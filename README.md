@@ -1,39 +1,59 @@
 # Expense Tracker
 
-A modern expense tracking application built with React, TypeScript, and Tailwind CSS.
+A modern expense tracking application built with React, TypeScript, and Tailwind CSS. Track your daily spending, organize by categories, and visualize your expenses.
+
+**Live Demo:** https://y-nine-flame.vercel.app
+
+## 🎯 Features
+
+### Phase 1 (Complete) ✅
+- ✅ **Add Expenses** - Create new expense records with amount, category, date, and description
+- ✅ **Delete Expenses** - Remove expenses from the tracker
+- ✅ **Category Filtering** - Filter expenses by category (Food, Transport, Entertainment, etc.)
+- ✅ **Data Persistence** - All expenses saved to browser's localStorage (survives page refresh)
+- ✅ **Empty State UI** - Helpful message when no expenses exist
+- ✅ **Professional Styling** - Built with Tailwind CSS for modern, responsive design
+- ✅ **Deployed Live** - Available on Vercel for instant access
+
+### Phase 2 (Coming Soon) 🚀
+- Form validation with React Hook Form + Zod
+- Loading and error states
+- Dashboard with summary statistics
+- Charts (Recharts) - Category breakdown visualization
+- Dark mode toggle
+- Date range filtering
+- Unit tests with React Testing Library
 
 ## 🚀 Tech Stack
 
-- **React 19** - UI library
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Vite** - Build tool
-- **Context API + useReducer** - State management
-
-## 📦 Current Progress
-
-### ✅ Completed (Phase 1 - Steps 1.1 to 1.5)
-
-- [x] Project initialized with Vite + React + TypeScript + Tailwind
-- [x] Folder structure created
-- [x] TypeScript types defined
-- [x] ExpenseForm component built
-- [x] ExpenseList component built
-- [x] ExpenseContext + useReducer created
-
-### 🔄 Next Steps
-
-**Step 1.6: Wire Context into App**
-
-Now let's finish Step 1.6 by wiring the Context into App.tsx so you can actually see the form and list working together!
-
-Ready to continue? I'll guide you through updating App.tsx and main.tsx to connect everything! 🚀
+- **React 19** - Modern UI library with hooks
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Vite** - Lightning-fast build tool
+- **Context API + useReducer** - Global state management (no Redux needed)
+- **localStorage** - Client-side data persistence
 
 ## 🛠️ Development
 
+### Installation
 ```bash
 npm install
+```
+
+### Run Development Server
+```bash
 npm run dev
+```
+Open http://localhost:5173
+
+### Build for Production
+```bash
+npm run build
+```
+
+### Deploy to Vercel
+```bash
+vercel
 ```
 
 ## 📁 Project Structure
@@ -41,18 +61,97 @@ npm run dev
 ```
 src/
 ├── components/
-│   ├── common/          # Reusable UI components
-│   ├── expenses/        # ExpenseForm, ExpenseList
-│   ├── dashboard/       # Dashboard components
-│   ├── filters/         # Filter components
-│   └── layout/          # Layout components
-├── context/             # ExpenseContext
-├── hooks/               # Custom hooks
-├── types/               # TypeScript types
-└── utils/               # Helper functions
+│   ├── common/              # Reusable UI (EmptyState, Button, etc.)
+│   ├── expenses/            # Expense-specific components
+│   │   ├── ExpenseForm.tsx     # Form to add expenses
+│   │   └── ExpenseList.tsx     # List to display & delete
+│   ├── filters/             # Filter components
+│   │   └── CategoryFilter.tsx  # Category selector
+│   ├── dashboard/           # Dashboard (Phase 2)
+│   └── layout/              # Layout wrapper
+├── context/
+│   └── ExpenseContext.tsx   # Global state with useReducer
+├── hooks/
+│   └── useLocalStorage.ts   # Custom hook for persistence
+├── types/
+│   └── index.ts             # TypeScript type definitions
+├── utils/                   # Helper functions
+├── App.tsx                  # Main component
+├── main.tsx                 # Entry point with ExpenseProvider
+└── index.css                # Tailwind styles
 ```
 
-## Expanding the ESLint configuration
+## 🔄 State Management Flow
+
+```
+ExpenseProvider (global state)
+  ├─ state.expenses: Expense[]
+  ├─ state.filters: { category, dateRange }
+  └─ dispatch(action) → expenseReducer
+      ├─ ADD_EXPENSE
+      ├─ DELETE_EXPENSE
+      ├─ SET_CATEGORY_FILTER
+      ├─ SET_LOADING
+      └─ SET_ERROR
+
+App.tsx
+  ├─ useExpenseContext()
+  ├─ handlers: add/delete/filter
+  └─ passes props to child components
+
+Components
+  ├─ ExpenseForm → dispatches ADD_EXPENSE
+  ├─ ExpenseList → displays filtered expenses
+  └─ CategoryFilter → dispatches SET_CATEGORY_FILTER
+```
+
+## 💾 Data Persistence
+
+Expenses are automatically saved to `localStorage` when:
+- A new expense is added
+- An expense is deleted
+- Any state change occurs
+
+Data is restored when the app loads, so your expenses persist across browser sessions!
+
+## 🎓 Learning Outcomes
+
+Building this project demonstrates:
+- ✅ **React Fundamentals** - Hooks, Context, useState, useReducer, useEffect
+- ✅ **TypeScript** - Type safety, interfaces, union types
+- ✅ **State Management** - Context API + reducer pattern
+- ✅ **Component Architecture** - Separation of concerns, reusable components
+- ✅ **Styling** - Tailwind CSS utility classes
+- ✅ **Data Persistence** - localStorage integration
+- ✅ **Deployment** - Vercel CI/CD pipeline
+
+## 🚀 Next Steps (Phase 2)
+
+1. Form validation with React Hook Form
+2. Error handling and loading states
+3. Dashboard with statistics
+4. Charts with Recharts
+5. Dark mode support
+6. Unit tests
+7. CSV export functionality
+
+## 📝 Changelog
+
+### Phase 1 (Jan 29, 2026)
+- Initial project setup with Vite + React + TypeScript
+- Built core components (Form, List, Filter)
+- Implemented Context + useReducer state management
+- Added localStorage persistence
+- Created empty state UI
+- Deployed to Vercel
+
+## 🤝 Contributing
+
+This is a learning project. Feel free to fork and build your own version!
+
+## 📄 License
+
+MIT
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
