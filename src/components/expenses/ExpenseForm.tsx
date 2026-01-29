@@ -6,11 +6,19 @@ interface ExpenseFormProps {
 }
 
 export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
+  const getTodayLocal = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Form state - controlled inputs
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState<Category>('food');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getTodayLocal());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Stop page reload
@@ -38,7 +46,7 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
     setAmount('');
     setCategory('food');
     setDescription('');
-    setDate(new Date().toISOString().split('T')[0]);
+    setDate(getTodayLocal());
   };
 
   return (

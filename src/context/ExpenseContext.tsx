@@ -1,10 +1,13 @@
-import { createContext, useContext, useReducer } from 'react';
-import type { Expense, ExpenseState } from '../types/index';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useEffect, useReducer } from 'react';
+import type { Category, Expense, ExpenseState } from '../types/index';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 // Action types
 export type ExpenseAction =
   | { type: 'ADD_EXPENSE'; payload: Expense }
   | { type: 'DELETE_EXPENSE'; payload: string }
+  | { type: 'SET_CATEGORY_FILTER'; payload: Category | 'all' }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null };
 
@@ -36,6 +39,15 @@ function expenseReducer(state: ExpenseState, action: ExpenseAction): ExpenseStat
         error: null,
       };
 
+    case 'SET_CATEGORY_FILTER':
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          category: action.payload,
+        },
+      };
+
     case 'SET_LOADING':
       return {
         ...state,
@@ -64,7 +76,18 @@ const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
 // Provider component
 export function ExpenseProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(expenseReducer, initialState);
+  const [storedExpenses, setStoredExpenses] = useLocalStorage<Expense[]>(
+    'expenses',
+    []
+  );
+  const [state, dispatch] = useReducer(expenseReducer, {
+    ...initialState,
+    expenses: storedExpenses,
+  });
+
+  useEffect(() => {
+    setStoredExpenses(state.expenses);
+  }, [state.expenses, setStoredExpenses]);
 
   return (
     <ExpenseContext.Provider value={{ state, dispatch }}>

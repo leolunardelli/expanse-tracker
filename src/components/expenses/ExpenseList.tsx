@@ -1,4 +1,5 @@
 import type { Expense } from '../../types/index';
+import EmptyState from '../common/EmptyState';
 
 interface ExpenseListProps {
   expenses: Expense[];
@@ -16,7 +17,7 @@ export default function ExpenseList({ expenses, onDeleteExpense }: ExpenseListPr
 
   // Format date
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(`${dateString}T00:00:00`).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -44,7 +45,16 @@ export default function ExpenseList({ expenses, onDeleteExpense }: ExpenseListPr
 
   return (
     <div className="space-y-3">
-      {expenses.map((expense) => (
+      {expenses.length === 0 ? (
+        <div className="bg-white p-8 rounded-lg shadow-md">
+          <EmptyState
+            title="No expenses yet"
+            description="Start tracking your spending by adding your first expense above."
+            icon="💰"
+          />
+        </div>
+      ) : (
+        expenses.map((expense) => (
         <div
           key={expense.id}
           className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between hover:shadow-lg transition-shadow"
@@ -93,7 +103,8 @@ export default function ExpenseList({ expenses, onDeleteExpense }: ExpenseListPr
             </button>
           </div>
         </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }
