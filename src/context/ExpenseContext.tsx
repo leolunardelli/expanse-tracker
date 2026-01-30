@@ -7,6 +7,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 export type ExpenseAction =
   | { type: 'ADD_EXPENSE'; payload: Expense }
   | { type: 'DELETE_EXPENSE'; payload: string }
+  | { type: 'EDIT_EXPENSE'; payload: Expense }
   | { type: 'SET_CATEGORY_FILTER'; payload: Category | 'all' }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null };
@@ -36,6 +37,15 @@ function expenseReducer(state: ExpenseState, action: ExpenseAction): ExpenseStat
       return {
         ...state,
         expenses: state.expenses.filter((expense) => expense.id !== action.payload),
+        error: null,
+      };
+
+    case 'EDIT_EXPENSE':
+      return {
+        ...state,
+        expenses: state.expenses.map((expense) =>
+          expense.id === action.payload.id ? action.payload : expense
+        ),
         error: null,
       };
 

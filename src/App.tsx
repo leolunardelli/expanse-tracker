@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import { useExpenseContext } from './context/ExpenseContext';
 import ExpenseForm from './components/expenses/ExpenseForm';
 import ExpenseList from './components/expenses/ExpenseList';
+import EditExpenseForm from './components/expenses/EditExpenseForm';
 import CategoryFilter from './components/filters/CategoryFilter';
+import Modal from './components/common/Modal';
 import type { Category, Expense } from './types/index';
 
 function App() {
+  // Modal state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+
   // Get state and dispatch from context
   const { state, dispatch } = useExpenseContext();
 
@@ -16,6 +23,25 @@ function App() {
   // Handler to delete expense
   const handleDeleteExpense = (id: string) => {
     dispatch({ type: 'DELETE_EXPENSE', payload: id });
+  };
+
+  // Handler to edit expense
+  const handleEditExpense = (expense: Expense) => {
+    setSelectedExpense(expense);
+    setIsEditModalOpen(true);
+  };
+
+  // Handler to save edited expense
+  const handleSaveEdit = (updatedExpense: Expense) => {
+    dispatch({ type: 'EDIT_EXPENSE', payload: updatedExpense });
+    setIsEditModalOpen(false);
+    setSelectedExpense(null);
+  };
+
+  // Handler to cancel edit
+  const handleCancelEdit = () => {
+    setIsEditModalOpen(false);
+    setSelectedExpense(null);
   };
 
   const handleCategoryChange = (value: Category | 'all') => {
@@ -58,10 +84,26 @@ function App() {
           </h2>
           <ExpenseList 
             expenses={filteredExpenses} 
-            onDeleteExpense={handleDeleteExpense} 
+            onDeleteExpense={handleDeleteExpense}
+            onEditExpense={handleEditExpense}
           />
         </div>
       </div>
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={handleCancelEdit}
+        title="Edit Expense"
+      >
+        {selectedExpense && (
+          <EditExpenseForm
+            expense={selectedExpense}
+            onSave={handleSaveEdit}
+            onCancel={handleCancelEdit}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

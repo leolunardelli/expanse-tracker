@@ -4,9 +4,10 @@ import EmptyState from '../common/EmptyState';
 interface ExpenseListProps {
   expenses: Expense[];
   onDeleteExpense: (id: string) => void;
+  onEditExpense: (expense: Expense) => void;
 }
 
-export default function ExpenseList({ expenses, onDeleteExpense }: ExpenseListProps) {
+export default function ExpenseList({ expenses, onDeleteExpense, onEditExpense }: ExpenseListProps) {
   // Format currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -76,15 +77,37 @@ export default function ExpenseList({ expenses, onDeleteExpense }: ExpenseListPr
             <p className="text-gray-800 font-medium">{expense.description}</p>
           </div>
 
-          {/* Right side: Amount & Delete */}
-          <div className="flex items-center gap-4">
+          {/* Right side: Amount & Buttons */}
+          <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-gray-900">
               {formatCurrency(expense.amount)}
             </span>
             <button
+              onClick={() => onEditExpense(expense)}
+              className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-md transition-colors"
+              aria-label="Edit expense"
+              title="Edit"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </button>
+            <button
               onClick={() => onDeleteExpense(expense.id)}
               className="text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-md transition-colors"
               aria-label="Delete expense"
+              title="Delete"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
