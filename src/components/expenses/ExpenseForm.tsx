@@ -1,56 +1,44 @@
-import { useState } from 'react';
-import type { Expense, Category } from '../../types/index';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { Expense } from '../../types/index';
+import { expenseSchema, type ExpenseFormData } from '../../utils/validation';
 
 interface ExpenseFormProps {
   onAddExpense: (expense: Expense) => void;
 }
 
 export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
-  const getTodayLocal = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ExpenseFormData>({
+    resolver: zodResolver(expenseSchema),
+    defaultValues: {
+      amount: undefined,
+      category: 'food',
+      description: '',
+      date: new Date().toISOString().split('T')[0],
+    },
+  });
 
-  // Form state - controlled inputs
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState<Category>('food');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(getTodayLocal());
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Stop page reload
-
-    // Validate
-    if (!amount || !description) {
-      alert('Please fill in all fields');
-      return;
-    }
-
-    // Create expense object
+  const onSubmit = (data: ExpenseFormData) => {
     const newExpense: Expense = {
       id: crypto.randomUUID(),
-      amount: parseFloat(amount),
-      category,
-      description,
-      date,
+      amount: data.amount,
+      category: data.category,
+      description: data.description,
+      date: data.date,
       createdAt: new Date().toISOString(),
     };
 
-    // Call parent callback
     onAddExpense(newExpense);
-
-    // Reset form
-    setAmount('');
-    setCategory('food');
-    setDescription('');
-    setDate(getTodayLocal());
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md mb-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Add Expense</h2>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -62,11 +50,17 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
           <input
             type="number"
             step="0.01"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...register('amount', { valueAsNumber: true })}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+              errors.amount
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
           />
+          {errors.amount && (
+            <p className="text-red-600 text-sm mt-1">{errors.amount.message}</p>
+          )}
         </div>
 
         {/* Category */}
@@ -75,9 +69,12 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
             Category
           </label>
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value as Category)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...register('category')}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+              errors.category
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
           >
             <option value="food">Food</option>
             <option value="transport">Transport</option>
@@ -87,6 +84,9 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
             <option value="health">Health</option>
             <option value="other">Other</option>
           </select>
+          {errors.category && (
+            <p className="text-red-600 text-sm mt-1">{errors.category.message}</p>
+          )}
         </div>
       </div>
 
@@ -97,11 +97,17 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
         </label>
         <input
           type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
           placeholder="e.g., Lunch at cafe"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...register('description')}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+            errors.description
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-blue-500'
+          }`}
         />
+        {errors.description && (
+          <p className="text-red-600 text-sm mt-1">{errors.description.message}</p>
+        )}
       </div>
 
       {/* Date */}
@@ -111,10 +117,16 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
         </label>
         <input
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...register('date')}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+            errors.date
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-blue-500'
+          }`}
         />
+        {errors.date && (
+          <p className="text-red-600 text-sm mt-1">{errors.date.message}</p>
+        )}
       </div>
 
       {/* Submit Button */}
