@@ -5,6 +5,8 @@ import ExpenseList from './components/expenses/ExpenseList';
 import EditExpenseForm from './components/expenses/EditExpenseForm';
 import CategoryFilter from './components/filters/CategoryFilter';
 import Modal from './components/common/Modal';
+import ErrorNotification from './components/common/ErrorNotification';
+import Dashboard from './components/dashboard/Dashboard';
 import type { Category, Expense } from './types/index';
 
 function App() {
@@ -90,6 +92,10 @@ function App() {
     dispatch({ type: 'SET_CATEGORY_FILTER', payload: value });
   };
 
+  const handleDismissError = () => {
+    dispatch({ type: 'SET_ERROR', payload: null });
+  };
+
   const filteredExpenses =
     state.filters.category === 'all'
       ? state.expenses
@@ -99,6 +105,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
+      {/* Error Notification */}
+      <ErrorNotification
+        message={state.error}
+        onDismiss={handleDismissError}
+      />
+
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <header className="mb-8">
@@ -112,6 +124,9 @@ function App() {
 
         {/* Add Expense Form */}
         <ExpenseForm onAddExpense={handleAddExpense} isLoading={state.isLoading} />
+
+        {/* Dashboard */}
+        <Dashboard expenses={state.expenses} />
 
         {/* Category Filter */}
         <CategoryFilter
