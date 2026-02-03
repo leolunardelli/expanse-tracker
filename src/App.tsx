@@ -15,14 +15,42 @@ function App() {
   // Get state and dispatch from context
   const { state, dispatch } = useExpenseContext();
 
-  // Handler to add expense
-  const handleAddExpense = (expense: Expense) => {
-    dispatch({ type: 'ADD_EXPENSE', payload: expense });
+  // Handler to add expense with loading state
+  const handleAddExpense = async (expense: Expense) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_ERROR', payload: null });
+    
+    try {
+      // Simulate network delay (in real app, this would be API call)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      dispatch({ type: 'ADD_EXPENSE', payload: expense });
+    } catch (error) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: error instanceof Error ? error.message : 'Failed to add expense',
+      });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
-  // Handler to delete expense
-  const handleDeleteExpense = (id: string) => {
-    dispatch({ type: 'DELETE_EXPENSE', payload: id });
+  // Handler to delete expense with loading state
+  const handleDeleteExpense = async (id: string) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_ERROR', payload: null });
+    
+    try {
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      dispatch({ type: 'DELETE_EXPENSE', payload: id });
+    } catch (error) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: error instanceof Error ? error.message : 'Failed to delete expense',
+      });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
   // Handler to edit expense
@@ -31,11 +59,25 @@ function App() {
     setIsEditModalOpen(true);
   };
 
-  // Handler to save edited expense
-  const handleSaveEdit = (updatedExpense: Expense) => {
-    dispatch({ type: 'EDIT_EXPENSE', payload: updatedExpense });
-    setIsEditModalOpen(false);
-    setSelectedExpense(null);
+  // Handler to save edited expense with loading state
+  const handleSaveEdit = async (updatedExpense: Expense) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_ERROR', payload: null });
+    
+    try {
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      dispatch({ type: 'EDIT_EXPENSE', payload: updatedExpense });
+      setIsEditModalOpen(false);
+      setSelectedExpense(null);
+    } catch (error) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: error instanceof Error ? error.message : 'Failed to update expense',
+      });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
   // Handler to cancel edit
@@ -69,7 +111,7 @@ function App() {
         </header>
 
         {/* Add Expense Form */}
-        <ExpenseForm onAddExpense={handleAddExpense} />
+        <ExpenseForm onAddExpense={handleAddExpense} isLoading={state.isLoading} />
 
         {/* Category Filter */}
         <CategoryFilter
@@ -86,6 +128,7 @@ function App() {
             expenses={filteredExpenses} 
             onDeleteExpense={handleDeleteExpense}
             onEditExpense={handleEditExpense}
+            isLoading={state.isLoading}
           />
         </div>
       </div>
@@ -101,6 +144,7 @@ function App() {
             expense={selectedExpense}
             onSave={handleSaveEdit}
             onCancel={handleCancelEdit}
+            isLoading={state.isLoading}
           />
         )}
       </Modal>

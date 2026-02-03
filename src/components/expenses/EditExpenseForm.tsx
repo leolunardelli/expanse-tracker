@@ -2,17 +2,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Expense } from '../../types/index';
 import { expenseSchema, type ExpenseFormData } from '../../utils/validation';
+import Spinner from '../common/Spinner';
 
 interface EditExpenseFormProps {
   expense: Expense;
   onSave: (updatedExpense: Expense) => void;
   onCancel: () => void;
+  isLoading?: boolean;
 }
 
 export default function EditExpenseForm({
   expense,
   onSave,
   onCancel,
+  isLoading = false,
 }: EditExpenseFormProps) {
   const {
     register,
@@ -130,14 +133,25 @@ export default function EditExpenseForm({
       <div className="flex gap-3 pt-4">
         <button
           type="submit"
-          className="flex-1 bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors"
+          disabled={isLoading}
+          className={`flex-1 text-white py-2 rounded-md font-semibold transition-colors flex items-center justify-center gap-2 ${
+            isLoading
+              ? 'bg-blue-400 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700'
+          }`}
         >
-          Save Changes
+          {isLoading && <Spinner size="sm" />}
+          {isLoading ? 'Saving...' : 'Save Changes'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-md font-semibold hover:bg-gray-300 transition-colors"
+          disabled={isLoading}
+          className={`flex-1 py-2 rounded-md font-semibold transition-colors ${
+            isLoading
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+          }`}
         >
           Cancel
         </button>

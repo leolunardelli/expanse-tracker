@@ -2,12 +2,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Expense } from '../../types/index';
 import { expenseSchema, type ExpenseFormData } from '../../utils/validation';
+import Spinner from '../common/Spinner';
 
 interface ExpenseFormProps {
   onAddExpense: (expense: Expense) => void;
+  isLoading?: boolean;
 }
 
-export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
+export default function ExpenseForm({ onAddExpense, isLoading = false }: ExpenseFormProps) {
   const {
     register,
     handleSubmit,
@@ -132,9 +134,15 @@ export default function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors"
+        disabled={isLoading}
+        className={`w-full py-2 rounded-md font-semibold transition-colors flex items-center justify-center gap-2 ${
+          isLoading
+            ? 'bg-blue-400 text-white cursor-not-allowed'
+            : 'bg-blue-600 text-white hover:bg-blue-700'
+        }`}
       >
-        Add Expense
+        {isLoading && <Spinner size="sm" />}
+        {isLoading ? 'Adding...' : 'Add Expense'}
       </button>
     </form>
   );
