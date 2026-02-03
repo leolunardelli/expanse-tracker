@@ -1,18 +1,19 @@
 interface SpinnerProps {
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
 }
 
-export default function Spinner({ size = 'md' }: SpinnerProps) {
+export default function Spinner({ size = 'md', className = '' }: SpinnerProps) {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-6 h-6',
-    lg: 'w-8 h-8',
+    lg: 'w-10 h-10',
   };
 
   return (
-    <div className={`${sizeClasses[size]} animate-spin`}>
+    <div className={`${sizeClasses[size]} animate-spin ${className}`}>
       <svg
-        className="w-full h-full text-blue-600"
+        className="w-full h-full text-primary-600 dark:text-primary-400"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

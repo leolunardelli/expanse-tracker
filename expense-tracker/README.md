@@ -1,0 +1,54 @@
+# Expense Tracker
+
+## Overview
+This is an Expense Tracker application built with React and TypeScript. It allows users to manage their expenses by adding, editing, deleting, and filtering them by category. The application provides a summary of total expenses and offers a user-friendly interface for tracking financial activities.
+
+## Features
+- Add new expenses with details such as name, amount, and category.
+- View a list of all expenses with options to edit or delete.
+- Filter expenses by category for better organization.
+- Summary of total expenses and statistics.
+
+## Getting Started
+
+### Prerequisites
+- Node.js (version 14 or higher)
+- npm (Node package manager)
+
+### Installation
+1. Clone the repository:
+   ```
+   git clone <repository-url>
+   cd expense-tracker
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+### Running the Application
+To start the development server, run:
+```
+npm start
+```
+This will open the application in your default web browser at `http://localhost:3000`.
+
+### Building for Production
+To create a production build, run:
+```
+npm run build
+```
+This will generate an optimized build of the application in the `build` directory.
+
+## Usage
+- Use the "Add Expense" form to input new expenses.
+- View the list of expenses displayed below the form.
+- Use the filter to view expenses by category.
+- Check the summary for total expenses.
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.

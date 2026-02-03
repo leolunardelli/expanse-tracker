@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { useExpenseContext } from './context/ExpenseContext';
+import Header from './components/layout/Header';
+import Sidebar, { type ViewType } from './components/layout/Sidebar';
 import ExpenseForm from './components/expenses/ExpenseForm';
 import ExpenseList from './components/expenses/ExpenseList';
 import EditExpenseForm from './components/expenses/EditExpenseForm';
-import CategoryFilter from './components/filters/CategoryFilter';
 import Modal from './components/common/Modal';
 import ErrorNotification from './components/common/ErrorNotification';
 import Dashboard from './components/dashboard/Dashboard';
+import Analytics from './components/analytics/Analytics';
+import Settings from './components/settings/Settings';
 import type { Category, Expense } from './types/index';
 
 function App() {
+  // View state
+  const [currentView, setCurrentView] = useState<ViewType>('dashboard');
+  
   // Modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
@@ -96,6 +102,12 @@ function App() {
     dispatch({ type: 'SET_ERROR', payload: null });
   };
 
+  const handleClearAll = () => {
+    state.expenses.forEach((expense) => {
+      dispatch({ type: 'DELETE_EXPENSE', payload: expense.id });
+    });
+  };
+
   const filteredExpenses =
     state.filters.category === 'all'
       ? state.expenses
@@ -103,49 +115,87 @@ function App() {
           (expense) => expense.category === state.filters.category
         );
 
+  // Render main content based on current view
+  const renderContent = () => {
+    switch (currentView) {
+      case 'dashboard':
+        return (
+          <div className="space-y-6">
+            {/* Quick Add Form */}
+            <ExpenseForm onAddExpense={handleAddExpense} isLoading={state.isLoading} />
+            
+            {/* Dashboard */}
+            <Dashboard expenses={state.expenses} />
+          </div>
+        );
+      
+      case 'expenses':
+        return (
+          <div className="space-y-6">
+            {/* Add Expense Form */}
+            <ExpenseForm onAddExpense={handleAddExpense} isLoading={state.isLoading} />
+            
+            {/* Expenses Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-display font-bold text-dark-900 dark:text-white">
+                  All Expenses
+                </h2>
+                <p className="text-dark-500 dark:text-dark-400 mt-1">
+                  {filteredExpenses.length} {filteredExpenses.length === 1 ? 'expense' : 'expenses'} found
+                  {state.filters.category !== 'all' && ` in ${state.filters.category}`}
+                </p>
+              </div>
+            </div>
+
+            {/* Expense List */}
+            <ExpenseList 
+              expenses={filteredExpenses} 
+              onDeleteExpense={handleDeleteExpense}
+              onEditExpense={handleEditExpense}
+              isLoading={state.isLoading}
+            />
+          </div>
+        );
+      
+      case 'analytics':
+        return <Analytics expenses={state.expenses} />;
+      
+      case 'settings':
+        return <Settings expenses={state.expenses} onClearAll={handleClearAll} />;
+      
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
+    <div className="min-h-screen bg-dark-50 dark:bg-dark-950 transition-colors duration-300">
       {/* Error Notification */}
       <ErrorNotification
         message={state.error}
         onDismiss={handleDismissError}
       />
 
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Expense Tracker
-          </h1>
-          <p className="text-gray-600">
-            Track your expenses and manage your budget
-          </p>
-        </header>
+      {/* Header */}
+      <Header />
 
-        {/* Add Expense Form */}
-        <ExpenseForm onAddExpense={handleAddExpense} isLoading={state.isLoading} />
-
-        {/* Dashboard */}
-        <Dashboard expenses={state.expenses} />
-
-        {/* Category Filter */}
-        <CategoryFilter
-          value={state.filters.category}
-          onChange={handleCategoryChange}
+      {/* Main Layout */}
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar
+          currentView={currentView}
+          onViewChange={setCurrentView}
+          categoryFilter={state.filters.category}
+          onCategoryChange={handleCategoryChange}
         />
 
-        {/* Expense List */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Recent Expenses
-          </h2>
-          <ExpenseList 
-            expenses={filteredExpenses} 
-            onDeleteExpense={handleDeleteExpense}
-            onEditExpense={handleEditExpense}
-            isLoading={state.isLoading}
-          />
-        </div>
+        {/* Main Content */}
+        <main className="flex-1 p-6 lg:p-8 min-h-[calc(100vh-73px)] overflow-y-auto">
+          <div className="max-w-6xl mx-auto">
+            {renderContent()}
+          </div>
+        </main>
       </div>
 
       {/* Edit Modal */}
@@ -167,4 +217,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

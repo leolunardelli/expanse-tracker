@@ -21,6 +21,7 @@ export default function EditExpenseForm({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
@@ -30,6 +31,18 @@ export default function EditExpenseForm({
       date: expense.date,
     },
   });
+
+  const selectedCategory = watch('category');
+
+  const categoryIcons: Record<string, string> = {
+    food: '🍔',
+    transport: '🚗',
+    entertainment: '🎬',
+    utilities: '💡',
+    shopping: '🛍️',
+    health: '💊',
+    other: '📦',
+  };
 
   const onSubmit = (data: ExpenseFormData) => {
     const updatedExpense: Expense = {
@@ -44,88 +57,103 @@ export default function EditExpenseForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Amount */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-dark-700 dark:text-dark-300 mb-2">
           Amount
         </label>
-        <input
-          type="number"
-          step="0.01"
-          {...register('amount', { valueAsNumber: true })}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-            errors.amount
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
-          }`}
-        />
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-400 dark:text-dark-500 font-medium">
+            $
+          </span>
+          <input
+            type="number"
+            step="0.01"
+            {...register('amount', { valueAsNumber: true })}
+            className={`input-field pl-8 ${
+              errors.amount
+                ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500'
+                : ''
+            }`}
+          />
+        </div>
         {errors.amount && (
-          <p className="text-red-600 text-sm mt-1">{errors.amount.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mt-1.5 flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {errors.amount.message}
+          </p>
         )}
       </div>
 
       {/* Category */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-dark-700 dark:text-dark-300 mb-2">
           Category
         </label>
-        <select
-          {...register('category')}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-            errors.category
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
-          }`}
-        >
-          <option value="food">Food</option>
-          <option value="transport">Transport</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="utilities">Utilities</option>
-          <option value="shopping">Shopping</option>
-          <option value="health">Health</option>
-          <option value="other">Other</option>
-        </select>
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg">
+            {categoryIcons[selectedCategory]}
+          </span>
+          <select
+            {...register('category')}
+            className={`select-field pl-12 ${
+              errors.category
+                ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500'
+                : ''
+            }`}
+          >
+            <option value="food">🍔 Food & Dining</option>
+            <option value="transport">🚗 Transportation</option>
+            <option value="entertainment">🎬 Entertainment</option>
+            <option value="utilities">💡 Utilities</option>
+            <option value="shopping">🛍️ Shopping</option>
+            <option value="health">💊 Health</option>
+            <option value="other">📦 Other</option>
+          </select>
+        </div>
         {errors.category && (
-          <p className="text-red-600 text-sm mt-1">{errors.category.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mt-1.5">{errors.category.message}</p>
         )}
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-dark-700 dark:text-dark-300 mb-2">
           Description
         </label>
         <input
           type="text"
           {...register('description')}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+          className={`input-field ${
             errors.description
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
+              ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500'
+              : ''
           }`}
         />
         {errors.description && (
-          <p className="text-red-600 text-sm mt-1">{errors.description.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mt-1.5">{errors.description.message}</p>
         )}
       </div>
 
       {/* Date */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-dark-700 dark:text-dark-300 mb-2">
           Date
         </label>
         <input
           type="date"
           {...register('date')}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+          className={`input-field ${
             errors.date
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
+              ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500'
+              : ''
           }`}
         />
         {errors.date && (
-          <p className="text-red-600 text-sm mt-1">{errors.date.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mt-1.5">{errors.date.message}</p>
         )}
       </div>
 
@@ -134,10 +162,8 @@ export default function EditExpenseForm({
         <button
           type="submit"
           disabled={isLoading}
-          className={`flex-1 text-white py-2 rounded-md font-semibold transition-colors flex items-center justify-center gap-2 ${
-            isLoading
-              ? 'bg-blue-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700'
+          className={`flex-1 btn-primary flex items-center justify-center gap-2 ${
+            isLoading ? 'opacity-70 cursor-not-allowed' : ''
           }`}
         >
           {isLoading && <Spinner size="sm" />}
@@ -147,10 +173,8 @@ export default function EditExpenseForm({
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className={`flex-1 py-2 rounded-md font-semibold transition-colors ${
-            isLoading
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+          className={`flex-1 btn-secondary ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
           Cancel

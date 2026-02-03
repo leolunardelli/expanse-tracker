@@ -5,74 +5,39 @@ interface ErrorNotificationProps {
   onDismiss: () => void;
 }
 
-export default function ErrorNotification({
-  message,
-  onDismiss,
-}: ErrorNotificationProps) {
-  // Auto-dismiss after 5 seconds
+export default function ErrorNotification({ message, onDismiss }: ErrorNotificationProps) {
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
         onDismiss();
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [message, onDismiss]);
 
-  if (!message) {
-    return null;
-  }
+  if (!message) return null;
 
   return (
-    <div
-      className="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-start gap-3 max-w-md animate-fadeIn"
-      role="alert"
-      aria-live="polite"
-    >
-      {/* Error Icon */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6 flex-shrink-0 mt-0.5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-
-      {/* Message Content */}
-      <div className="flex-1">
-        <p className="font-medium">Error</p>
-        <p className="text-sm text-red-100">{message}</p>
-      </div>
-
-      {/* Close Button */}
-      <button
-        onClick={onDismiss}
-        className="flex-shrink-0 text-red-200 hover:text-white transition-colors"
-        aria-label="Close error notification"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+    <div className="fixed top-4 right-4 z-50 max-w-md animate-slide-in-right">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 shadow-lg flex items-start gap-3">
+        <div className="flex-shrink-0 w-10 h-10 bg-red-100 dark:bg-red-900/50 rounded-xl flex items-center justify-center">
+          <svg className="w-5 h-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <p className="font-semibold text-red-800 dark:text-red-200">Error</p>
+          <p className="text-sm text-red-600 dark:text-red-300 mt-0.5">{message}</p>
+        </div>
+        <button
+          onClick={onDismiss}
+          className="flex-shrink-0 p-1 rounded-lg text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }

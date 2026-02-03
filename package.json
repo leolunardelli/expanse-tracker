@@ -1,7 +1,21 @@
 {
-  "name": "expanse-tracker",
-  "private": true,
-  "version": "0.0.0",
+  "name": "expenseflow",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A beautiful, modern expense tracking application built with React & TypeScript. Features dark mode, interactive charts, category management, and data export.",
+  "keywords": [
+    "expense-tracker",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "finance",
+    "budget",
+    "money-management",
+    "recharts",
+    "vite"
+  ],
+  "author": "ExpenseFlow",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

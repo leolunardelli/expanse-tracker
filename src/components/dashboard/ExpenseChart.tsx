@@ -18,7 +18,7 @@ interface ExpenseChartProps {
   expenses: Expense[];
 }
 
-// Custom tooltip component (defined outside to avoid re-creation)
+// Custom tooltip component
 function CustomTooltip({
   active,
   payload,
@@ -33,18 +33,37 @@ function CustomTooltip({
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-300">
-        <p className="font-semibold text-gray-900">{data.name}</p>
-        <p className="text-blue-600 font-bold">
+      <div className="bg-white dark:bg-dark-800 p-4 rounded-xl shadow-lg border border-dark-200 dark:border-dark-700">
+        <p className="font-semibold text-dark-900 dark:text-white">{data.name}</p>
+        <p className="text-lg font-bold text-primary-600 dark:text-primary-400 mt-1">
           {formatCurrency(data.value)}
         </p>
-        <p className="text-gray-600 text-sm">
+        <p className="text-dark-500 dark:text-dark-400 text-sm mt-1">
           {data.payload.percentage.toFixed(1)}% of total
         </p>
       </div>
     );
   }
   return null;
+}
+
+// Custom legend
+function CustomLegend({ payload }: { payload?: Array<{ value: string; color: string }> }) {
+  if (!payload) return null;
+  
+  return (
+    <div className="flex flex-wrap justify-center gap-4 mt-4">
+      {payload.map((entry, index) => (
+        <div key={`legend-${index}`} className="flex items-center gap-2">
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-sm text-dark-600 dark:text-dark-300">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function ExpenseChart({ expenses }: ExpenseChartProps) {
@@ -57,7 +76,7 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
     .filter(([, amount]) => amount > 0)
     .map(([category, amount]) => ({
       name: getCategoryLabel(category),
-      value: Math.round(amount * 100) / 100, // Round to 2 decimals
+      value: Math.round(amount * 100) / 100,
       category,
       percentage: stats.total > 0 ? (amount / stats.total) * 100 : 0,
     }))
@@ -66,71 +85,55 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
   // If no data, show empty state
   if (chartData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-        <p className="text-gray-500 text-center">
-          No data yet. Add expenses to see the chart!
-        </p>
+      <div>
+        <h3 className="text-lg font-display font-semibold text-dark-900 dark:text-white mb-4">
+          Spending Distribution
+        </h3>
+        <div className="flex items-center justify-center h-[300px] bg-dark-50 dark:bg-dark-800/50 rounded-xl border-2 border-dashed border-dark-200 dark:border-dark-700">
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-dark-100 dark:bg-dark-700 flex items-center justify-center">
+              <svg className="w-6 h-6 text-dark-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+              </svg>
+            </div>
+            <p className="text-dark-500 dark:text-dark-400 text-sm">
+              Add expenses to see the distribution
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-lg font-display font-semibold text-dark-900 dark:text-white mb-4">
         Spending Distribution
       </h3>
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={false}
-            label={({ name, value }) => {
-              const entry = chartData.find((d) => d.value === value);
-              return entry ? `${name}: ${entry.percentage.toFixed(0)}%` : '';
-            }}
+            innerRadius={60}
             outerRadius={100}
-            fill="#8884d8"
+            paddingAngle={3}
             dataKey="value"
           >
             {chartData.map((entry) => (
               <Cell
                 key={`cell-${entry.category}`}
                 fill={getCategoryColor(entry.category)}
+                stroke="none"
               />
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
+          <Legend content={<CustomLegend />} />
         </PieChart>
       </ResponsiveContainer>
-
-      {/* Legend with values */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3">
-        {chartData.map((item) => (
-          <div
-            key={item.category}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: getCategoryColor(item.category) }}
-              />
-              <span className="text-sm font-medium text-gray-700">
-                {item.name}
-              </span>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold text-gray-900">
-                {formatCurrency(item.value)}
-              </p>
-              <p className="text-xs text-gray-500">{item.percentage.toFixed(1)}%</p>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
