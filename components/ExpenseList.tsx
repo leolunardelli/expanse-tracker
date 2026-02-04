@@ -8,7 +8,12 @@ interface Expense {
   description: string;
   amount: number;
   category: string;
-  date: Date;
+  date: Date | string;
+}
+
+function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD format is consistent
 }
 
 export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
@@ -38,7 +43,7 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
           <div key={expense.id} className="flex justify-between items-center p-3 border rounded-lg hover:bg-gray-50 transition">
             <div className="flex-1">
               <p className="font-medium text-gray-900">{expense.description}</p>
-              <p className="text-sm text-gray-500">{expense.category} • {new Date(expense.date).toLocaleDateString()}</p>
+              <p className="text-sm text-gray-500">{expense.category} • {formatDate(expense.date)}</p>
             </div>
             <div className="flex items-center gap-4">
               <p className="font-bold text-lg">${expense.amount.toFixed(2)}</p>
