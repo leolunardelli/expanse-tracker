@@ -18,9 +18,20 @@ dist-ssr
 .idea
 .DS_Store
 *.suo
+
+# Next.js
+.next
+.env.local
+.env.*.local
+
+# Prisma
+.prisma/
+
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
 .vercel
+
+/src/generated/prisma
