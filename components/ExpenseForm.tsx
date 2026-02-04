@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { createExpense } from '@/app/actions/expenses';
 
 export default function ExpenseForm() {
   const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -13,7 +14,7 @@ export default function ExpenseForm() {
     const formData = new FormData(e.currentTarget);
     try {
       await createExpense(formData);
-      e.currentTarget.reset();
+      formRef.current?.reset();
     } catch (error) {
       alert('Error creating expense: ' + (error as Error).message);
     } finally {
@@ -24,7 +25,7 @@ export default function ExpenseForm() {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <h2 className="text-xl font-bold mb-4">Add Expense</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <input
