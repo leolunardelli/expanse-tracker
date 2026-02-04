@@ -8,14 +8,8 @@ import { categorizeExpense } from '@/lib/ai';
 
 async function getUserId() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.email) throw new Error('Unauthorized');
-  
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-  
-  if (!user) throw new Error('User not found');
-  return user.id;
+  if (!session?.user?.id) throw new Error('Unauthorized');
+  return session.user.id;
 }
 
 export async function createExpense(formData: FormData) {

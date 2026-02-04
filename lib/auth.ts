@@ -12,26 +12,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'database', // Use database sessions with adapter
   },
   pages: {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async session({ session, token }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
       }
       return session;
     },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
     async redirect({ url, baseUrl }) {
-      // After sign in, redirect to home
       if (url.startsWith('/')) return `${baseUrl}${url}`;
       if (url.startsWith(baseUrl)) return url;
       return baseUrl;
