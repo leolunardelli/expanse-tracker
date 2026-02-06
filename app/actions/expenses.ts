@@ -20,6 +20,8 @@ export async function createExpense(formData: FormData) {
   const category = formData.get('category') as string;
   const dateStr = formData.get('date') as string;
   const date = dateStr ? new Date(dateStr) : new Date();
+  const isRecurring = formData.get('isRecurring') === 'true';
+  const recurrenceType = formData.get('recurrenceType') as string | null;
   
   // AI categorization if category is "Other" or empty
   let finalCategory = category;
@@ -37,6 +39,8 @@ export async function createExpense(formData: FormData) {
       amount,
       category: finalCategory,
       date,
+      isRecurring,
+      recurrenceType: isRecurring ? recurrenceType : null,
       userId,
     },
   });
@@ -46,7 +50,14 @@ export async function createExpense(formData: FormData) {
 
 export async function updateExpense(
   id: string,
-  data: { description: string; amount: number; category: string; date: Date }
+  data: { 
+    description: string; 
+    amount: number; 
+    category: string; 
+    date: Date;
+    isRecurring?: boolean;
+    recurrenceType?: string | null;
+  }
 ) {
   const userId = await getUserId();
   
@@ -64,6 +75,8 @@ export async function updateExpense(
       amount: data.amount,
       category: data.category,
       date: data.date,
+      isRecurring: data.isRecurring ?? false,
+      recurrenceType: data.isRecurring ? data.recurrenceType : null,
     },
   });
   

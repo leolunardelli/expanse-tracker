@@ -64,6 +64,10 @@ model Expense {
   category    String
   date        DateTime @default(now())
   
+  // Recurring expense fields
+  isRecurring     Boolean @default(false)
+  recurrenceType  String? // "daily", "weekly", "monthly", "yearly"
+  
   // AI-generated fields
   aiCategory  String?  // AI-suggested category
   aiNote      String?  // AI insights
@@ -77,6 +81,7 @@ model Expense {
   @@index([userId])
   @@index([date])
   @@index([category])
+  @@index([isRecurring])
 }
 
 // Budget Goals

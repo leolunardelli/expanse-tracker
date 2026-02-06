@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, RefreshCw } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
 
 interface Expense {
@@ -10,6 +10,8 @@ interface Expense {
   amount: number;
   category: string;
   date: Date | string;
+  isRecurring?: boolean;
+  recurrenceType?: string | null;
 }
 
 interface EditExpenseModalProps {
@@ -23,6 +25,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurrenceType, setRecurrenceType] = useState('monthly');
 
   useEffect(() => {
     if (expense) {
@@ -31,6 +35,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
       setCategory(expense.category);
       const d = new Date(expense.date);
       setDate(d.toISOString().split('T')[0]);
+      setIsRecurring(expense.isRecurring || false);
+      setRecurrenceType(expense.recurrenceType || 'monthly');
     }
   }, [expense]);
 
@@ -46,6 +52,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
         amount: parseFloat(amount),
         category,
         date: new Date(date),
+        isRecurring,
+        recurrenceType: isRecurring ? recurrenceType : null,
       });
       onClose();
     } catch (error) {
@@ -116,6 +124,36 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          
+          {/* Recurring Expense Toggle */}
+          <div className="border rounded-lg p-3 bg-gray-50">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isRecurring}
+                onChange={(e) => setIsRecurring(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400'} />
+              <span className="text-sm font-medium text-gray-700">Recurring expense</span>
+            </label>
+            
+            {isRecurring && (
+              <div className="mt-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Repeat</label>
+                <select
+                  value={recurrenceType}
+                  onChange={(e) => setRecurrenceType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="daily">Daily</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+            )}
           </div>
           
           <div className="flex gap-3 pt-2">

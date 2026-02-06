@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { createExpense } from '@/app/actions/expenses';
+import { RefreshCw } from 'lucide-react';
 
 function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -9,6 +10,7 @@ function getTodayDate(): string {
 
 export default function ExpenseForm() {
   const [loading, setLoading] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -16,9 +18,12 @@ export default function ExpenseForm() {
     setLoading(true);
     
     const formData = new FormData(e.currentTarget);
+    formData.set('isRecurring', isRecurring.toString());
+    
     try {
       await createExpense(formData);
       formRef.current?.reset();
+      setIsRecurring(false);
     } catch (error) {
       alert('Error creating expense: ' + (error as Error).message);
     } finally {
@@ -81,6 +86,35 @@ export default function ExpenseForm() {
             <option value="Health">Health</option>
             <option value="Other">Other (AI will categorize)</option>
           </select>
+        </div>
+        
+        {/* Recurring Expense Toggle */}
+        <div className="border rounded-lg p-3 bg-gray-50">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isRecurring}
+              onChange={(e) => setIsRecurring(e.target.checked)}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400'} />
+            <span className="text-sm font-medium text-gray-700">Recurring expense</span>
+          </label>
+          
+          {isRecurring && (
+            <div className="mt-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Repeat</label>
+              <select
+                name="recurrenceType"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="daily">Daily</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          )}
         </div>
         
         <button
