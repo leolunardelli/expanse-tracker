@@ -2,11 +2,13 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { getExpenses, getExpenseStats } from './actions/expenses';
 import { getAIInsights } from './actions/ai';
+import Header from '@/components/Header';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExpenseList from '@/components/ExpenseList';
 import StatsCard from '@/components/StatsCard';
 import AIInsights from '@/components/AIInsights';
 import { authOptions } from '@/lib/auth';
+import { formatCurrency } from '@/lib/currency';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -21,21 +23,11 @@ export default async function HomePage() {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">💰 Expense Tracker</h1>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600">{session.user?.name}</span>
-            {session.user?.image && (
-              <img src={session.user.image} alt="avatar" className="w-8 h-8 rounded-full" />
-            )}
-          </div>
-        </div>
-      </header>
+      <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <StatsCard title="Total Spent" value={`$${stats.total.toFixed(2)}`} />
+          <StatsCard title="Total Spent" value={formatCurrency(stats.total)} />
           <StatsCard title="Transactions" value={stats.count} />
           <StatsCard title="Categories" value={Object.keys(stats.byCategory).length} />
         </div>

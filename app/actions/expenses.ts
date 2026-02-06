@@ -18,6 +18,8 @@ export async function createExpense(formData: FormData) {
   const description = formData.get('description') as string;
   const amount = parseFloat(formData.get('amount') as string);
   const category = formData.get('category') as string;
+  const dateStr = formData.get('date') as string;
+  const date = dateStr ? new Date(dateStr) : new Date();
   
   // AI categorization if category is "Other" or empty
   let finalCategory = category;
@@ -34,6 +36,7 @@ export async function createExpense(formData: FormData) {
       description,
       amount,
       category: finalCategory,
+      date,
       userId,
     },
   });
@@ -41,8 +44,41 @@ export async function createExpense(formData: FormData) {
   revalidatePath('/');
 }
 
+export async function updateExpense(
+  id: string,
+  data: { description: string; amount: number; category: string; date: Date }
+) {
+  const userId = await getUserId();
+  
+  // Verify expense belongs to user
+  const expense = await prisma.expense.findFirst({
+    where: { id, userId },
+  });
+  
+  if (!expense) throw new Error('Expense not found');
+  
+  await prisma.expense.update({
+    where: { id },
+    data: {
+      description: data.description,
+      amount: data.amount,
+      category: data.category,
+      date: data.date,
+    },
+  });
+  
+  revalidatePath('/');
+}
+
 export async function deleteExpense(id: string) {
-  await getUserId(); // Auth check
+  const userId = await getUserId();
+  
+  // Verify expense belongs to user
+  const expense = await prisma.expense.findFirst({
+    where: { id, userId },
+  });
+  
+  if (!expense) throw new Error('Expense not found');
   
   await prisma.expense.delete({
     where: { id },

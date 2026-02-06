@@ -1,7 +1,10 @@
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { Trash2, Pencil } from 'lucide-react';
 import { deleteExpense } from '@/app/actions/expenses';
+import { formatCurrency } from '@/lib/currency';
+import EditExpenseModal from './EditExpenseModal';
 
 interface Expense {
   id: string;
@@ -13,10 +16,12 @@ interface Expense {
 
 function formatDate(date: Date | string): string {
   const d = new Date(date);
-  return d.toISOString().split('T')[0]; // YYYY-MM-DD format is consistent
+  return d.toISOString().split('T')[0];
 }
 
 export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+
   async function handleDelete(id: string) {
     if (!confirm('Delete this expense?')) return;
     try {
@@ -36,27 +41,42 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
-      <div className="space-y-2">
-        {expenses.map((expense) => (
-          <div key={expense.id} className="flex justify-between items-center p-3 border rounded-lg hover:bg-gray-50 transition">
-            <div className="flex-1">
-              <p className="font-medium text-gray-900">{expense.description}</p>
-              <p className="text-sm text-gray-500">{expense.category} • {formatDate(expense.date)}</p>
+    <>
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
+        <div className="space-y-2">
+          {expenses.map((expense) => (
+            <div key={expense.id} className="flex justify-between items-center p-3 border rounded-lg hover:bg-gray-50 transition">
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">{expense.description}</p>
+                <p className="text-sm text-gray-500">{expense.category} • {formatDate(expense.date)}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <p className="font-bold text-lg">{formatCurrency(expense.amount)}</p>
+                <button
+                  onClick={() => setEditingExpense(expense)}
+                  className="p-2 hover:bg-blue-100 text-blue-600 rounded transition"
+                  title="Edit"
+                >
+                  <Pencil size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(expense.id)}
+                  className="p-2 hover:bg-red-100 text-red-600 rounded transition"
+                  title="Delete"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <p className="font-bold text-lg">${expense.amount.toFixed(2)}</p>
-              <button
-                onClick={() => handleDelete(expense.id)}
-                className="p-2 hover:bg-red-100 text-red-600 rounded transition"
-              >
-                <Trash2 size={18} />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+      
+      <EditExpenseModal 
+        expense={editingExpense} 
+        onClose={() => setEditingExpense(null)} 
+      />
+    </>
   );
 }
