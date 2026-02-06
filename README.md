@@ -2,204 +2,247 @@
 
 <div align="center">
 
-![ExpenseFlow Logo](https://img.shields.io/badge/ExpenseFlow-Smart%20Money%20Management-6366f1?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDgtMy41OSA4LTggOHptLjMxLTguODZjLTEuNzctLjQ1LTIuMzQtLjk0LTIuMzQtMS42NyAwLS44NC43OS0xLjQzIDIuMS0xLjQzIDEuMzggMCAxLjkuNjYgMS45NCAxLjY0aDEuNzFjLS4wNS0xLjM0LS44Ny0yLjU3LTIuNDktMi45N1Y1aC0yLjN2MS40M2MtMS41Ny4zNC0yLjgzIDEuMzctMi44MyAyLjkzIDAgMS44NyAxLjU1IDIuOCAzLjgxIDMuMzQgMi4wMi40OCAyLjQxIDEuMTkgMi40MSAxLjkzIDAgLjU1LS4zOSAxLjQzLTIuMSAxLjQzLTEuNjEgMC0yLjIzLS43Mi0yLjMyLTEuNjRINy42NWMuMSAxLjcxIDEuMzcgMi42NyAyLjk3IDIuOTlWMTloMi4zdi0xLjQ2YzEuNTgtLjMxIDIuODUtMS4zIDIuODUtMi45MSAwLTIuMy0xLjk3LTMuMDgtMy40Ni0zLjQ5eiIvPjwvc3ZnPg==)
+![ExpenseFlow](https://img.shields.io/badge/ExpenseFlow-AI--Powered%20Finance-6366f1?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDgtMy41OSA4LTggOHptLjMxLTguODZjLTEuNzctLjQ1LTIuMzQtLjk0LTIuMzQtMS42NyAwLS44NC43OS0xLjQzIDIuMS0xLjQzIDEuMzggMCAxLjkuNjYgMS45NCAxLjY0aDEuNzFjLS4wNS0xLjM0LS44Ny0yLjU3LTIuNDktMi45N1Y1aC0yLjN2MS40M2MtMS41Ny4zNC0yLjgzIDEuMzctMi44MyAyLjkzIDAgMS44NyAxLjU1IDIuOCAzLjgxIDMuMzQgMi4wMi40OCAyLjQxIDEuMTkgMi40MSAxLjkzIDAgLjU1LS4zOSAxLjQzLTIuMSAxLjQzLTEuNjEgMC0yLjIzLS43Mi0yLjMyLTEuNjRINy42NWMuMSAxLjcxIDEuMzcgMi42NyAyLjk3IDIuOTlWMTloMi4zdi0xLjQ2YzEuNTgtLjMxIDIuODUtMS4zIDIuODUtMi45MSAwLTIuMy0xLjk3LTMuMDgtMy40Ni0zLjQ5eiIvPjwvc3ZnPg==)
 
-**A beautiful, modern expense tracking application built with React & TypeScript**
+### 🚀 A Full-Stack Expense Tracker with AI-Powered Insights
 
-[![React](https://img.shields.io/badge/React-19.x-61dafb?style=flat-square&logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.x-06b6d4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Vite](https://img.shields.io/badge/Vite-7.x-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_App-00C853?style=for-the-badge)](https://y-nine-flame.vercel.app)
 
-[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Tech Stack](#-tech-stack) • [License](#-license)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=flat-square&logo=postgresql)](https://neon.tech/)
+[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=flat-square&logo=openai)](https://openai.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06b6d4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 
 </div>
 
 ---
 
-## ✨ Features
+## 🌟 Key Features
 
-### 📊 Smart Dashboard
-- **Real-time statistics** - Total expenses, averages, and top categories at a glance
-- **Interactive charts** - Beautiful pie charts and area charts powered by Recharts
-- **Category breakdown** - Visual progress bars showing spending distribution
-
-### 💳 Expense Management
-- **Quick add form** - Add expenses in seconds with smart category icons
-- **Edit & delete** - Full CRUD operations with smooth animations
-- **Category filtering** - Filter expenses by any category instantly
-
-### 📈 Advanced Analytics
-- **Monthly comparisons** - Stacked bar charts showing spending trends
-- **Smart insights** - Auto-generated tips based on spending patterns
-- **Category statistics** - Detailed breakdown with percentages
-
-### 🎨 Premium Design
-- **Dark mode** - Beautiful dark theme with smooth transitions
-- **Glassmorphism** - Modern glass-effect cards and components
-- **Responsive** - Fully responsive design for all devices
-- **Animations** - Smooth fade-in and slide animations throughout
-
-### 💾 Data Management
-- **Local storage** - Your data persists between sessions
-- **Export options** - Download expenses as CSV or JSON
-- **Clear all** - Safely reset your data when needed
+| Feature | Description |
+|---------|-------------|
+| 🔐 **Google OAuth** | Secure authentication with NextAuth.js database sessions |
+| 🗄️ **PostgreSQL Database** | Cloud-hosted on Neon with Prisma ORM |
+| 🤖 **AI-Powered Insights** | OpenAI GPT-4o-mini for spending analysis & predictions |
+| 📊 **Interactive Charts** | Recharts-powered pie, bar, and area charts |
+| ⚡ **Server Actions** | Next.js 15 App Router with server-side data mutations |
+| 🎨 **Modern UI** | Tailwind CSS with responsive design |
 
 ---
 
-## 🎯 Demo
+## ✨ Application Pages
 
-### Light Mode
-![ExpenseFlow Light Mode](https://via.placeholder.com/800x450/f8fafc/6366f1?text=ExpenseFlow+Light+Mode)
+### 🏠 Dashboard (`/`)
+- Quick expense entry with date picker & category selection
+- Real-time stats: total spending, monthly average, expense count
+- AI quick insights displayed on dashboard
+- Full CRUD operations: add, edit, delete expenses
 
-### Dark Mode
-![ExpenseFlow Dark Mode](https://via.placeholder.com/800x450/0f172a/818cf8?text=ExpenseFlow+Dark+Mode)
+### 📈 Analytics (`/analytics`)
+- **Category Pie Chart** - spending breakdown by category
+- **Monthly Bar Chart** - compare spending month-over-month
+- **30-Day Trend Chart** - daily spending patterns
+- **Summary Cards** - key metrics at a glance
+
+### 🧠 AI Insights (`/insights`)
+- **Monthly Predictions** - AI predicts end-of-month spending total
+- **Weekly Comparison** - this week vs last week with % change
+- **Saving Tips** - 3 personalized recommendations with potential savings
+- **Smart Assessments** - AI commentary on spending habits
 
 ---
 
-## 🚀 Installation
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|------------|---------|
+| **Next.js 15** | React framework with App Router |
+| **React 19** | UI library |
+| **TypeScript 5** | Type safety |
+| **Tailwind CSS 3** | Styling |
+| **Recharts 2** | Data visualization |
+| **Lucide React** | Icons |
+
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| **Next.js Server Actions** | API layer |
+| **NextAuth.js 4** | Authentication |
+| **Prisma 6** | Database ORM |
+| **PostgreSQL** | Database (Neon) |
+
+### AI
+| Technology | Purpose |
+|------------|---------|
+| **OpenAI GPT-4o-mini** | Insights, categorization, predictions |
+| **Vercel AI SDK** | AI integration |
+
+### Deployment
+| Technology | Purpose |
+|------------|---------|
+| **Vercel** | Hosting & deployment |
+| **Neon** | Serverless PostgreSQL |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18.x or higher
-- npm or yarn
+- Node.js 18+
+- PostgreSQL database (or [Neon](https://neon.tech) free tier)
+- Google OAuth credentials ([Google Cloud Console](https://console.cloud.google.com))
+- OpenAI API key ([OpenAI Platform](https://platform.openai.com))
 
-### Quick Start
+### Environment Variables
+
+Create `.env.local`:
+
+```env
+# Database (Neon PostgreSQL)
+DATABASE_URL="postgresql://user:pass@host/db?sslmode=require"
+
+# NextAuth
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+
+# OpenAI
+OPENAI_API_KEY="sk-..."
+```
+
+### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/expenseflow.git
-
-# Navigate to the project
-cd expenseflow
+# Clone repository
+git clone https://github.com/leolunardelli/expanse-tracker.git
+cd expanse-tracker
 
 # Install dependencies
 npm install
+
+# Setup database
+npx prisma db push
+npx prisma generate
 
 # Start development server
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`
-
-### Build for Production
-
-```bash
-# Create production build
-npm run build
-
-# Preview production build
-npm run preview
-```
-
----
-
-## 🛠 Tech Stack
-
-| Technology | Purpose |
-|------------|---------|
-| **React 19** | UI Framework |
-| **TypeScript 5** | Type Safety |
-| **Tailwind CSS 3** | Styling |
-| **Vite 7** | Build Tool |
-| **React Hook Form** | Form Management |
-| **Zod** | Schema Validation |
-| **Recharts** | Data Visualization |
-| **Context API** | State Management |
+Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/
+├── app/
+│   ├── actions/           # Server actions
+│   │   ├── expenses.ts    # CRUD operations
+│   │   ├── analytics.ts   # Chart data
+│   │   └── ai.ts          # AI insights
+│   ├── analytics/         # Analytics page
+│   ├── insights/          # AI insights page
+│   ├── api/auth/          # NextAuth routes
+│   └── page.tsx           # Dashboard
 ├── components/
-│   ├── analytics/        # Analytics dashboard
-│   ├── common/           # Shared components (Modal, Spinner, etc.)
-│   ├── dashboard/        # Main dashboard & charts
-│   ├── expenses/         # Expense forms & lists
-│   ├── filters/          # Category filters
-│   ├── layout/           # Header & Sidebar
-│   └── settings/         # Settings page
-├── context/
-│   ├── ExpenseContext    # Expense state management
-│   └── ThemeContext      # Theme (dark/light) management
-├── hooks/
-│   └── useLocalStorage   # Local storage hook
-├── types/
-│   └── index.ts          # TypeScript type definitions
-├── utils/
-│   ├── stats.ts          # Statistics calculations
-│   └── validation.ts     # Zod validation schemas
-├── App.tsx               # Main app component
-├── main.tsx              # App entry point
-└── index.css             # Global styles & Tailwind
+│   ├── ai/                # AI components
+│   ├── charts/            # Chart components
+│   ├── Header.tsx         # Navigation
+│   ├── ExpenseForm.tsx    # Add expense
+│   └── ExpenseList.tsx    # Expense list
+├── lib/
+│   ├── ai.ts              # OpenAI functions
+│   ├── auth.ts            # NextAuth config
+│   └── prisma.ts          # Database client
+├── prisma/
+│   └── schema.prisma      # Database schema
+└── types/
+    └── next-auth.d.ts     # Type extensions
 ```
 
 ---
 
-## 🎨 Customization
+## 💡 Implementation Highlights
 
-### Theme Colors
-
-Customize the color palette in `tailwind.config.js`:
-
-```javascript
-colors: {
-  primary: {
-    // Your primary color palette
-  },
-  accent: {
-    // Your accent color palette
-  }
+### Server Actions (Next.js 15)
+```typescript
+'use server';
+export async function createExpense(formData: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error('Unauthorized');
+  
+  await prisma.expense.create({
+    data: { ...expenseData, userId: session.user.id }
+  });
+  revalidatePath('/');
 }
 ```
 
-### Categories
-
-Add new expense categories in `src/types/index.ts`:
-
+### AI Integration
 ```typescript
-export type Category = 
-  | 'food' 
-  | 'transport' 
-  | 'your-new-category';
+export async function generateSavingTips(expenses: ExpenseData[]) {
+  const { text } = await generateText({
+    model: openai('gpt-4o-mini'),
+    prompt: `Analyze spending and provide 3 saving tips...`,
+  });
+  return JSON.parse(text);
+}
+```
+
+### Database Schema
+```prisma
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String
+  date        DateTime
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
 ```
 
 ---
 
 ## 🔜 Roadmap
 
-- [ ] **Budget Goals** - Set monthly spending limits
-- [ ] **Recurring Expenses** - Track subscriptions automatically
-- [ ] **Multi-currency** - Support for different currencies
-- [ ] **Cloud Sync** - Sync data across devices
-- [ ] **Receipt Scanning** - OCR for automatic expense entry
-- [ ] **Reports** - Monthly/yearly PDF reports
+- [x] Core CRUD operations
+- [x] Google OAuth authentication
+- [x] Analytics dashboard with charts
+- [x] AI-powered insights
+- [ ] Budget goals & alerts
+- [ ] Recurring expenses
+- [ ] Multi-currency support
+- [ ] Mobile PWA
+
+---
+
+## 👨‍💻 Author
+
+**Leonardo Lunardelli**
+
+[![GitHub](https://img.shields.io/badge/GitHub-leolunardelli-181717?style=flat-square&logo=github)](https://github.com/leolunardelli)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-leolunardelli-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/leolunardelli)
+[![Twitter](https://img.shields.io/badge/Twitter-lewowzera-1DA1F2?style=flat-square&logo=twitter)](https://twitter.com/lewowzera)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-**Built with ❤️ using React & TypeScript**
+**Built with ❤️ using Next.js 15, TypeScript, PostgreSQL & OpenAI**
 
-[⬆ Back to top](#expenseflow-)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/leolunardelli/expanse-tracker)
 
 </div>
