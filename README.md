@@ -216,7 +216,7 @@ model Expense {
 - [x] Google OAuth authentication
 - [x] Analytics dashboard with charts
 - [x] AI-powered insights
-- [ ] Budget goals & alerts
+- [x] Budget goals & alerts
 - [ ] Recurring expenses
 - [ ] Multi-currency support
 - [ ] Mobile PWA
