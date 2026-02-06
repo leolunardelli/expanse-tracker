@@ -54,6 +54,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   expenses      Expense[]
+  budgets       Budget[]
 }
 
 model Expense {
@@ -76,4 +77,22 @@ model Expense {
   @@index([userId])
   @@index([date])
   @@index([category])
+}
+
+// Budget Goals
+model Budget {
+  id          String   @id @default(cuid())
+  category    String   // "all" for total budget, or specific category
+  amount      Float    // Monthly budget limit
+  period      String   @default("monthly") // monthly, weekly
+  alertAt     Int      @default(80) // Alert when reaching this % (e.g., 80%)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, category]) // One budget per category per user
+  @@index([userId])
 }
