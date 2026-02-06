@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { LogOut, BarChart3, Home } from 'lucide-react';
+import { LogOut, BarChart3, Home, Brain } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -40,6 +40,17 @@ export default function Header({ userName, userImage }: HeaderProps) {
             >
               <BarChart3 size={18} />
               <span>Analytics</span>
+            </Link>
+            <Link 
+              href="/insights"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                pathname === '/insights' 
+                  ? 'bg-purple-50 text-purple-600' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Brain size={18} />
+              <span>AI Insights</span>
             </Link>
           </nav>
         </div>
