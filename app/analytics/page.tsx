@@ -2,11 +2,14 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
 import { getAnalyticsData } from '../actions/analytics';
+import { getYearOverYearData } from '../actions/yoy';
 import Header from '@/components/Header';
 import SummaryCards from '@/components/charts/SummaryCards';
 import CategoryPieChart from '@/components/charts/CategoryPieChart';
 import MonthlyBarChart from '@/components/charts/MonthlyBarChart';
 import SpendingTrendChart from '@/components/charts/SpendingTrendChart';
+import YearOverYearChart from '@/components/charts/YearOverYearChart';
+import YoYStatsCards from '@/components/charts/YoYStatsCards';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -18,6 +21,7 @@ export default async function AnalyticsPage() {
   }
   
   const analytics = await getAnalyticsData();
+  const yoyData = await getYearOverYearData();
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,6 +48,17 @@ export default async function AnalyticsPage() {
         
         <div className="mt-6">
           <SpendingTrendChart data={analytics.trendData} />
+        </div>
+
+        {/* Year-over-Year Section */}
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-4">📈 Year-over-Year Analysis</h2>
+          <YoYStatsCards stats={yoyData} />
+          <YearOverYearChart 
+            data={yoyData.chartData} 
+            currentYear={yoyData.currentYear}
+            previousYear={yoyData.previousYear}
+          />
         </div>
       </main>
     </div>
