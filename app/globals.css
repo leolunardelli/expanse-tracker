@@ -10,6 +10,15 @@
   }
 
   body {
-    @apply font-sans antialiased;
+    @apply font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
+  }
+
+  /* Dark mode form controls */
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  .dark select {
+    color-scheme: dark;
   }
 }

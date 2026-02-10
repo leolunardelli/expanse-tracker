@@ -46,7 +46,7 @@ export default function InstallPrompt() {
       <button onClick={install} className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 shrink-0">
         Install
       </button>
-      <button onClick={() => setDismissed(true)} className="p-1 text-gray-400 hover:text-gray-600">
+      <button onClick={() => setDismissed(true)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
         <X size={16} />
       </button>
     </div>

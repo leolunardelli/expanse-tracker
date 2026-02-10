@@ -17,15 +17,15 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white p-8 rounded-xl shadow-xl max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-950">
+      <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-xl max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-2">Welcome Back</h1>
-        <p className="text-gray-600 text-center mb-8">Sign in to track your expenses</p>
+        <p className="text-gray-600 dark:text-gray-400 text-center mb-8">Sign in to track your expenses</p>
         
         <button
           onClick={handleSignIn}
           disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 text-gray-700 font-semibold hover:bg-gray-50 transition disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 text-gray-700 dark:text-gray-200 font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition disabled:opacity-50"
         >
           {isLoading ? (
             <span>Signing in...</span>

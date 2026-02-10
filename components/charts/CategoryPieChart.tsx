@@ -1,6 +1,7 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { useTheme } from 'next-themes';
 
 type CategoryData = {
   name: string;
@@ -19,17 +20,20 @@ const COLORS = [
 ];
 
 export default function CategoryPieChart({ data }: { data: CategoryData[] }) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   if (data.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
         <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
-        <p className="text-gray-500 text-center py-8">No data yet</p>
+        <p className="text-gray-500 dark:text-gray-400 text-center py-8">No data yet</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
       <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
@@ -50,6 +54,12 @@ export default function CategoryPieChart({ data }: { data: CategoryData[] }) {
           </Pie>
           <Tooltip 
             formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Amount']}
+            contentStyle={{
+              backgroundColor: isDark ? '#1f2937' : '#fff',
+              border: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`,
+              borderRadius: '8px',
+              color: isDark ? '#f3f4f6' : '#111827',
+            }}
           />
           <Legend />
         </PieChart>

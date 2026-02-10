@@ -24,7 +24,7 @@ export default async function HomePage() {
   const insights = await getAIInsights();
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 py-8">

@@ -27,11 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
-      <body>
+      <body className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
         <AuthProvider>{children}</AuthProvider>
         <InstallPrompt />
       </body>

@@ -24,14 +24,14 @@ export default async function AnalyticsPage() {
   const yoyData = await getYearOverYearData();
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-6">
           <Link 
             href="/"
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition"
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition"
           >
             <ArrowLeft size={20} />
             <span>Back to Dashboard</span>

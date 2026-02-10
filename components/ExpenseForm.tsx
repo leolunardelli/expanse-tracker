@@ -32,51 +32,51 @@ export default function ExpenseForm() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
       <h2 className="text-xl font-bold mb-4">Add Expense</h2>
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
           <input
             type="text"
             name="description"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
             placeholder="Coffee, Uber, etc."
           />
         </div>
         
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
             <input
               type="number"
               name="amount"
               required
               step="0.01"
               min="0"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
               placeholder="0.00"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
             <input
               type="date"
               name="date"
               defaultValue={getTodayDate()}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
             />
           </div>
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
           <select
             name="category"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
           >
             <option value="Food">Food</option>
             <option value="Transport">Transport</option>
@@ -88,24 +88,24 @@ export default function ExpenseForm() {
           </select>
         </div>
         
-        <div className="border rounded-lg p-3 bg-gray-50">
+        <div className="border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={isRecurring}
               onChange={(e) => setIsRecurring(e.target.checked)}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
             />
-            <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400'} />
-            <span className="text-sm font-medium text-gray-700">Recurring expense</span>
+            <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400 dark:text-gray-500'} />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Recurring expense</span>
           </label>
           
           {isRecurring && (
             <div className="mt-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Repeat</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Repeat</label>
               <select
                 name="recurrenceType"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
               >
                 <option value="monthly">Monthly</option>
                 <option value="weekly">Weekly</option>
