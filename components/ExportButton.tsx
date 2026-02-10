@@ -7,19 +7,17 @@ import { exportExpensesAsCSV } from '@/app/actions/export';
 export default function ExportButton() {
   const [loading, setLoading] = useState(false);
 
-  async function handleExport() {
+  const handleExport = async () => {
     setLoading(true);
     try {
       const { csv, filename } = await exportExpensesAsCSV();
-
-      // Create a blob and download
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([csv], { type: 'text/csv' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = filename;
       link.click();
-    } catch (error) {
-      alert('Error exporting expenses: ' + (error as Error).message);
+    } catch {
+      alert('Failed to export');
     } finally {
       setLoading(false);
     }

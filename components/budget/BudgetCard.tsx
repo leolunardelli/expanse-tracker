@@ -5,7 +5,7 @@ import { deleteBudget } from '@/app/actions/budget';
 import { formatCurrency } from '@/lib/currency';
 import { useState } from 'react';
 
-interface BudgetStatus {
+type BudgetStatus = {
   id: string;
   category: string;
   budgetAmount: number;
@@ -28,7 +28,7 @@ const CATEGORY_INFO: Record<string, { label: string; emoji: string; color: strin
   other: { label: 'Other', emoji: '📦', color: 'gray' },
 };
 
-interface BudgetCardProps {
+type BudgetCardProps = {
   budget: BudgetStatus;
   onDelete?: () => void;
 }
@@ -96,7 +96,6 @@ export default function BudgetCard({ budget, onDelete }: BudgetCardProps) {
         </button>
       </div>
 
-      {/* Progress Bar */}
       <div className="mb-3">
         <div className="flex justify-between text-sm mb-1">
           <span className="text-gray-600 dark:text-gray-400">
@@ -122,7 +121,6 @@ export default function BudgetCard({ budget, onDelete }: BudgetCardProps) {
         </div>
       </div>
 
-      {/* Status */}
       <div className={`flex items-center gap-2 p-2 rounded-lg ${
         budget.isOverBudget 
           ? 'bg-red-50 dark:bg-red-900/20' 

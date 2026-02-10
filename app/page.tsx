@@ -28,7 +28,6 @@ export default async function HomePage() {
       <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Budget Alerts */}
         <BudgetAlerts />
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -39,7 +38,6 @@ export default async function HomePage() {
         
         <AIInsights insights={insights} />
         
-        {/* Export Button */}
         <div className="flex justify-end mb-6">
           <ExportButton />
         </div>

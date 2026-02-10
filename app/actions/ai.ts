@@ -30,8 +30,8 @@ export async function getAIInsights() {
     }
     
     return await generateExpenseInsight(expenses);
-  } catch (error) {
-    console.error('AI Insights error:', error);
+  } catch {
+    console.error('AI Insights error');
     return 'Unable to generate insights at this time.';
   }
 }
@@ -44,8 +44,8 @@ export async function getSavingTips() {
     }
     
     return await generateSavingTips(expenses);
-  } catch (error) {
-    console.error('Saving Tips error:', error);
+  } catch {
+    console.error('Saving Tips error');
     return [];
   }
 }
@@ -58,8 +58,8 @@ export async function getSpendingPrediction() {
     }
     
     return await predictMonthlySpending(expenses);
-  } catch (error) {
-    console.error('Prediction error:', error);
+  } catch {
+    console.error('Prediction error');
     return null;
   }
 }
@@ -72,8 +72,8 @@ export async function getWeeklyAnalysis() {
     }
     
     return await generateWeeklyAnalysis(expenses);
-  } catch (error) {
-    console.error('Weekly Analysis error:', error);
+  } catch {
+    console.error('Weekly Analysis error');
     return null;
   }
 }

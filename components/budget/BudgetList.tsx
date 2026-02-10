@@ -6,7 +6,7 @@ import BudgetForm from './BudgetForm';
 import BudgetCard from './BudgetCard';
 import { Wallet } from 'lucide-react';
 
-interface BudgetStatus {
+type BudgetStatus = {
   id: string;
   category: string;
   budgetAmount: number;
@@ -77,7 +77,6 @@ export default function BudgetList() {
         </div>
       )}
 
-      {/* Tips */}
       {budgets.length > 0 && (
         <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border border-purple-100 dark:border-purple-800">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-2">

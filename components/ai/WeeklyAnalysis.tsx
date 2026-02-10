@@ -5,7 +5,7 @@ import { BarChart3, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
 import { getWeeklyAnalysis } from '@/app/actions/ai';
 import { formatCurrency } from '@/lib/currency';
 
-interface WeeklyData {
+type WeeklyData = {
   thisWeekTotal: number;
   lastWeekTotal: number;
   changePercent: number;
@@ -22,8 +22,8 @@ export default function WeeklyAnalysis() {
     try {
       const result = await getWeeklyAnalysis();
       setData(result);
-    } catch (error) {
-      console.error('Failed to fetch weekly analysis:', error);
+    } catch {
+      console.error('Failed to load analysis');
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,6 @@ export default function WeeklyAnalysis() {
         </button>
       </div>
 
-      {/* Week Comparison */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-100 dark:border-green-800">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">This Week</p>
@@ -96,7 +95,6 @@ export default function WeeklyAnalysis() {
         </div>
       </div>
 
-      {/* Change Indicator */}
       <div className={`flex items-center justify-center gap-2 p-3 rounded-lg mb-4 ${
         isIncrease 
           ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400' 
@@ -108,7 +106,6 @@ export default function WeeklyAnalysis() {
         </span>
       </div>
 
-      {/* Top Category */}
       <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg mb-4">
         <span className="text-sm text-gray-600 dark:text-gray-400">Top Category This Week</span>
         <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
@@ -116,7 +113,6 @@ export default function WeeklyAnalysis() {
         </span>
       </div>
 
-      {/* AI Analysis */}
       <div className="p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800">
         <p className="text-sm text-gray-700 dark:text-gray-300">
           {data.analysis}

@@ -5,7 +5,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// Get all budgets for the current user
 export async function getBudgets() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return [];
@@ -16,7 +15,6 @@ export async function getBudgets() {
   });
 }
 
-// Get a specific budget by category
 export async function getBudgetByCategory(category: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return null;
@@ -31,7 +29,6 @@ export async function getBudgetByCategory(category: string) {
   });
 }
 
-// Create or update a budget (upsert)
 export async function saveBudget(formData: FormData) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -69,13 +66,12 @@ export async function saveBudget(formData: FormData) {
     revalidatePath('/');
     revalidatePath('/budget');
     return { success: true };
-  } catch (error) {
-    console.error('Save budget error:', error);
+  } catch {
+    console.error('Save budget error');
     return { error: 'Failed to save budget' };
   }
 }
 
-// Delete a budget
 export async function deleteBudget(id: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -93,13 +89,12 @@ export async function deleteBudget(id: string) {
     revalidatePath('/');
     revalidatePath('/budget');
     return { success: true };
-  } catch (error) {
-    console.error('Delete budget error:', error);
+  } catch {
+    console.error('Delete budget error');
     return { error: 'Failed to delete budget' };
   }
 }
 
-// Get budget status with spending for current month
 export async function getBudgetStatus() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return [];
@@ -108,12 +103,10 @@ export async function getBudgetStatus() {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-  // Get all budgets
   const budgets = await prisma.budget.findMany({
     where: { userId: session.user.id },
   });
 
-  // Get expenses for this month
   const expenses = await prisma.expense.findMany({
     where: {
       userId: session.user.id,
@@ -124,7 +117,6 @@ export async function getBudgetStatus() {
     },
   });
 
-  // Calculate spending by category
   const spendingByCategory: Record<string, number> = {};
   let totalSpending = 0;
 
@@ -133,7 +125,6 @@ export async function getBudgetStatus() {
     totalSpending += expense.amount;
   });
 
-  // Build budget status
   return budgets.map((budget) => {
     const spent = budget.category === 'all' 
       ? totalSpending 
@@ -158,7 +149,6 @@ export async function getBudgetStatus() {
   });
 }
 
-// Get alerts for budgets that are near or over limit
 export async function getBudgetAlerts() {
   const statuses = await getBudgetStatus();
   return statuses.filter((s) => s.isNearLimit || s.isOverBudget);

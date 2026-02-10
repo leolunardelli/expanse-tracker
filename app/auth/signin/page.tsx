@@ -10,8 +10,8 @@ export default function SignIn() {
     setIsLoading(true);
     try {
       await signIn('google', { callbackUrl: '/', redirect: true });
-    } catch (error) {
-      console.error('Sign in error:', error);
+    } catch {
+      console.error('Sign in error');
       setIsLoading(false);
     }
   };
@@ -42,7 +42,6 @@ export default function SignIn() {
           )}
         </button>
 
-        {/* Alternative direct link */}
         <div className="mt-4 text-center">
           <a 
             href="/api/auth/signin/google?callbackUrl=%2F"

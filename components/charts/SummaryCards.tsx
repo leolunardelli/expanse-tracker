@@ -3,7 +3,7 @@
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Hash } from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
 
-interface SummaryData {
+type SummaryData = {
   totalExpenses: number;
   totalSpent: number;
   currentMonthTotal: number;

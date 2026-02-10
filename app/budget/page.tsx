@@ -17,7 +17,6 @@ export default async function BudgetPage() {
       <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg">
@@ -33,7 +32,6 @@ export default async function BudgetPage() {
           </p>
         </div>
 
-        {/* Budget List */}
         <BudgetList />
       </main>
     </div>

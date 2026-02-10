@@ -5,10 +5,10 @@ import { LogOut, BarChart3, Home, Brain, Target } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-interface HeaderProps {
+type HeaderProps = {
   userName?: string | null;
   userImage?: string | null;
-}
+};
 
 export default function Header({ userName, userImage }: HeaderProps) {
   const pathname = usePathname();

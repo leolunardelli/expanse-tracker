@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
-    strategy: 'database', // Use database sessions with adapter
+    strategy: 'database',
   },
   pages: {
     signIn: '/auth/signin',

@@ -6,7 +6,7 @@ import { getBudgetAlerts } from '@/app/actions/budget';
 import { formatCurrency } from '@/lib/currency';
 import Link from 'next/link';
 
-interface BudgetAlert {
+type BudgetAlert = {
   id: string;
   category: string;
   budgetAmount: number;

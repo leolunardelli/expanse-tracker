@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, RefreshCw } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
 
-interface Expense {
+type Expense = {
   id: string;
   description: string;
   amount: number;
@@ -14,7 +14,7 @@ interface Expense {
   recurrenceType?: string | null;
 }
 
-interface EditExpenseModalProps {
+type EditExpenseModalProps = {
   expense: Expense | null;
   onClose: () => void;
 }
@@ -56,8 +56,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
         recurrenceType: isRecurring ? recurrenceType : null,
       });
       onClose();
-    } catch (error) {
-      alert('Error updating expense: ' + (error as Error).message);
+    } catch {
+      alert('Update failed');
     } finally {
       setLoading(false);
     }
@@ -126,7 +126,6 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
             />
           </div>
           
-          {/* Recurring Expense Toggle */}
           <div className="border rounded-lg p-3 bg-gray-50">
             <label className="flex items-center gap-2 cursor-pointer">
               <input

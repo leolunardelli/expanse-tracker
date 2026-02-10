@@ -2,11 +2,11 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface YoYData {
+type YoYData = {
   month: string;
   current: number;
   previous: number;
-}
+};
 
 export default function YearOverYearChart({ data, currentYear, previousYear }: { 
   data: YoYData[]; 

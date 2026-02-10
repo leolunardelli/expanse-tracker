@@ -2,7 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-interface CategoryData {
+type CategoryData = {
   name: string;
   value: number;
 }

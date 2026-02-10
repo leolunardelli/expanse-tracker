@@ -7,43 +7,29 @@ import { prisma } from '@/lib/prisma';
 export async function exportExpensesAsCSV() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Unauthorized');
+  const userId = session.user.id;
 
-  // Get all expenses for the user
   const expenses = await prisma.expense.findMany({
-    where: { userId: session.user.id },
+    where: { userId },
     orderBy: { date: 'desc' },
   });
 
-  if (expenses.length === 0) {
-    throw new Error('No expenses to export');
-  }
+  if (!expenses.length) throw new Error('No data to export');
 
-  // CSV headers
   const headers = ['Date', 'Description', 'Category', 'Amount', 'Recurring', 'Frequency'];
-
-  // Convert expenses to CSV rows
-  const rows = expenses.map(expense => {
-    const date = new Date(expense.date).toISOString().split('T')[0];
-    const amount = expense.amount.toFixed(2);
-    const recurring = expense.isRecurring ? 'Yes' : 'No';
-    const frequency = expense.recurrenceType || '-';
-
+  const rows = expenses.map(exp => {
+    const date = new Date(exp.date).toISOString().split('T')[0];
     return [
       `"${date}"`,
-      `"${expense.description.replace(/"/g, '""')}"`, // Escape quotes in description
-      `"${expense.category}"`,
-      amount,
-      recurring,
-      frequency,
+      `"${exp.description.replace(/"/g, '""')}"`,
+      `"${exp.category}"`,
+      exp.amount.toFixed(2),
+      exp.isRecurring ? 'Yes' : 'No',
+      exp.recurrenceType || '-',
     ].join(',');
   });
 
-  // Combine headers and rows
   const csv = [headers.join(','), ...rows].join('\n');
-
-  // Create filename with current date
-  const today = new Date().toISOString().split('T')[0];
-  const filename = `ExpenseFlow_Export_${today}.csv`;
-
+  const filename = `expenses_${new Date().toISOString().split('T')[0]}.csv`;
   return { csv, filename };
 }

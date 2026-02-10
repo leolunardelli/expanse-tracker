@@ -6,7 +6,7 @@ import { deleteExpense } from '@/app/actions/expenses';
 import { formatCurrency } from '@/lib/currency';
 import EditExpenseModal from './EditExpenseModal';
 
-interface Expense {
+type Expense = {
   id: string;
   description: string;
   amount: number;
@@ -16,26 +16,17 @@ interface Expense {
   recurrenceType?: string | null;
 }
 
-function formatDate(date: Date | string): string {
-  const d = new Date(date);
-  return d.toISOString().split('T')[0];
-}
+const formatDate = (date: Date | string) => new Date(date).toISOString().split('T')[0];
 
-function getRecurrenceLabel(type: string | null | undefined): string {
-  switch (type) {
-    case 'daily': return 'Daily';
-    case 'weekly': return 'Weekly';
-    case 'monthly': return 'Monthly';
-    case 'yearly': return 'Yearly';
-    default: return '';
-  }
-}
+const getRecurrenceLabel = (type?: string | null) => {
+  const labels: Record<string, string> = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', yearly: 'Yearly' };
+  return labels[type || ''] || '';
+};
 
 export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filter expenses by search query
   const filteredExpenses = expenses.filter(expense => 
     expense.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     expense.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -45,8 +36,8 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
     if (!confirm('Delete this expense?')) return;
     try {
       await deleteExpense(id);
-    } catch (error) {
-      alert('Error deleting expense: ' + (error as Error).message);
+    } catch {
+      alert('Delete failed');
     }
   }
 
@@ -67,7 +58,6 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
           <span className="text-sm text-gray-500">{filteredExpenses.length} of {expenses.length}</span>
         </div>
         
-        {/* Search Bar */}
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <input

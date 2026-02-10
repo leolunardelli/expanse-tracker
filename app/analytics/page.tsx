@@ -50,7 +50,6 @@ export default async function AnalyticsPage() {
           <SpendingTrendChart data={analytics.trendData} />
         </div>
 
-        {/* Year-over-Year Section */}
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4">📈 Year-over-Year Analysis</h2>
           <YoYStatsCards stats={yoyData} />

@@ -5,7 +5,7 @@ import { Lightbulb, DollarSign, RefreshCw } from 'lucide-react';
 import { getSavingTips } from '@/app/actions/ai';
 import { formatCurrency } from '@/lib/currency';
 
-interface SavingTip {
+type SavingTip = {
   tip: string;
   potentialSaving: number;
   category: string;
@@ -20,8 +20,8 @@ export default function SavingTips() {
     try {
       const data = await getSavingTips();
       setTips(data);
-    } catch (error) {
-      console.error('Failed to fetch tips:', error);
+    } catch {
+      console.error('Failed to load tips');
     } finally {
       setLoading(false);
     }

@@ -24,8 +24,8 @@ export default function ExpenseForm() {
       await createExpense(formData);
       formRef.current?.reset();
       setIsRecurring(false);
-    } catch (error) {
-      alert('Error creating expense: ' + (error as Error).message);
+    } catch {
+      alert('Failed to save');
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,6 @@ export default function ExpenseForm() {
           </select>
         </div>
         
-        {/* Recurring Expense Toggle */}
         <div className="border rounded-lg p-3 bg-gray-50">
           <label className="flex items-center gap-2 cursor-pointer">
             <input

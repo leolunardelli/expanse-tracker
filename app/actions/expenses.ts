@@ -14,37 +14,24 @@ async function getUserId() {
 
 export async function createExpense(formData: FormData) {
   const userId = await getUserId();
-  
   const description = formData.get('description') as string;
   const amount = parseFloat(formData.get('amount') as string);
-  const category = formData.get('category') as string;
-  const dateStr = formData.get('date') as string;
-  const date = dateStr ? new Date(dateStr) : new Date();
+  let category = formData.get('category') as string;
+  const date = new Date(formData.get('date') as string);
   const isRecurring = formData.get('isRecurring') === 'true';
   const recurrenceType = formData.get('recurrenceType') as string | null;
   
-  // AI categorization if category is "Other" or empty
-  let finalCategory = category;
   if (!category || category === 'Other') {
     try {
-      finalCategory = await categorizeExpense(description);
+      category = await categorizeExpense(description);
     } catch {
-      finalCategory = 'Other';
+      category = 'Other';
     }
   }
   
   await prisma.expense.create({
-    data: {
-      description,
-      amount,
-      category: finalCategory,
-      date,
-      isRecurring,
-      recurrenceType: isRecurring ? recurrenceType : null,
-      userId,
-    },
+    data: { description, amount, category, date, isRecurring, recurrenceType: isRecurring ? recurrenceType : null, userId },
   });
-  
   revalidatePath('/');
 }
 
@@ -61,7 +48,6 @@ export async function updateExpense(
 ) {
   const userId = await getUserId();
   
-  // Verify expense belongs to user
   const expense = await prisma.expense.findFirst({
     where: { id, userId },
   });
@@ -86,7 +72,6 @@ export async function updateExpense(
 export async function deleteExpense(id: string) {
   const userId = await getUserId();
   
-  // Verify expense belongs to user
   const expense = await prisma.expense.findFirst({
     where: { id, userId },
   });
@@ -117,8 +102,8 @@ export async function getExpenseStats() {
     select: { amount: true, category: true },
   });
   
-  const total = expenses.reduce((sum: number, e: { amount: number }) => sum + e.amount, 0);
-  const byCategory = expenses.reduce((acc: Record<string, number>, e: { amount: number; category: string }) => {
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const byCategory = expenses.reduce((acc, e) => {
     acc[e.category] = (acc[e.category] || 0) + e.amount;
     return acc;
   }, {} as Record<string, number>);

@@ -2,7 +2,7 @@
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-interface YoYStats {
+type YoYStats = {
   currentYearTotal: number;
   previousYearTotal: number;
   difference: number;
@@ -11,7 +11,7 @@ interface YoYStats {
   previousAverage: number;
   currentYear: number;
   previousYear: number;
-}
+};
 
 export default function YoYStatsCards({ stats }: { stats: YoYStats }) {
   const isPositive = stats.difference > 0;
@@ -20,7 +20,6 @@ export default function YoYStatsCards({ stats }: { stats: YoYStats }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      {/* Total Spending Comparison */}
       <div className="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
         <p className="text-gray-600 text-sm font-medium">Total Annual Spending</p>
         <div className="mt-2">
@@ -35,7 +34,6 @@ export default function YoYStatsCards({ stats }: { stats: YoYStats }) {
         </div>
       </div>
 
-      {/* Year-over-Year Change */}
       <div className={`rounded-lg shadow p-4 border-l-4 ${bgColor} ${isPositive ? 'border-red-500' : 'border-green-500'}`}>
         <p className="text-gray-600 text-sm font-medium">Year-over-Year Change</p>
         <div className="mt-2 flex items-center gap-3">
@@ -55,7 +53,6 @@ export default function YoYStatsCards({ stats }: { stats: YoYStats }) {
         </div>
       </div>
 
-      {/* Monthly Average Comparison */}
       <div className="bg-white rounded-lg shadow p-4 border-l-4 border-purple-500">
         <p className="text-gray-600 text-sm font-medium">Monthly Average</p>
         <div className="mt-2">

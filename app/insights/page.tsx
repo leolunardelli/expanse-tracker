@@ -19,7 +19,6 @@ export default async function InsightsPage() {
       <Header userName={session.user?.name} userImage={session.user?.image} />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg">
@@ -35,19 +34,15 @@ export default async function InsightsPage() {
           </p>
         </div>
 
-        {/* Insights Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column */}
           <div className="space-y-6">
             <SpendingPrediction />
             <WeeklyAnalysis />
           </div>
           
-          {/* Right Column */}
           <div className="space-y-6">
             <SavingTips />
             
-            {/* AI Features Info Card */}
             <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl shadow-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                 <Sparkles className="w-5 h-5" />

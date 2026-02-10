@@ -15,7 +15,7 @@ const CATEGORIES = [
   { value: 'other', label: '📦 Other', color: 'bg-gray-500' },
 ];
 
-interface BudgetFormProps {
+type BudgetFormProps = {
   existingCategories: string[];
   onSuccess?: () => void;
 }

@@ -5,7 +5,7 @@ import { TrendingUp, TrendingDown, Calendar, RefreshCw } from 'lucide-react';
 import { getSpendingPrediction } from '@/app/actions/ai';
 import { formatCurrency } from '@/lib/currency';
 
-interface Prediction {
+type Prediction = {
   spentSoFar: number;
   avgPerDay: number;
   projectedTotal: number;
@@ -23,8 +23,8 @@ export default function SpendingPrediction() {
     try {
       const data = await getSpendingPrediction();
       setPrediction(data);
-    } catch (error) {
-      console.error('Failed to fetch prediction:', error);
+    } catch {
+      console.error('Failed to load prediction');
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,6 @@ export default function SpendingPrediction() {
         </button>
       </div>
 
-      {/* Projected Total */}
       <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Projected Monthly Total</p>
         <div className="flex items-end gap-3">
@@ -103,7 +102,6 @@ export default function SpendingPrediction() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Spent So Far</p>
@@ -134,7 +132,6 @@ export default function SpendingPrediction() {
         </div>
       </div>
 
-      {/* AI Assessment */}
       <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-100 dark:border-purple-800">
         <p className="text-sm text-gray-700 dark:text-gray-300">
           <span className="font-medium">AI Assessment:</span> {prediction.assessment}

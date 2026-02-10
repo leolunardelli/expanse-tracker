@@ -96,7 +96,6 @@ export async function predictMonthlySpending(expenses: ExpenseData[]) {
   const dayOfMonth = now.getDate();
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  // Get this month's expenses
   const thisMonthExpenses = expenses.filter(e => {
     const d = new Date(e.date);
     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
@@ -106,7 +105,6 @@ export async function predictMonthlySpending(expenses: ExpenseData[]) {
   const avgPerDay = spentSoFar / dayOfMonth;
   const projectedTotal = avgPerDay * daysInMonth;
 
-  // Get last month's total for comparison
   const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   const lastMonthExpenses = expenses.filter(e => {

@@ -18,31 +18,27 @@ export async function getYearOverYearData() {
     select: { amount: true, date: true },
   });
 
-  // Get current year and previous year
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const previousYear = currentYear - 1;
 
-  // Group by month for both years
   const currentYearData: Record<string, number> = {};
   const previousYearData: Record<string, number> = {};
 
-  expenses.forEach(expense => {
-    const date = new Date(expense.date);
+  expenses.forEach(exp => {
+    const date = new Date(exp.date);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    const monthKey = month; // Just month for comparison
 
     if (year === currentYear) {
-      currentYearData[monthKey] = (currentYearData[monthKey] || 0) + expense.amount;
+      currentYearData[month] = (currentYearData[month] || 0) + exp.amount;
     } else if (year === previousYear) {
-      previousYearData[monthKey] = (previousYearData[monthKey] || 0) + expense.amount;
+      previousYearData[month] = (previousYearData[month] || 0) + exp.amount;
     }
   });
 
-  // Create comparison chart data
   const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // TODO: use locale
   
   const chartData = months.map((month, idx) => ({
     month: monthNames[idx],
@@ -50,7 +46,6 @@ export async function getYearOverYearData() {
     previous: Math.round((previousYearData[month] || 0) * 100) / 100,
   }));
 
-  // Calculate totals
   const currentYearTotal = Object.values(currentYearData).reduce((a, b) => a + b, 0);
   const previousYearTotal = Object.values(previousYearData).reduce((a, b) => a + b, 0);
   const difference = currentYearTotal - previousYearTotal;
@@ -58,7 +53,6 @@ export async function getYearOverYearData() {
     ? Math.round(((difference / previousYearTotal) * 100) * 100) / 100 
     : 0;
 
-  // Calculate average monthly spending
   const currentAverage = currentYearTotal / 12;
   const previousAverage = previousYearTotal / 12;
 

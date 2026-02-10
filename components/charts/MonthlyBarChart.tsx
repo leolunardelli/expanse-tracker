@@ -2,7 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface MonthlyData {
+type MonthlyData = {
   month: string;
   amount: number;
 }

@@ -2,7 +2,7 @@
 
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 
-interface TrendData {
+type TrendData = {
   date: string;
   amount: number;
 }
