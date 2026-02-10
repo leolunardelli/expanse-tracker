@@ -5,6 +5,7 @@ import { getAIInsights } from './actions/ai';
 import Header from '@/components/Header';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExpenseList from '@/components/ExpenseList';
+import ExportButton from '@/components/ExportButton';
 import StatsCard from '@/components/StatsCard';
 import AIInsights from '@/components/AIInsights';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
@@ -37,6 +38,11 @@ export default async function HomePage() {
         </div>
         
         <AIInsights insights={insights} />
+        
+        {/* Export Button */}
+        <div className="flex justify-end mb-6">
+          <ExportButton />
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
           <ExpenseForm />
