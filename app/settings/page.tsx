@@ -1,7 +1,13 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
+import { getUserSettings, getUserProfile } from '../actions/settings';
 import Header from '@/components/Header';
+import ProfileCard from '@/components/settings/ProfileCard';
+import CurrencySelect from '@/components/settings/CurrencySelect';
+import NotificationPrefs from '@/components/settings/NotificationPrefs';
+import ThemePrefs from '@/components/settings/ThemePrefs';
+import DangerZone from '@/components/settings/DangerZone';
 import { Settings, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,6 +17,11 @@ export default async function SettingsPage() {
   if (!session) {
     redirect('/auth/signin');
   }
+
+  const [settings, profile] = await Promise.all([
+    getUserSettings(),
+    getUserProfile(),
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -41,12 +52,30 @@ export default async function SettingsPage() {
         </div>
 
         <div className="space-y-6">
-          {/* Components will be added here in subsequent commits */}
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-            <p className="text-gray-500 dark:text-gray-400 text-center">
-              Settings components loading...
-            </p>
-          </div>
+          {/* Profile */}
+          {profile && <ProfileCard profile={profile} />}
+
+          {/* Appearance */}
+          <ThemePrefs />
+
+          {/* Regional */}
+          <CurrencySelect
+            currentCurrency={settings.currency}
+            currentLanguage={settings.language}
+          />
+
+          {/* Notifications */}
+          <NotificationPrefs
+            settings={{
+              budgetAlerts: settings.budgetAlerts,
+              weeklyReport: settings.weeklyReport,
+              monthlyReport: settings.monthlyReport,
+              aiInsightsEnabled: settings.aiInsightsEnabled,
+            }}
+          />
+
+          {/* Danger Zone */}
+          <DangerZone />
         </div>
       </main>
     </div>
