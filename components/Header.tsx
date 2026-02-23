@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { LogOut, BarChart3, Home, Brain, Target, RefreshCw } from 'lucide-react';
+import { LogOut, BarChart3, Home, Brain, Target, RefreshCw, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DarkModeToggle from './DarkModeToggle';
@@ -78,6 +78,17 @@ export default function Header({ userName, userImage }: HeaderProps) {
           </nav>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            href="/settings"
+            className={`p-2 rounded-lg transition ${
+              pathname === '/settings'
+                ? 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
+                : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+            title="Settings"
+          >
+            <Settings size={18} />
+          </Link>
           <DarkModeToggle />
           <div className="flex items-center gap-2">
             {userImage && (
