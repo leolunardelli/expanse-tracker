@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { LogOut, BarChart3, Home, Brain, Target } from 'lucide-react';
+import { LogOut, BarChart3, Home, Brain, Target, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DarkModeToggle from './DarkModeToggle';
@@ -41,6 +41,17 @@ export default function Header({ userName, userImage }: HeaderProps) {
             >
               <Target size={18} />
               <span>Budget</span>
+            </Link>
+            <Link 
+              href="/recurring"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                pathname === '/recurring' 
+                  ? 'bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400' 
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+            >
+              <RefreshCw size={18} />
+              <span>Recurring</span>
             </Link>
             <Link 
               href="/analytics"
