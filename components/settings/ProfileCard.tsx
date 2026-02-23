@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { User, Mail, Calendar, Receipt, Target } from 'lucide-react';
 
 type ProfileCardProps = {
@@ -17,8 +18,9 @@ type ProfileCardProps = {
 
 export default function ProfileCard({ profile }: ProfileCardProps) {
   const joinDate = new Date(profile.createdAt);
+  const [now] = useState(() => Date.now());
   const daysSinceJoin = Math.floor(
-    (Date.now() - joinDate.getTime()) / (1000 * 60 * 60 * 24)
+    (now - joinDate.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   return (
