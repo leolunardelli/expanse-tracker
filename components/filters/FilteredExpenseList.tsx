@@ -1,0 +1,239 @@
+'use client';
+
+import { useState, useEffect, useCallback, useTransition } from 'react';
+import { Trash2, Pencil, RefreshCw, Loader2, FileX2 } from 'lucide-react';
+import { getFilteredExpenses, deleteExpense } from '@/app/actions/expenses';
+import { formatCurrency } from '@/lib/currency';
+import FilterBar, { FilterState } from '@/components/filters/FilterBar';
+import ActiveFilters from '@/components/filters/ActiveFilters';
+import Pagination from '@/components/filters/Pagination';
+import EditExpenseModal from '@/components/EditExpenseModal';
+
+type Expense = {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: Date | string;
+  isRecurring?: boolean;
+  recurrenceType?: string | null;
+};
+
+type PaginationData = {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+};
+
+const DEFAULT_FILTERS: FilterState = {
+  search: '',
+  category: '',
+  dateFrom: '',
+  dateTo: '',
+  amountMin: '',
+  amountMax: '',
+  sortBy: 'date',
+  sortOrder: 'desc',
+};
+
+const formatDate = (date: Date | string) =>
+  new Date(date).toISOString().split('T')[0];
+
+const getRecurrenceLabel = (type?: string | null) => {
+  const labels: Record<string, string> = {
+    daily: 'Daily',
+    weekly: 'Weekly',
+    monthly: 'Monthly',
+    yearly: 'Yearly',
+  };
+  return labels[type || ''] || '';
+};
+
+type FilteredExpenseListProps = {
+  categories: string[];
+  initialExpenses: Expense[];
+  initialPagination: PaginationData;
+};
+
+export default function FilteredExpenseList({
+  categories,
+  initialExpenses,
+  initialPagination,
+}: FilteredExpenseListProps) {
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const [page, setPage] = useState(1);
+  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
+  const [pagination, setPagination] = useState<PaginationData>(initialPagination);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const activeFilterCount = Object.entries(filters).filter(
+    ([key, value]) =>
+      value !== '' &&
+      key !== 'sortOrder' &&
+      !(key === 'sortBy' && value === 'date')
+  ).length;
+
+  const fetchExpenses = useCallback(
+    (currentFilters: FilterState, currentPage: number) => {
+      startTransition(async () => {
+        const result = await getFilteredExpenses({
+          search: currentFilters.search || undefined,
+          category: currentFilters.category || undefined,
+          dateFrom: currentFilters.dateFrom || undefined,
+          dateTo: currentFilters.dateTo || undefined,
+          amountMin: currentFilters.amountMin || undefined,
+          amountMax: currentFilters.amountMax || undefined,
+          sortBy: currentFilters.sortBy || undefined,
+          sortOrder: currentFilters.sortOrder,
+          page: currentPage,
+          pageSize: 10,
+        });
+        setExpenses(result.expenses);
+        setPagination(result.pagination);
+      });
+    },
+    []
+  );
+
+  // Fetch when filters change (reset to page 1)
+  useEffect(() => {
+    setPage(1);
+    fetchExpenses(filters, 1);
+  }, [filters, fetchExpenses]);
+
+  // Fetch when page changes
+  function handlePageChange(newPage: number) {
+    setPage(newPage);
+    fetchExpenses(filters, newPage);
+  }
+
+  function handleFilterChange(newFilters: FilterState) {
+    setFilters(newFilters);
+  }
+
+  function handleClearFilters() {
+    setFilters(DEFAULT_FILTERS);
+  }
+
+  function handleRemoveFilter(key: keyof FilterState) {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: key === 'sortBy' ? 'date' : key === 'sortOrder' ? 'desc' : '',
+    }));
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm('Delete this expense?')) return;
+    try {
+      await deleteExpense(id);
+      fetchExpenses(filters, page);
+    } catch {
+      alert('Delete failed');
+    }
+  }
+
+  return (
+    <div>
+      <FilterBar
+        filters={filters}
+        categories={categories}
+        onFilterChange={handleFilterChange}
+        onClearFilters={handleClearFilters}
+        activeFilterCount={activeFilterCount}
+      />
+
+      <ActiveFilters
+        filters={filters}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearFilters}
+      />
+
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Expenses
+          </h2>
+          {isPending && (
+            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+          )}
+        </div>
+
+        {/* Expense rows */}
+        {expenses.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <FileX2 className="w-12 h-12 mb-3" />
+            <p className="text-lg font-medium">No expenses found</p>
+            {activeFilterCount > 0 && (
+              <p className="text-sm mt-1">Try adjusting your filters</p>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {expenses.map((expense) => (
+              <div
+                key={expense.id}
+                className="flex justify-between items-center p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                      {expense.description}
+                    </p>
+                    {expense.isRecurring && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full shrink-0">
+                        <RefreshCw size={10} />
+                        {getRecurrenceLabel(expense.recurrenceType)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {expense.category} &bull; {formatDate(expense.date)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 shrink-0 ml-3">
+                  <p className="font-bold text-lg text-gray-900 dark:text-white">
+                    {formatCurrency(expense.amount)}
+                  </p>
+                  <button
+                    onClick={() => setEditingExpense(expense)}
+                    className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded transition"
+                    title="Edit"
+                  >
+                    <Pencil size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(expense.id)}
+                    className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded transition"
+                    title="Delete"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        <Pagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          totalCount={pagination.totalCount}
+          pageSize={pagination.pageSize}
+          hasNext={pagination.hasNext}
+          hasPrev={pagination.hasPrev}
+          onPageChange={handlePageChange}
+        />
+      </div>
+
+      <EditExpenseModal
+        expense={editingExpense}
+        onClose={() => setEditingExpense(null)}
+      />
+    </div>
+  );
+}
