@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useTransition } from 'react';
 import { Trash2, Pencil, RefreshCw, Loader2, FileX2 } from 'lucide-react';
 import { getFilteredExpenses, deleteExpense } from '@/app/actions/expenses';
 import { formatCurrency } from '@/lib/currency';
+import { useFilterParams } from '@/lib/useFilterParams';
 import FilterBar, { FilterState } from '@/components/filters/FilterBar';
 import ActiveFilters from '@/components/filters/ActiveFilters';
 import Pagination from '@/components/filters/Pagination';
@@ -26,17 +27,6 @@ type PaginationData = {
   totalPages: number;
   hasNext: boolean;
   hasPrev: boolean;
-};
-
-const DEFAULT_FILTERS: FilterState = {
-  search: '',
-  category: '',
-  dateFrom: '',
-  dateTo: '',
-  amountMin: '',
-  amountMax: '',
-  sortBy: 'date',
-  sortOrder: 'desc',
 };
 
 const formatDate = (date: Date | string) =>
@@ -63,8 +53,7 @@ export default function FilteredExpenseList({
   initialExpenses,
   initialPagination,
 }: FilteredExpenseListProps) {
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-  const [page, setPage] = useState(1);
+  const { filters, page, setFilters, setPage, clearFilters } = useFilterParams();
   const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
   const [pagination, setPagination] = useState<PaginationData>(initialPagination);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
@@ -99,31 +88,29 @@ export default function FilteredExpenseList({
     []
   );
 
-  // Fetch when filters change (reset to page 1)
+  // Fetch when filters or page change (driven by URL)
   useEffect(() => {
-    setPage(1);
-    fetchExpenses(filters, 1);
-  }, [filters, fetchExpenses]);
-
-  // Fetch when page changes
-  function handlePageChange(newPage: number) {
-    setPage(newPage);
-    fetchExpenses(filters, newPage);
-  }
+    fetchExpenses(filters, page);
+  }, [filters, page, fetchExpenses]);
 
   function handleFilterChange(newFilters: FilterState) {
-    setFilters(newFilters);
+    setFilters(newFilters, 1);
   }
 
   function handleClearFilters() {
-    setFilters(DEFAULT_FILTERS);
+    clearFilters();
   }
 
   function handleRemoveFilter(key: keyof FilterState) {
-    setFilters((prev) => ({
-      ...prev,
+    const updated = {
+      ...filters,
       [key]: key === 'sortBy' ? 'date' : key === 'sortOrder' ? 'desc' : '',
-    }));
+    };
+    setFilters(updated, 1);
+  }
+
+  function handlePageChange(newPage: number) {
+    setPage(newPage);
   }
 
   async function handleDelete(id: string) {
