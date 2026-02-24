@@ -94,6 +94,102 @@ export async function getExpenses() {
   });
 }
 
+export type FilterParams = {
+  search?: string;
+  category?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  amountMin?: string;
+  amountMax?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  page?: number;
+  pageSize?: number;
+};
+
+export async function getFilteredExpenses(filters: FilterParams = {}) {
+  const userId = await getUserId();
+  const {
+    search,
+    category,
+    dateFrom,
+    dateTo,
+    amountMin,
+    amountMax,
+    sortBy = 'date',
+    sortOrder = 'desc',
+    page = 1,
+    pageSize = 10,
+  } = filters;
+
+  // Build where clause
+  const where: Record<string, unknown> = { userId };
+
+  if (search) {
+    where.OR = [
+      { description: { contains: search, mode: 'insensitive' } },
+      { category: { contains: search, mode: 'insensitive' } },
+    ];
+  }
+
+  if (category && category !== 'all') {
+    where.category = category;
+  }
+
+  if (dateFrom || dateTo) {
+    where.date = {};
+    if (dateFrom) (where.date as Record<string, unknown>).gte = new Date(dateFrom);
+    if (dateTo) (where.date as Record<string, unknown>).lte = new Date(dateTo + 'T23:59:59');
+  }
+
+  if (amountMin || amountMax) {
+    where.amount = {};
+    if (amountMin) (where.amount as Record<string, unknown>).gte = parseFloat(amountMin);
+    if (amountMax) (where.amount as Record<string, unknown>).lte = parseFloat(amountMax);
+  }
+
+  // Build order by
+  const validSortFields = ['date', 'amount', 'description', 'category'];
+  const orderField = validSortFields.includes(sortBy) ? sortBy : 'date';
+  const orderBy = { [orderField]: sortOrder };
+
+  // Get total count for pagination
+  const totalCount = await prisma.expense.count({ where });
+
+  // Get paginated results
+  const expenses = await prisma.expense.findMany({
+    where,
+    orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+
+  return {
+    expenses,
+    pagination: {
+      page,
+      pageSize,
+      totalCount,
+      totalPages: Math.ceil(totalCount / pageSize),
+      hasNext: page * pageSize < totalCount,
+      hasPrev: page > 1,
+    },
+  };
+}
+
+export async function getCategories() {
+  const userId = await getUserId();
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId },
+    select: { category: true },
+    distinct: ['category'],
+    orderBy: { category: 'asc' },
+  });
+
+  return expenses.map((e) => e.category);
+}
+
 export async function getExpenseStats() {
   const userId = await getUserId();
   
