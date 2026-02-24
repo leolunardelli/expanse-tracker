@@ -1,14 +1,14 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { getExpenses, getExpenseStats } from './actions/expenses';
+import { getFilteredExpenses, getCategories, getExpenseStats } from './actions/expenses';
 import { getAIInsights } from './actions/ai';
 import Header from '@/components/Header';
 import ExpenseForm from '@/components/ExpenseForm';
-import ExpenseList from '@/components/ExpenseList';
 import ExportButton from '@/components/ExportButton';
 import StatsCard from '@/components/StatsCard';
 import AIInsights from '@/components/AIInsights';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
+import FilteredExpenseList from '@/components/filters/FilteredExpenseList';
 import { authOptions } from '@/lib/auth';
 import { formatCurrency } from '@/lib/currency';
 
@@ -19,9 +19,12 @@ export default async function HomePage() {
     redirect('/auth/signin');
   }
   
-  const expenses = await getExpenses();
-  const stats = await getExpenseStats();
-  const insights = await getAIInsights();
+  const [{ expenses, pagination }, categories, stats, insights] = await Promise.all([
+    getFilteredExpenses({ page: 1, pageSize: 10 }),
+    getCategories(),
+    getExpenseStats(),
+    getAIInsights(),
+  ]);
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -42,10 +45,15 @@ export default async function HomePage() {
           <ExportButton />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div className="mb-8">
           <ExpenseForm />
-          <ExpenseList expenses={expenses} />
         </div>
+
+        <FilteredExpenseList
+          categories={categories}
+          initialExpenses={expenses}
+          initialPagination={pagination}
+        />
       </main>
     </div>
   );
