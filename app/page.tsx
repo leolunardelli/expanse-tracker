@@ -1,5 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { getFilteredExpenses, getCategories, getExpenseStats } from './actions/expenses';
 import { getAIInsights } from './actions/ai';
 import Header from '@/components/Header';
@@ -49,11 +50,22 @@ export default async function HomePage() {
           <ExpenseForm />
         </div>
 
-        <FilteredExpenseList
-          categories={categories}
-          initialExpenses={expenses}
-          initialPagination={pagination}
-        />
+        <Suspense fallback={
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 animate-pulse">
+            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-4" />
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-16 bg-gray-100 dark:bg-gray-800 rounded-lg" />
+              ))}
+            </div>
+          </div>
+        }>
+          <FilteredExpenseList
+            categories={categories}
+            initialExpenses={expenses}
+            initialPagination={pagination}
+          />
+        </Suspense>
       </main>
     </div>
   );
