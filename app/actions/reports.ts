@@ -174,3 +174,43 @@ export async function getMonthlyReport(month: string): Promise<MonthlyReport> {
     },
   };
 }
+
+export type AvailableMonth = {
+  value: string; // 'YYYY-MM'
+  label: string; // 'February 2026'
+  count: number;
+  total: number;
+};
+
+export async function getAvailableMonths(): Promise<AvailableMonth[]> {
+  const userId = await getUserId();
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId },
+    select: { date: true, amount: true },
+    orderBy: { date: 'desc' },
+  });
+
+  const monthMap: Record<string, { count: number; total: number }> = {};
+
+  expenses.forEach((e) => {
+    const d = new Date(e.date);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    if (!monthMap[key]) monthMap[key] = { count: 0, total: 0 };
+    monthMap[key].count += 1;
+    monthMap[key].total += e.amount;
+  });
+
+  return Object.entries(monthMap)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([value, { count, total }]) => {
+      const [year, month] = value.split('-');
+      const date = new Date(parseInt(year), parseInt(month) - 1);
+      return {
+        value,
+        label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        count,
+        total: Math.round(total * 100) / 100,
+      };
+    });
+}
