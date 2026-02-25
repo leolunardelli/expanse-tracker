@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { LogOut, BarChart3, Home, Brain, Target, RefreshCw, Settings } from 'lucide-react';
+import { LogOut, BarChart3, Home, Brain, Target, RefreshCw, Settings, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DarkModeToggle from './DarkModeToggle';
@@ -63,6 +63,17 @@ export default function Header({ userName, userImage }: HeaderProps) {
             >
               <BarChart3 size={18} />
               <span>Analytics</span>
+            </Link>
+            <Link 
+              href="/reports"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                pathname === '/reports' 
+                  ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400' 
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+            >
+              <FileText size={18} />
+              <span>Reports</span>
             </Link>
             <Link 
               href="/insights"
