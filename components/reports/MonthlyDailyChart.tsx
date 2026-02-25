@@ -82,7 +82,7 @@ export default function MonthlyDailyChart({
               width={50}
             />
             <Tooltip
-              formatter={(value: number) => [formatCurrency(value), 'Spent']}
+              formatter={(value) => [formatCurrency(Number(value)), 'Spent']}
               labelFormatter={(label) => {
                 const item = data.find((d) => d.day === label);
                 return item?.label || `Day ${label}`;

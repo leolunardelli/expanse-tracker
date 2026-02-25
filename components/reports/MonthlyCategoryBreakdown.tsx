@@ -23,7 +23,6 @@ const COLORS = [
 
 export default function MonthlyCategoryBreakdown({
   data,
-  totalSpent,
 }: MonthlyCategoryBreakdownProps) {
   if (data.length === 0) {
     return (
@@ -67,7 +66,7 @@ export default function MonthlyCategoryBreakdown({
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number) => formatCurrency(value)}
+                formatter={(value) => formatCurrency(Number(value))}
                 contentStyle={{
                   backgroundColor: 'var(--tooltip-bg, #fff)',
                   border: '1px solid var(--tooltip-border, #e5e7eb)',
