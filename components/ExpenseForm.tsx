@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { createExpense } from '@/app/actions/expenses';
 import { RefreshCw } from 'lucide-react';
+import TagInput from '@/components/tags/TagInput';
+import NoteInput from '@/components/tags/NoteInput';
 
 function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -11,6 +13,8 @@ function getTodayDate(): string {
 export default function ExpenseForm() {
   const [loading, setLoading] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
+  const [notes, setNotes] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -19,11 +23,15 @@ export default function ExpenseForm() {
     
     const formData = new FormData(e.currentTarget);
     formData.set('isRecurring', isRecurring.toString());
+    formData.set('tags', tags.join(','));
+    formData.set('notes', notes);
     
     try {
       await createExpense(formData);
       formRef.current?.reset();
       setIsRecurring(false);
+      setTags([]);
+      setNotes('');
     } catch {
       alert('Failed to save');
     } finally {
@@ -116,6 +124,9 @@ export default function ExpenseForm() {
           )}
         </div>
         
+        <TagInput tags={tags} onChange={setTags} />
+        <NoteInput value={notes} onChange={setNotes} />
+
         <button
           type="submit"
           disabled={loading}
