@@ -5,6 +5,7 @@ import { Trash2, Pencil, Search, RefreshCw } from 'lucide-react';
 import { deleteExpense } from '@/app/actions/expenses';
 import { formatCurrency } from '@/lib/currency';
 import EditExpenseModal from './EditExpenseModal';
+import { getTagColor } from '@/components/tags/TagInput';
 
 type Expense = {
   id: string;
@@ -14,6 +15,8 @@ type Expense = {
   date: Date | string;
   isRecurring?: boolean;
   recurrenceType?: string | null;
+  tags?: string[];
+  notes?: string | null;
 }
 
 const formatDate = (date: Date | string) => new Date(date).toISOString().split('T')[0];
@@ -94,6 +97,23 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
                     )}
                   </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{expense.category} • {formatDate(expense.date)}</p>
+                  {expense.tags && expense.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {expense.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTagColor(tag)}`}
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {expense.notes && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 truncate max-w-xs">
+                      {expense.notes}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="font-bold text-lg">{formatCurrency(expense.amount)}</p>
