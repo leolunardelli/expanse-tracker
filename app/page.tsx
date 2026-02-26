@@ -11,8 +11,13 @@ import StatsCard from '@/components/StatsCard';
 import AIInsights from '@/components/AIInsights';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
 import FilteredExpenseList from '@/components/filters/FilteredExpenseList';
+import BalanceCard from '@/components/dashboard/BalanceCard';
+import SpendingBreakdown from '@/components/dashboard/SpendingBreakdown';
+import RecentTransactions from '@/components/dashboard/RecentTransactions';
+import QuickActions from '@/components/dashboard/QuickActions';
 import { authOptions } from '@/lib/auth';
 import { formatCurrency } from '@/lib/currency';
+import { Wallet, Receipt, FolderOpen } from 'lucide-react';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -34,27 +39,62 @@ export default async function HomePage() {
     <AppShell userName={session.user?.name} userImage={session.user?.image}>
       <BudgetAlerts />
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatsCard title="Total Spent" value={formatCurrency(stats.total)} />
-        <StatsCard title="Transactions" value={stats.count} />
-        <StatsCard title="Categories" value={Object.keys(stats.byCategory).length} />
-        <StatsCard
-          title="Available Income"
-          value={formatCurrency(planSummary.remaining)}
-          className={planSummary.remaining < 0 ? 'border-expense-20 dark:border-expense-100/20' : 'border-income-20 dark:border-income-100/20'}
+      {/* Balance Hero Card */}
+      <div className="mb-6">
+        <BalanceCard
+          totalSpent={stats.total}
+          monthlyIncome={planSummary.income}
+          remaining={planSummary.remaining}
+          transactionCount={stats.count}
         />
       </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <StatsCard
+          title="Spent"
+          value={formatCurrency(stats.total)}
+          icon={<Wallet size={16} />}
+        />
+        <StatsCard
+          title="Transactions"
+          value={stats.count}
+          icon={<Receipt size={16} />}
+        />
+        <StatsCard
+          title="Categories"
+          value={Object.keys(stats.byCategory).length}
+          icon={<FolderOpen size={16} />}
+        />
+      </div>
+
+      {/* AI Insights */}
+      <div className="mb-6">
+        <AIInsights insights={insights} />
+      </div>
       
-      <AIInsights insights={insights} />
-      
+      {/* Two Column Layout: Spending + Recent */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <SpendingBreakdown byCategory={stats.byCategory} total={stats.total} />
+        <RecentTransactions transactions={expenses} />
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mb-6">
+        <QuickActions />
+      </div>
+
+      {/* Export */}
       <div className="flex justify-end mb-4">
         <ExportButton />
       </div>
       
+      {/* Add Expense Form */}
       <div className="mb-6">
         <ExpenseForm />
       </div>
 
+      {/* Full Transaction List */}
       <Suspense fallback={
         <div className="card p-6 animate-pulse">
           <div className="h-6 bg-surface-light dark:bg-dark-700 rounded w-32 mb-4" />
