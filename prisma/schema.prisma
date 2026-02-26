@@ -90,6 +90,10 @@ model Expense {
   aiCategory  String?  // AI-suggested category
   aiNote      String?  // AI insights
   
+  // Tags & Notes
+  tags        String[] @default([])
+  notes       String?  // User notes/memo
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
@@ -100,6 +104,7 @@ model Expense {
   @@index([date])
   @@index([category])
   @@index([isRecurring])
+  @@index([tags])
 }
 
 // Budget Goals
