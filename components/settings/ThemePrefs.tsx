@@ -12,21 +12,21 @@ const themeOptions = [
     label: 'Light',
     icon: Sun,
     description: 'Clean and bright',
-    color: 'from-amber-400 to-orange-400',
+    color: 'from-warning-100 to-warning-60',
   },
   {
     value: 'dark',
     label: 'Dark',
     icon: Moon,
     description: 'Easy on the eyes',
-    color: 'from-indigo-500 to-purple-500',
+    color: 'from-violet-100 to-violet-60',
   },
   {
     value: 'system',
     label: 'System',
     icon: Monitor,
     description: 'Match your device',
-    color: 'from-gray-400 to-gray-600',
+    color: 'from-light-60 to-dark-400',
   },
 ];
 
@@ -36,16 +36,16 @@ export default function ThemePrefs() {
 
   if (!mounted) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <Palette className="w-5 h-5 text-purple-500" />
+      <div className="card p-6">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <Palette className="w-5 h-5 text-violet-100" />
           Appearance
         </h2>
         <div className="grid grid-cols-3 gap-3">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse"
+              className="h-24 rounded-montra-sm bg-surface-light dark:bg-dark-700 animate-pulse"
             />
           ))}
         </div>
@@ -54,9 +54,9 @@ export default function ThemePrefs() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-        <Palette className="w-5 h-5 text-purple-500" />
+    <div className="card p-6">
+      <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Palette className="w-5 h-5 text-violet-100" />
         Appearance
       </h2>
 
@@ -69,31 +69,31 @@ export default function ThemePrefs() {
             <button
               key={option.value}
               onClick={() => setTheme(option.value)}
-              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+              className={`relative flex flex-col items-center gap-2 p-4 rounded-montra-sm border-2 transition-all ${
                 isActive
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'border-violet-100 bg-violet-20 dark:bg-violet-100/10 shadow-md'
+                  : 'border-light-40 dark:border-dark-600 hover:border-light-60 dark:hover:border-dark-400 hover:bg-surface-light dark:hover:bg-dark-700'
               }`}
             >
               <div
-                className={`p-2 rounded-lg bg-gradient-to-br ${option.color}`}
+                className={`p-2 rounded-montra-sm bg-gradient-to-br ${option.color}`}
               >
                 <Icon className="w-5 h-5 text-white" />
               </div>
               <span
                 className={`text-sm font-medium ${
                   isActive
-                    ? 'text-blue-600 dark:text-blue-400'
+                    ? 'text-violet-100 dark:text-violet-60'
                     : 'text-gray-700 dark:text-gray-300'
                 }`}
               >
                 {option.label}
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 {option.description}
               </span>
               {isActive && (
-                <div className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full" />
+                <div className="absolute top-2 right-2 w-2 h-2 bg-violet-100 rounded-full" />
               )}
             </button>
           );

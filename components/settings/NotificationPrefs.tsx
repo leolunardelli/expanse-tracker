@@ -61,9 +61,9 @@ export default function NotificationPrefs({ settings }: NotificationPrefsProps) 
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-        <Bell className="w-5 h-5 text-amber-500" />
+    <div className="card p-6">
+      <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Bell className="w-5 h-5 text-warning-100" />
         Notifications & Features
       </h2>
 
@@ -71,7 +71,7 @@ export default function NotificationPrefs({ settings }: NotificationPrefsProps) 
         {toggleOptions.map((option) => (
           <div
             key={option.key}
-            className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800 last:border-0"
+            className="flex items-center justify-between py-3 border-b border-light-40 dark:border-dark-600 last:border-0"
           >
             <div className="flex-1 min-w-0 pr-4">
               <div className="flex items-center gap-2">
@@ -79,13 +79,13 @@ export default function NotificationPrefs({ settings }: NotificationPrefsProps) 
                   {option.label}
                 </p>
                 {saving === option.key && (
-                  <Loader2 className="w-3 h-3 animate-spin text-blue-500" />
+                  <Loader2 className="w-3 h-3 animate-spin text-violet-100" />
                 )}
                 {saved === option.key && (
-                  <Check className="w-3 h-3 text-green-500" />
+                  <Check className="w-3 h-3 text-income-100" />
                 )}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {option.description}
               </p>
             </div>
@@ -94,10 +94,10 @@ export default function NotificationPrefs({ settings }: NotificationPrefsProps) 
             <button
               onClick={() => handleToggle(option.key)}
               disabled={saving === option.key}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 ${
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-violet-100/50 focus:ring-offset-2 dark:focus:ring-offset-dark-surface disabled:opacity-50 ${
                 prefs[option.key]
-                  ? 'bg-blue-600'
-                  : 'bg-gray-300 dark:bg-gray-600'
+                  ? 'bg-violet-100'
+                  : 'bg-light-40 dark:bg-dark-600'
               }`}
             >
               <span

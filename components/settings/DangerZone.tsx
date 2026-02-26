@@ -26,32 +26,32 @@ export default function DangerZone() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border-2 border-red-200 dark:border-red-900/50 p-6">
-      <h2 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2">
+    <div className="card p-6 border-2 !border-expense-100/20 dark:!border-expense-100/10">
+      <h2 className="text-base font-semibold text-expense-100 dark:text-expense-60 mb-2 flex items-center gap-2">
         <ShieldAlert className="w-5 h-5" />
         Danger Zone
       </h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+      <p className="text-sm text-muted-foreground mb-4">
         Irreversible actions that permanently affect your account.
       </p>
 
       {!showConfirm ? (
         <button
           onClick={() => setShowConfirm(true)}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+          className="btn-outline flex items-center gap-2 !text-expense-100 !border-expense-100/30 hover:!bg-expense-100/5"
         >
           <Trash2 className="w-4 h-4" />
           Delete Account
         </button>
       ) : (
-        <div className="bg-red-50 dark:bg-red-900/10 rounded-lg p-4 border border-red-200 dark:border-red-900/30">
+        <div className="bg-expense-100/5 dark:bg-expense-100/5 rounded-montra-sm p-4 border border-expense-100/20 dark:border-expense-100/10">
           <div className="flex items-start gap-3 mb-4">
-            <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-expense-100 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold text-red-700 dark:text-red-300">
+              <p className="text-sm font-semibold text-expense-100 dark:text-expense-60">
                 Are you absolutely sure?
               </p>
-              <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+              <p className="text-xs text-expense-100/80 dark:text-expense-60/80 mt-1">
                 This will permanently delete your account, all expenses, budgets,
                 settings, and AI insights. This action cannot be undone.
               </p>
@@ -59,7 +59,7 @@ export default function DangerZone() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-xs font-medium text-red-700 dark:text-red-300 mb-1">
+            <label className="block text-xs font-medium text-expense-100 dark:text-expense-60 mb-1">
               Type <span className="font-bold">{CONFIRM_PHRASE}</span> to confirm
             </label>
             <input
@@ -67,7 +67,7 @@ export default function DangerZone() {
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
               placeholder={CONFIRM_PHRASE}
-              className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-red-300 dark:border-red-800 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="input text-sm !border-expense-100/30 !focus:ring-expense-100/50"
               disabled={loading}
             />
           </div>
@@ -76,7 +76,7 @@ export default function DangerZone() {
             <button
               onClick={handleDelete}
               disabled={confirmText !== CONFIRM_PHRASE || loading}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="btn-danger flex items-center gap-2"
             >
               {loading ? (
                 <>
@@ -96,7 +96,7 @@ export default function DangerZone() {
                 setConfirmText('');
               }}
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition disabled:opacity-50"
+              className="btn-outline px-4 py-2 text-sm"
             >
               Cancel
             </button>
