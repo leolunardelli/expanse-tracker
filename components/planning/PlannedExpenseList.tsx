@@ -18,10 +18,10 @@ type PlannedExpense = {
 };
 
 const FREQ_LABELS: Record<string, string> = {
-  monthly: 'Mensal',
-  weekly: 'Semanal',
-  yearly: 'Anual',
-  daily: 'Diário',
+  monthly: 'Monthly',
+  weekly: 'Weekly',
+  yearly: 'Yearly',
+  daily: 'Daily',
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -53,11 +53,11 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
   const total = totalFixed + totalVariable;
 
   async function handleDelete(id: string) {
-    if (!confirm('Remover esta despesa planejada?')) return;
+    if (!confirm('Remove this planned expense?')) return;
     try {
       await deletePlannedExpense(id);
     } catch {
-      alert('Erro ao remover');
+      alert('Failed to remove');
     }
   }
 
@@ -75,7 +75,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
       });
       setEditingId(null);
     } catch {
-      alert('Erro ao atualizar');
+      alert('Failed to update');
     }
   }
 
@@ -83,7 +83,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
     return (
       <div className="text-center py-8 text-gray-400 dark:text-gray-500">
         <Receipt className="w-10 h-10 mx-auto mb-2 opacity-50" />
-        <p className="text-sm">Nenhuma despesa planejada cadastrada</p>
+        <p className="text-sm">No planned expenses registered</p>
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
     return (
       <div
         key={expense.id}
-        className={`flex items-center justify-between p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition ${
+        className={`flex items-center justify-between p-3 border dark:border-dark-600 rounded-montra-sm hover:bg-surface-light dark:hover:bg-dark-700 transition ${
           !expense.isActive ? 'opacity-50' : ''
         }`}
       >
@@ -144,7 +144,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
                     </span>
                   )}
                   {expense.frequency !== 'monthly' && (
-                    <span className="text-gray-400">({formatCurrency(monthly)}/mês)</span>
+                    <span className="text-muted-foreground">({formatCurrency(monthly)}/mo)</span>
                   )}
                 </p>
               </>
@@ -154,20 +154,20 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
 
         {editingId !== expense.id && (
           <div className="flex items-center gap-2 shrink-0 ml-3">
-            <p className="font-bold text-red-600 dark:text-red-400">
+            <p className="font-bold text-expense-100">
               {formatCurrency(expense.amount)}
             </p>
             <button
               onClick={() => startEdit(expense)}
-              className="p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded transition"
-              title="Editar"
+              className="p-1.5 hover:bg-violet-20 dark:hover:bg-violet-100/10 text-violet-100 rounded transition"
+              title="Edit"
             >
               <Pencil size={14} />
             </button>
             <button
               onClick={() => handleDelete(expense.id)}
-              className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded transition"
-              title="Remover"
+              className="p-1.5 hover:bg-expense-20 dark:hover:bg-expense-100/10 text-expense-100 rounded transition"
+              title="Remove"
             >
               <Trash2 size={14} />
             </button>
@@ -183,12 +183,12 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
       {fixed.length > 0 && (
         <div className="mb-4">
           <div className="flex items-center gap-1.5 mb-2">
-            <Lock size={14} className="text-red-500" />
-            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Despesas fixas
+            <Lock size={14} className="text-expense-100" />
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Fixed expenses
             </h4>
-            <span className="ml-auto text-xs font-medium text-red-600 dark:text-red-400">
-              {formatCurrency(totalFixed)}/mês
+            <span className="ml-auto text-xs font-medium text-expense-100">
+              {formatCurrency(totalFixed)}/mo
             </span>
           </div>
           <div className="space-y-2">{fixed.map(renderExpenseRow)}</div>
@@ -199,12 +199,12 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
       {variable.length > 0 && (
         <div className="mb-4">
           <div className="flex items-center gap-1.5 mb-2">
-            <Shuffle size={14} className="text-amber-500" />
-            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Despesas variáveis
+            <Shuffle size={14} className="text-warning-100" />
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Variable expenses
             </h4>
-            <span className="ml-auto text-xs font-medium text-amber-600 dark:text-amber-400">
-              {formatCurrency(totalVariable)}/mês
+            <span className="ml-auto text-xs font-medium text-warning-100">
+              {formatCurrency(totalVariable)}/mo
             </span>
           </div>
           <div className="space-y-2">{variable.map(renderExpenseRow)}</div>
@@ -214,17 +214,17 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
       {/* Inactive section */}
       {inactive.length > 0 && (
         <div className="mb-4 opacity-60">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
-            Inativas ({inactive.length})
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+            Inactive ({inactive.length})
           </h4>
           <div className="space-y-2">{inactive.map(renderExpenseRow)}</div>
         </div>
       )}
 
       {/* Total */}
-      <div className="mt-3 pt-3 border-t dark:border-gray-700 flex justify-between items-center">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total planejado mensal</span>
-        <span className="text-lg font-bold text-red-600 dark:text-red-400">
+      <div className="mt-3 pt-3 border-t dark:border-dark-600 flex justify-between items-center">
+        <span className="text-sm font-medium text-muted-foreground">Total planned monthly</span>
+        <span className="text-lg font-bold text-expense-100">
           {formatCurrency(total)}
         </span>
       </div>

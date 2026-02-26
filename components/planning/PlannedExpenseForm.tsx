@@ -8,10 +8,10 @@ import { EXPENSE_CATEGORIES } from '@/lib/categories';
 const CATEGORIES = EXPENSE_CATEGORIES.map((c) => c.value);
 
 const FREQUENCIES = [
-  { value: 'monthly', label: 'Mensal' },
-  { value: 'weekly', label: 'Semanal' },
-  { value: 'yearly', label: 'Anual' },
-  { value: 'daily', label: 'Diário' },
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'yearly', label: 'Yearly' },
+  { value: 'daily', label: 'Daily' },
 ];
 
 export default function PlannedExpenseForm() {
@@ -33,7 +33,7 @@ export default function PlannedExpenseForm() {
       setIsFixed(true);
       setOpen(false);
     } catch {
-      alert('Erro ao salvar despesa planejada');
+      alert('Failed to save planned expense');
     } finally {
       setLoading(false);
     }
@@ -43,10 +43,10 @@ export default function PlannedExpenseForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-orange-400 hover:text-orange-500 transition"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-light-40 dark:border-dark-600 rounded-montra text-muted-foreground hover:border-warning-100 hover:text-warning-100 transition"
       >
         <Plus size={18} />
-        Adicionar despesa planejada
+        Add planned expense
       </button>
     );
   }
@@ -55,44 +55,44 @@ export default function PlannedExpenseForm() {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="border border-orange-200 dark:border-orange-800 rounded-lg p-4 bg-orange-50/50 dark:bg-orange-900/10 space-y-3"
+      className="border border-warning-100/20 dark:border-warning-100/10 rounded-montra p-4 bg-warning-20/50 dark:bg-warning-100/5 space-y-3"
     >
       <div className="flex items-center gap-2 mb-2">
-        <Receipt size={16} className="text-orange-600" />
-        <h4 className="font-medium text-orange-700 dark:text-orange-400 text-sm">Nova despesa planejada</h4>
+        <Receipt size={16} className="text-warning-100" />
+        <h4 className="font-medium text-warning-100 text-sm">New planned expense</h4>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Descrição</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>
           <input
             type="text"
             name="description"
             required
-            placeholder="Ex: Aluguel"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            placeholder="e.g. Rent"
+            className="input text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Valor</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Amount</label>
           <input
             type="number"
             name="amount"
             required
             step="0.01"
             min="0"
-            placeholder="0,00"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            placeholder="0.00"
+            className="input text-sm"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Categoria</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Category</label>
           <select
             name="category"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input text-sm"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -100,10 +100,10 @@ export default function PlannedExpenseForm() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Frequência</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Frequency</label>
           <select
             name="frequency"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input text-sm"
           >
             {FREQUENCIES.map((f) => (
               <option key={f.value} value={f.value}>{f.label}</option>
@@ -111,14 +111,14 @@ export default function PlannedExpenseForm() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Dia de vencimento</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Due day</label>
           <input
             type="number"
             name="dueDay"
             min="1"
             max="31"
-            placeholder="Ex: 10"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            placeholder="e.g. 10"
+            className="input text-sm"
           />
         </div>
       </div>
@@ -128,24 +128,24 @@ export default function PlannedExpenseForm() {
         <button
           type="button"
           onClick={() => setIsFixed(true)}
-          className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg border transition ${
+          className={`flex-1 px-3 py-2 text-xs font-medium rounded-montra-sm border transition ${
             isFixed
-              ? 'bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300'
-              : 'border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              ? 'bg-warning-20 dark:bg-warning-100/10 border-warning-100/30 text-warning-100'
+              : 'border-light-40 dark:border-dark-600 text-muted-foreground hover:bg-surface-light dark:hover:bg-dark-700'
           }`}
         >
-          Fixa (ex: aluguel)
+          Fixed (e.g. rent)
         </button>
         <button
           type="button"
           onClick={() => setIsFixed(false)}
-          className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg border transition ${
+          className={`flex-1 px-3 py-2 text-xs font-medium rounded-montra-sm border transition ${
             !isFixed
-              ? 'bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300'
-              : 'border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              ? 'bg-warning-20 dark:bg-warning-100/10 border-warning-100/30 text-warning-100'
+              : 'border-light-40 dark:border-dark-600 text-muted-foreground hover:bg-surface-light dark:hover:bg-dark-700'
           }`}
         >
-          Variável (ex: comida)
+          Variable (e.g. food)
         </button>
       </div>
 
@@ -153,16 +153,16 @@ export default function PlannedExpenseForm() {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition dark:text-gray-300"
+          className="btn-outline flex-1 px-3 py-2 text-sm"
         >
-          Cancelar
+          Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-3 py-2 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 font-medium transition"
+          className="btn-primary flex-1 px-3 py-2 text-sm"
         >
-          {loading ? 'Salvando...' : 'Adicionar'}
+          {loading ? 'Saving...' : 'Add'}
         </button>
       </div>
     </form>

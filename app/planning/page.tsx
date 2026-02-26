@@ -12,8 +12,8 @@ import CategoryComparison from '@/components/planning/CategoryComparison';
 import { getIncomes, getPlannedExpenses, getMonthlyPlanSummary } from '@/app/actions/planning';
 
 export const metadata = {
-  title: 'Planejamento Mensal | Expanse Tracker',
-  description: 'Planeje sua renda e despesas mensais para controlar seu orçamento.',
+  title: 'Monthly Planning | Expanse Tracker',
+  description: 'Plan your monthly income and expenses to keep your budget on track.',
 };
 
 export default async function PlanningPage() {
@@ -55,10 +55,10 @@ export default async function PlanningPage() {
         {/* Income and Expenses side by side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Income section */}
-          <section className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-5">
+          <section className="card p-5">
             <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500" />
-              Fontes de renda
+              <span className="w-2 h-2 rounded-full bg-income-100" />
+              Income Sources
             </h2>
             <IncomeForm />
             <div className="mt-4">
@@ -67,10 +67,10 @@ export default async function PlanningPage() {
           </section>
 
           {/* Planned expenses section */}
-          <section className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-5">
+          <section className="card p-5">
             <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
-              Despesas planejadas
+              <span className="w-2 h-2 rounded-full bg-expense-100" />
+              Planned Expenses
             </h2>
             <PlannedExpenseForm />
             <div className="mt-4">

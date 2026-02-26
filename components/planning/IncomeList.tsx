@@ -16,17 +16,17 @@ type Income = {
 };
 
 const TYPE_CONFIG: Record<string, { icon: typeof DollarSign; color: string; label: string }> = {
-  salary: { icon: Briefcase, color: 'text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400', label: 'Salário' },
-  freelance: { icon: TrendingUp, color: 'text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400', label: 'Freelance' },
-  investment: { icon: TrendingUp, color: 'text-purple-600 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400', label: 'Investimento' },
-  rental: { icon: Home, color: 'text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400', label: 'Aluguel' },
-  other: { icon: MoreHorizontal, color: 'text-gray-600 bg-gray-100 dark:bg-gray-700 dark:text-gray-400', label: 'Outro' },
+  salary: { icon: Briefcase, color: 'text-income-100 bg-income-20 dark:bg-income-100/10', label: 'Salary' },
+  freelance: { icon: TrendingUp, color: 'text-info-100 bg-info-100/10 dark:bg-info-100/10', label: 'Freelance' },
+  investment: { icon: TrendingUp, color: 'text-violet-100 bg-violet-20 dark:bg-violet-100/10', label: 'Investment' },
+  rental: { icon: Home, color: 'text-warning-100 bg-warning-20 dark:bg-warning-100/10', label: 'Rental' },
+  other: { icon: MoreHorizontal, color: 'text-muted-foreground bg-surface-light dark:bg-dark-700', label: 'Other' },
 };
 
 const FREQ_LABELS: Record<string, string> = {
-  monthly: 'Mensal',
-  biweekly: 'Quinzenal',
-  weekly: 'Semanal',
+  monthly: 'Monthly',
+  biweekly: 'Biweekly',
+  weekly: 'Weekly',
 };
 
 export default function IncomeList({ incomes }: { incomes: Income[] }) {
@@ -39,11 +39,11 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
     .reduce((sum, i) => sum + toMonthly(i.amount, i.frequency), 0);
 
   async function handleDelete(id: string) {
-    if (!confirm('Remover esta fonte de renda?')) return;
+    if (!confirm('Remove this income source?')) return;
     try {
       await deleteIncome(id);
     } catch {
-      alert('Erro ao remover');
+      alert('Failed to remove');
     }
   }
 
@@ -61,7 +61,7 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
       });
       setEditingId(null);
     } catch {
-      alert('Erro ao atualizar');
+      alert('Failed to update');
     }
   }
 
@@ -69,7 +69,7 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
     return (
       <div className="text-center py-8 text-gray-400 dark:text-gray-500">
         <DollarSign className="w-10 h-10 mx-auto mb-2 opacity-50" />
-        <p className="text-sm">Nenhuma fonte de renda cadastrada</p>
+        <p className="text-sm">No income sources registered</p>
       </div>
     );
   }
@@ -85,12 +85,12 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
           return (
             <div
               key={income.id}
-              className={`flex items-center justify-between p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition ${
+              className={`flex items-center justify-between p-3 border dark:border-dark-600 rounded-montra-sm hover:bg-surface-light dark:hover:bg-dark-700 transition ${
                 !income.isActive ? 'opacity-50' : ''
               }`}
             >
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <span className={`p-2 rounded-lg ${config.color}`}>
+                <span className={`p-2 rounded-montra-sm ${config.color}`}>
                   <Icon size={16} />
                 </span>
                 <div className="min-w-0">
@@ -129,7 +129,7 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {config.label} • {FREQ_LABELS[income.frequency] || income.frequency}
                         {income.frequency !== 'monthly' && (
-                          <span className="ml-1 text-gray-400">({formatCurrency(monthly)}/mês)</span>
+                          <span className="ml-1 text-muted-foreground">({formatCurrency(monthly)}/mo)</span>
                         )}
                       </p>
                     </>
@@ -139,20 +139,20 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
 
               {editingId !== income.id && (
                 <div className="flex items-center gap-2 shrink-0 ml-3">
-                  <p className="font-bold text-green-600 dark:text-green-400">
+                  <p className="font-bold text-income-100">
                     {formatCurrency(income.amount)}
                   </p>
                   <button
                     onClick={() => startEdit(income)}
-                    className="p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded transition"
-                    title="Editar"
+                    className="p-1.5 hover:bg-violet-20 dark:hover:bg-violet-100/10 text-violet-100 rounded transition"
+                    title="Edit"
                   >
                     <Pencil size={14} />
                   </button>
                   <button
                     onClick={() => handleDelete(income.id)}
-                    className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded transition"
-                    title="Remover"
+                    className="p-1.5 hover:bg-expense-20 dark:hover:bg-expense-100/10 text-expense-100 rounded transition"
+                    title="Remove"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -164,9 +164,9 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
       </div>
 
       {/* Total */}
-      <div className="mt-3 pt-3 border-t dark:border-gray-700 flex justify-between items-center">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Renda mensal total</span>
-        <span className="text-lg font-bold text-green-600 dark:text-green-400">
+      <div className="mt-3 pt-3 border-t dark:border-dark-600 flex justify-between items-center">
+        <span className="text-sm font-medium text-muted-foreground">Total monthly income</span>
+        <span className="text-lg font-bold text-income-100">
           {formatCurrency(totalMonthly)}
         </span>
       </div>

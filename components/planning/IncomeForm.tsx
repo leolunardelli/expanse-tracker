@@ -5,17 +5,17 @@ import { Plus, DollarSign } from 'lucide-react';
 import { addIncome } from '@/app/actions/planning';
 
 const INCOME_TYPES = [
-  { value: 'salary', label: 'Salário' },
+  { value: 'salary', label: 'Salary' },
   { value: 'freelance', label: 'Freelance' },
-  { value: 'investment', label: 'Investimento' },
-  { value: 'rental', label: 'Aluguel recebido' },
-  { value: 'other', label: 'Outro' },
+  { value: 'investment', label: 'Investment' },
+  { value: 'rental', label: 'Rental income' },
+  { value: 'other', label: 'Other' },
 ];
 
 const FREQUENCIES = [
-  { value: 'monthly', label: 'Mensal' },
-  { value: 'biweekly', label: 'Quinzenal' },
-  { value: 'weekly', label: 'Semanal' },
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'biweekly', label: 'Biweekly' },
+  { value: 'weekly', label: 'Weekly' },
 ];
 
 export default function IncomeForm() {
@@ -34,7 +34,7 @@ export default function IncomeForm() {
       formRef.current?.reset();
       setOpen(false);
     } catch {
-      alert('Erro ao salvar renda');
+      alert('Failed to save income');
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,10 @@ export default function IncomeForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-green-400 hover:text-green-500 transition"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-light-40 dark:border-dark-600 rounded-montra text-muted-foreground hover:border-income-100 hover:text-income-100 transition"
       >
         <Plus size={18} />
-        Adicionar fonte de renda
+        Add income source
       </button>
     );
   }
@@ -56,44 +56,44 @@ export default function IncomeForm() {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="border border-green-200 dark:border-green-800 rounded-lg p-4 bg-green-50/50 dark:bg-green-900/10 space-y-3"
+      className="border border-income-100/20 dark:border-income-100/10 rounded-montra p-4 bg-income-20/50 dark:bg-income-100/5 space-y-3"
     >
       <div className="flex items-center gap-2 mb-2">
-        <DollarSign size={16} className="text-green-600" />
-        <h4 className="font-medium text-green-700 dark:text-green-400 text-sm">Nova fonte de renda</h4>
+        <DollarSign size={16} className="text-income-100" />
+        <h4 className="font-medium text-income-100 text-sm">New income source</h4>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Descrição</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>
           <input
             type="text"
             name="description"
             required
-            placeholder="Ex: Salário CLT"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            placeholder="e.g. Salary"
+            className="input text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Valor</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Amount</label>
           <input
             type="number"
             name="amount"
             required
             step="0.01"
             min="0"
-            placeholder="0,00"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            placeholder="0.00"
+            className="input text-sm"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Tipo</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Type</label>
           <select
             name="type"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input text-sm"
           >
             {INCOME_TYPES.map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
@@ -101,10 +101,10 @@ export default function IncomeForm() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Frequência</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Frequency</label>
           <select
             name="frequency"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input text-sm"
           >
             {FREQUENCIES.map((f) => (
               <option key={f.value} value={f.value}>{f.label}</option>
@@ -117,16 +117,16 @@ export default function IncomeForm() {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition dark:text-gray-300"
+          className="btn-outline flex-1 px-3 py-2 text-sm"
         >
-          Cancelar
+          Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 font-medium transition"
+          className="btn-primary flex-1 px-3 py-2 text-sm"
         >
-          {loading ? 'Salvando...' : 'Adicionar'}
+          {loading ? 'Saving...' : 'Add'}
         </button>
       </div>
     </form>

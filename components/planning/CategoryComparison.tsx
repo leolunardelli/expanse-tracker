@@ -13,26 +13,26 @@ type CategoryComparisonItem = {
 export default function CategoryComparison({ data }: { data: CategoryComparisonItem[] }) {
   if (data.length === 0) {
     return (
-      <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-sm">
-        Sem dados de comparação este mês
+      <div className="text-center py-6 text-muted-foreground text-sm">
+        No comparison data this month
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-4">
+    <div className="card p-4">
       <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-        Planejado vs. Real por categoria
+        Planned vs. Actual by category
       </h4>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs text-gray-500 dark:text-gray-400 uppercase border-b dark:border-gray-700">
-              <th className="text-left py-2 pr-2">Categoria</th>
-              <th className="text-right py-2 px-2">Planejado</th>
-              <th className="text-right py-2 px-2">Real</th>
-              <th className="text-right py-2 pl-2">Diferença</th>
+            <tr className="text-xs text-muted-foreground uppercase border-b dark:border-dark-600">
+              <th className="text-left py-2 pr-2">Category</th>
+              <th className="text-right py-2 px-2">Planned</th>
+              <th className="text-right py-2 px-2">Actual</th>
+              <th className="text-right py-2 pl-2">Difference</th>
             </tr>
           </thead>
           <tbody>
@@ -44,10 +44,10 @@ export default function CategoryComparison({ data }: { data: CategoryComparisonI
                 : item.actual > 0 ? '∞' : '0';
 
               return (
-                <tr key={item.category} className="border-b dark:border-gray-700/50 last:border-0">
+                <tr key={item.category} className="border-b dark:border-dark-600/50 last:border-0">
                   <td className="py-2.5 pr-2">
                     <span className="font-medium text-gray-900 dark:text-gray-100">{item.category}</span>
-                    <span className="ml-2 text-xs text-gray-400 dark:text-gray-500">{pct}%</span>
+                    <span className="ml-2 text-xs text-muted-foreground">{pct}%</span>
                   </td>
                   <td className="text-right py-2.5 px-2 text-gray-600 dark:text-gray-400">
                     {formatCurrency(item.planned)}
@@ -59,10 +59,10 @@ export default function CategoryComparison({ data }: { data: CategoryComparisonI
                     <span
                       className={`inline-flex items-center gap-0.5 font-medium ${
                         isOver
-                          ? 'text-red-600 dark:text-red-400'
+                          ? 'text-expense-100'
                           : isUnder
-                          ? 'text-green-600 dark:text-green-400'
-                          : 'text-gray-400'
+                          ? 'text-income-100'
+                          : 'text-muted-foreground'
                       }`}
                     >
                       {isOver ? <ArrowUp size={12} /> : isUnder ? <ArrowDown size={12} /> : <Minus size={12} />}
