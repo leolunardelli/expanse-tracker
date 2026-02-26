@@ -25,7 +25,7 @@ export default function NoteInput({
         placeholder={placeholder}
         rows={2}
         maxLength={500}
-        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 resize-none text-sm"
+        className="input w-full resize-none text-sm"
       />
       <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 text-right">
         {value.length}/500

@@ -45,7 +45,7 @@ export default function FilterBar({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 mb-6">
+    <div className="card p-4 mb-6">
       {/* Search + Toggle */}
       <div className="flex items-center gap-3">
         <div className="flex-1">
@@ -58,14 +58,14 @@ export default function FilterBar({
           onClick={() => setExpanded(!expanded)}
           className={`flex items-center gap-2 px-3 py-2.5 text-sm font-medium rounded-lg border transition ${
             activeFilterCount > 0
-              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400'
-              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750'
+              ? 'bg-violet-20 dark:bg-violet-100/10 border-violet-100/30 dark:border-violet-100/20 text-violet-100 dark:text-violet-60'
+              : 'bg-white dark:bg-dark-700 border-light-40 dark:border-dark-600 text-muted-foreground hover:bg-surface-light dark:hover:bg-dark-600'
           }`}
         >
           <SlidersHorizontal className="w-4 h-4" />
           <span className="hidden sm:inline">Filters</span>
           {activeFilterCount > 0 && (
-            <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="bg-violet-100 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {activeFilterCount}
             </span>
           )}
@@ -79,7 +79,7 @@ export default function FilterBar({
 
       {/* Expanded Filters */}
       {expanded && (
-        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <div className="mt-4 pt-4 border-t border-light-40 dark:border-dark-600">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <CategoryFilter
               value={filters.category}
@@ -116,7 +116,7 @@ export default function FilterBar({
             <div className="mt-4 flex justify-end">
               <button
                 onClick={onClearFilters}
-                className="text-sm text-red-500 hover:text-red-600 dark:hover:text-red-400 transition"
+                className="text-sm text-expense-100 hover:text-expense-80 transition"
               >
                 Clear all filters
               </button>

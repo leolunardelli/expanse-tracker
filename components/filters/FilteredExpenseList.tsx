@@ -146,13 +146,13 @@ export default function FilteredExpenseList({
         onClearAll={handleClearFilters}
       />
 
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+      <div className="card p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Expenses
           </h2>
           {isPending && (
-            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-violet-100" />
           )}
         </div>
 
@@ -170,7 +170,7 @@ export default function FilteredExpenseList({
             {expenses.map((expense) => (
               <div
                 key={expense.id}
-                className="flex justify-between items-center p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                className="flex justify-between items-center p-3 border border-light-40 dark:border-dark-600 rounded-montra-sm hover:bg-surface-light dark:hover:bg-dark-700 transition"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function FilteredExpenseList({
                       {expense.description}
                     </p>
                     {expense.isRecurring && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full shrink-0">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-violet-20 dark:bg-violet-100/10 text-violet-100 dark:text-violet-60 text-xs rounded-full shrink-0">
                         <RefreshCw size={10} />
                         {getRecurrenceLabel(expense.recurrenceType)}
                       </span>
@@ -211,14 +211,14 @@ export default function FilteredExpenseList({
                   </p>
                   <button
                     onClick={() => setEditingExpense(expense)}
-                    className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded transition"
+                    className="p-2 hover:bg-violet-20 dark:hover:bg-violet-100/10 text-violet-100 dark:text-violet-60 rounded transition"
                     title="Edit"
                   >
                     <Pencil size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(expense.id)}
-                    className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded transition"
+                    className="p-2 hover:bg-expense-100/10 text-expense-100 rounded transition"
                     title="Delete"
                   >
                     <Trash2 size={18} />

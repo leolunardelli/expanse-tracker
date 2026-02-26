@@ -90,10 +90,10 @@ export default function Pagination({
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`min-w-[32px] h-8 text-sm rounded-lg transition font-medium ${
+              className={`min-w-[32px] h-8 text-sm rounded-montra-sm transition font-medium ${
                 pageNum === page
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  ? 'bg-violet-100 text-white shadow-sm'
+                  : 'text-muted-foreground hover:bg-surface-light dark:hover:bg-dark-700'
               }`}
             >
               {pageNum}

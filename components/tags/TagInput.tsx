@@ -73,7 +73,7 @@ export default function TagInput({
         <Tag size={14} />
         Tags
       </label>
-      <div className="flex flex-wrap items-center gap-1.5 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 min-h-[42px]">
+      <div className="flex flex-wrap items-center gap-1.5 p-2 border border-light-40 dark:border-dark-600 rounded-montra-sm bg-white dark:bg-dark-surface focus-within:ring-2 focus-within:ring-violet-100/50 focus-within:border-violet-100 min-h-[42px]">
         {tags.map((tag) => (
           <span
             key={tag}
