@@ -50,6 +50,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  password      String?   // Hashed password for email/password auth
   createdAt     DateTime  @default(now())
   accounts      Account[]
   sessions      Session[]
@@ -58,6 +59,7 @@ model User {
   settings      UserSettings?
   incomes       Income[]
   plannedExpenses PlannedExpense[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 // User Settings & Preferences
@@ -69,12 +71,28 @@ model UserSettings {
   weeklyReport        Boolean  @default(false)
   monthlyReport       Boolean  @default(true)
   aiInsightsEnabled   Boolean  @default(true)
+  onboardingComplete  Boolean  @default(false)
   
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   
   userId              String   @unique
   user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Password Reset Tokens
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expires   DateTime
+  
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([token])
 }
 
 model Expense {
