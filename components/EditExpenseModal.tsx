@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { X, RefreshCw } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
+import TagInput from '@/components/tags/TagInput';
+import NoteInput from '@/components/tags/NoteInput';
 
 type Expense = {
   id: string;
@@ -12,6 +14,8 @@ type Expense = {
   date: Date | string;
   isRecurring?: boolean;
   recurrenceType?: string | null;
+  tags?: string[];
+  notes?: string | null;
 }
 
 type EditExpenseModalProps = {
@@ -27,6 +31,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
   const [date, setDate] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurrenceType, setRecurrenceType] = useState('monthly');
+  const [tags, setTags] = useState<string[]>([]);
+  const [notes, setNotes] = useState('');
 
   useEffect(() => {
     if (expense) {
@@ -37,6 +43,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
       setDate(d.toISOString().split('T')[0]);
       setIsRecurring(expense.isRecurring || false);
       setRecurrenceType(expense.recurrenceType || 'monthly');
+      setTags(expense.tags || []);
+      setNotes(expense.notes || '');
     }
   }, [expense]);
 
@@ -54,6 +62,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
         date: new Date(date),
         isRecurring,
         recurrenceType: isRecurring ? recurrenceType : null,
+        tags,
+        notes: notes || null,
       });
       onClose();
     } catch {
@@ -155,6 +165,9 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
             )}
           </div>
           
+          <TagInput tags={tags} onChange={setTags} />
+          <NoteInput value={notes} onChange={setNotes} />
+
           <div className="flex gap-3 pt-2">
             <button
               type="button"
