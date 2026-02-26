@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, RefreshCw } from 'lucide-react';
+import { X, RefreshCw, Save, Loader2 } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { getCategoryConfig } from '@/lib/design-tokens';
 
 type Expense = {
   id: string;
@@ -51,6 +52,8 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
 
   if (!expense) return null;
 
+  const categoryConfig = getCategoryConfig(category);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -75,46 +78,81 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Edit Expense</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
-            <X size={20} />
+    <div className="fixed inset-0 z-50" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        className="absolute bottom-0 left-0 right-0 bg-white dark:bg-dark-800 rounded-t-[24px] max-h-[90vh] overflow-y-auto animate-slide-up sm:absolute sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:bottom-auto sm:rounded-montra-lg sm:max-w-md sm:w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Drag handle (mobile) */}
+        <div className="flex justify-center pt-3 sm:hidden">
+          <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 pt-4 pb-3">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: categoryConfig.color }}
+            />
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Edit Transaction</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-surface-light dark:bg-dark-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-dark-600 transition"
+          >
+            <X size={16} className="text-gray-500" />
           </button>
         </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="px-5 pb-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Description</label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="input"
             />
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-              step="0.01"
-              min="0"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
-            />
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Amount</label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+                step="0.01"
+                min="0"
+                className="input"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+                className="input"
+              />
+            </div>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="input"
             >
               {EXPENSE_CATEGORIES.map((cat) => (
                 <option key={cat.value} value={cat.value}>
@@ -123,47 +161,33 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
               ))}
             </select>
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
-            />
-          </div>
-          
-          <div className="border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
+
+          <div className="p-3 rounded-montra-sm bg-surface-light dark:bg-dark-700">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isRecurring}
                 onChange={(e) => setIsRecurring(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-violet-100 border-gray-300 rounded focus:ring-violet-100"
               />
-              <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400 dark:text-gray-500'} />
+              <RefreshCw size={16} className={isRecurring ? 'text-violet-100' : 'text-muted-foreground'} />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Recurring expense</span>
             </label>
-            
+
             {isRecurring && (
-              <div className="mt-3">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Repeat</label>
-                <select
-                  value={recurrenceType}
-                  onChange={(e) => setRecurrenceType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="daily">Daily</option>
-                  <option value="yearly">Yearly</option>
-                </select>
-              </div>
+              <select
+                value={recurrenceType}
+                onChange={(e) => setRecurrenceType(e.target.value)}
+                className="input mt-2"
+              >
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="daily">Daily</option>
+                <option value="yearly">Yearly</option>
+              </select>
             )}
           </div>
-          
+
           <TagInput tags={tags} onChange={setTags} />
           <NoteInput value={notes} onChange={setNotes} />
 
@@ -171,16 +195,26 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition dark:text-gray-300"
+              className="flex-1 py-2.5 rounded-montra-md border border-gray-200 dark:border-dark-600 text-gray-700 dark:text-gray-300 font-medium text-sm hover:bg-surface-light dark:hover:bg-dark-700 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium transition"
+              className="flex-1 btn-primary py-2.5 flex items-center justify-center gap-2"
             >
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save size={16} />
+                  Save Changes
+                </>
+              )}
             </button>
           </div>
         </form>
