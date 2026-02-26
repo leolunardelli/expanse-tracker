@@ -1,10 +1,11 @@
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
+import { AI_CATEGORY_LIST } from '@/lib/categories';
 
 export async function categorizeExpense(description: string) {
   const { text } = await generateText({
     model: openai('gpt-4o-mini'),
-    prompt: `Categorize this expense into ONE of these categories: Food, Transport, Entertainment, Shopping, Bills, Health, Other.
+    prompt: `Categorize this expense into ONE of these categories: ${AI_CATEGORY_LIST}.
     
 Expense: "${description}"
 

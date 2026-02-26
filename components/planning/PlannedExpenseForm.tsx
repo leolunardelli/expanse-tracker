@@ -3,12 +3,9 @@
 import { useState, useRef } from 'react';
 import { Plus, Receipt } from 'lucide-react';
 import { addPlannedExpense } from '@/app/actions/planning';
+import { EXPENSE_CATEGORIES } from '@/lib/categories';
 
-const CATEGORIES = [
-  'Housing', 'Utilities', 'Transport', 'Food',
-  'Subscriptions', 'Insurance', 'Financial', 'Health',
-  'Entertainment', 'Shopping', 'Bills', 'Other',
-];
+const CATEGORIES = EXPENSE_CATEGORIES.map((c) => c.value);
 
 const FREQUENCIES = [
   { value: 'monthly', label: 'Mensal' },

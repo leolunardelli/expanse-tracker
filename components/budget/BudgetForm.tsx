@@ -3,17 +3,9 @@
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import { saveBudget } from '@/app/actions/budget';
+import { BUDGET_CATEGORIES } from '@/lib/categories';
 
-const CATEGORIES = [
-  { value: 'all', label: '💰 Total Budget', color: 'bg-purple-500' },
-  { value: 'food', label: '🍔 Food & Dining', color: 'bg-orange-500' },
-  { value: 'transport', label: '🚗 Transport', color: 'bg-blue-500' },
-  { value: 'entertainment', label: '🎬 Entertainment', color: 'bg-pink-500' },
-  { value: 'shopping', label: '🛍️ Shopping', color: 'bg-green-500' },
-  { value: 'bills', label: '📄 Bills & Utilities', color: 'bg-red-500' },
-  { value: 'health', label: '🏥 Health', color: 'bg-teal-500' },
-  { value: 'other', label: '📦 Other', color: 'bg-gray-500' },
-];
+const CATEGORIES = BUDGET_CATEGORIES;
 
 type BudgetFormProps = {
   existingCategories: string[];

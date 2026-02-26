@@ -5,6 +5,7 @@ import { X, RefreshCw } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
+import { EXPENSE_CATEGORIES } from '@/lib/categories';
 
 type Expense = {
   id: string;
@@ -115,13 +116,11 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
             >
-              <option value="Food">Food</option>
-              <option value="Transport">Transport</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Bills">Bills</option>
-              <option value="Health">Health</option>
-              <option value="Other">Other</option>
+              {EXPENSE_CATEGORIES.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
+              ))}
             </select>
           </div>
           
