@@ -47,12 +47,14 @@ const getRecurrenceLabel = (type?: string | null) => {
 
 type FilteredExpenseListProps = {
   categories: string[];
+  availableTags: string[];
   initialExpenses: Expense[];
   initialPagination: PaginationData;
 };
 
 export default function FilteredExpenseList({
   categories,
+  availableTags,
   initialExpenses,
   initialPagination,
 }: FilteredExpenseListProps) {
@@ -79,6 +81,7 @@ export default function FilteredExpenseList({
           dateTo: currentFilters.dateTo || undefined,
           amountMin: currentFilters.amountMin || undefined,
           amountMax: currentFilters.amountMax || undefined,
+          tag: currentFilters.tag || undefined,
           sortBy: currentFilters.sortBy || undefined,
           sortOrder: currentFilters.sortOrder,
           page: currentPage,
@@ -131,6 +134,7 @@ export default function FilteredExpenseList({
       <FilterBar
         filters={filters}
         categories={categories}
+        availableTags={availableTags}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
         activeFilterCount={activeFilterCount}

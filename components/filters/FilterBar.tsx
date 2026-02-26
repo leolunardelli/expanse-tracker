@@ -7,10 +7,12 @@ import DateRangeFilter from './DateRangeFilter';
 import CategoryFilter from './CategoryFilter';
 import AmountRangeFilter from './AmountRangeFilter';
 import SortSelect from './SortSelect';
+import TagFilter from './TagFilter';
 
 export type FilterState = {
   search: string;
   category: string;
+  tag: string;
   dateFrom: string;
   dateTo: string;
   amountMin: string;
@@ -22,6 +24,7 @@ export type FilterState = {
 type FilterBarProps = {
   filters: FilterState;
   categories: string[];
+  availableTags: string[];
   onFilterChange: (filters: FilterState) => void;
   onClearFilters: () => void;
   activeFilterCount: number;
@@ -30,6 +33,7 @@ type FilterBarProps = {
 export default function FilterBar({
   filters,
   categories,
+  availableTags,
   onFilterChange,
   onClearFilters,
   activeFilterCount,
@@ -76,11 +80,16 @@ export default function FilterBar({
       {/* Expanded Filters */}
       {expanded && (
         <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <CategoryFilter
               value={filters.category}
               onChange={(v) => updateFilter('category', v)}
               categories={categories}
+            />
+            <TagFilter
+              value={filters.tag}
+              onChange={(v) => updateFilter('tag', v)}
+              availableTags={availableTags}
             />
             <DateRangeFilter
               dateFrom={filters.dateFrom}

@@ -7,6 +7,7 @@ import { FilterState } from '@/components/filters/FilterBar';
 const DEFAULT_FILTERS: FilterState = {
   search: '',
   category: '',
+  tag: '',
   dateFrom: '',
   dateTo: '',
   amountMin: '',
@@ -18,6 +19,7 @@ const DEFAULT_FILTERS: FilterState = {
 const FILTER_PARAM_MAP: Record<keyof FilterState, string> = {
   search: 'q',
   category: 'cat',
+  tag: 'tag',
   dateFrom: 'from',
   dateTo: 'to',
   amountMin: 'min',
@@ -36,6 +38,7 @@ export function useFilterParams() {
     return {
       search: searchParams.get(FILTER_PARAM_MAP.search) ?? '',
       category: searchParams.get(FILTER_PARAM_MAP.category) ?? '',
+      tag: searchParams.get(FILTER_PARAM_MAP.tag) ?? '',
       dateFrom: searchParams.get(FILTER_PARAM_MAP.dateFrom) ?? '',
       dateTo: searchParams.get(FILTER_PARAM_MAP.dateTo) ?? '',
       amountMin: searchParams.get(FILTER_PARAM_MAP.amountMin) ?? '',

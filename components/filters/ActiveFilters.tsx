@@ -15,6 +15,8 @@ function getFilterLabel(key: keyof FilterState, value: string): string {
       return `Search: "${value}"`;
     case 'category':
       return `Category: ${value}`;
+    case 'tag':
+      return `Tag: #${value}`;
     case 'dateFrom':
       return `From: ${new Date(value).toLocaleDateString()}`;
     case 'dateTo':
@@ -33,6 +35,7 @@ function getFilterLabel(key: keyof FilterState, value: string): string {
 const CHIP_COLORS: Record<string, string> = {
   search: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   category: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  tag: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300',
   dateFrom: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
   dateTo: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
   amountMin: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
