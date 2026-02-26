@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { getFilteredExpenses, getCategories, getExpenseStats, getTags } from './actions/expenses';
 import { getAIInsights } from './actions/ai';
+import { getMonthlyPlanSummary } from './actions/planning';
 import Header from '@/components/Header';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExportButton from '@/components/ExportButton';
@@ -20,12 +21,13 @@ export default async function HomePage() {
     redirect('/auth/signin');
   }
   
-  const [{ expenses, pagination }, categories, stats, insights, availableTags] = await Promise.all([
+  const [{ expenses, pagination }, categories, stats, insights, availableTags, planSummary] = await Promise.all([
     getFilteredExpenses({ page: 1, pageSize: 10 }),
     getCategories(),
     getExpenseStats(),
     getAIInsights(),
     getTags(),
+    getMonthlyPlanSummary(),
   ]);
   
   return (
@@ -35,10 +37,15 @@ export default async function HomePage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <BudgetAlerts />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatsCard title="Total Spent" value={formatCurrency(stats.total)} />
           <StatsCard title="Transactions" value={stats.count} />
           <StatsCard title="Categories" value={Object.keys(stats.byCategory).length} />
+          <StatsCard
+            title="Renda disponível"
+            value={formatCurrency(planSummary.remaining)}
+            className={planSummary.remaining < 0 ? 'border-red-200 dark:border-red-800' : 'border-green-200 dark:border-green-800'}
+          />
         </div>
         
         <AIInsights insights={insights} />
