@@ -111,6 +111,7 @@ export async function getExpenses() {
 export type FilterParams = {
   search?: string;
   category?: string;
+  tag?: string;
   dateFrom?: string;
   dateTo?: string;
   amountMin?: string;
@@ -126,6 +127,7 @@ export async function getFilteredExpenses(filters: FilterParams = {}) {
   const {
     search,
     category,
+    tag,
     dateFrom,
     dateTo,
     amountMin,
@@ -143,11 +145,17 @@ export async function getFilteredExpenses(filters: FilterParams = {}) {
     where.OR = [
       { description: { contains: search, mode: 'insensitive' } },
       { category: { contains: search, mode: 'insensitive' } },
+      { notes: { contains: search, mode: 'insensitive' } },
+      { tags: { has: search.toLowerCase() } },
     ];
   }
 
   if (category && category !== 'all') {
     where.category = category;
+  }
+
+  if (tag) {
+    where.tags = { has: tag.toLowerCase() };
   }
 
   if (dateFrom || dateTo) {
