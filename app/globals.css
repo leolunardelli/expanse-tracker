@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
+    @apply font-sans antialiased bg-surface-light dark:bg-surface-dark text-dark-900 dark:text-white;
   }
 
   /* Dark mode form controls */
@@ -21,17 +21,112 @@
   .dark select {
     color-scheme: dark;
   }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted/30 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted/50;
+  }
+}
+
+@layer components {
+  /* Montra card styles */
+  .card {
+    @apply bg-white dark:bg-card-dark rounded-montra shadow-card dark:shadow-card-dark;
+  }
+  .card-hover {
+    @apply card hover:shadow-card-hover transition-shadow duration-200;
+  }
+
+  /* Montra input styles */
+  .input {
+    @apply w-full px-4 py-3 rounded-montra border border-border-light dark:border-border-dark
+      bg-white dark:bg-card-dark text-dark-900 dark:text-white
+      placeholder:text-muted
+      focus:outline-none focus:ring-2 focus:ring-violet-100/50 focus:border-violet-100
+      transition-colors duration-150;
+  }
+
+  /* Montra button styles */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-montra
+      bg-violet-100 text-white font-semibold
+      hover:bg-violet-80 active:bg-violet-100
+      disabled:opacity-50 disabled:cursor-not-allowed
+      transition-colors duration-150;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-montra
+      bg-violet-20 text-violet-100 font-semibold
+      hover:bg-violet-40
+      disabled:opacity-50 disabled:cursor-not-allowed
+      transition-colors duration-150;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-montra
+      border border-border-light dark:border-border-dark
+      text-dark-900 dark:text-white font-medium
+      hover:bg-surface-light dark:hover:bg-dark-700
+      disabled:opacity-50 disabled:cursor-not-allowed
+      transition-colors duration-150;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-montra
+      bg-expense-100 text-white font-semibold
+      hover:bg-expense-80
+      disabled:opacity-50 disabled:cursor-not-allowed
+      transition-colors duration-150;
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center p-2 rounded-montra-sm
+      text-muted hover:bg-surface-light dark:hover:bg-dark-700
+      transition-colors duration-150;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .badge-violet { @apply bg-violet-20 text-violet-100; }
+  .badge-green { @apply bg-income-20 text-income-100; }
+  .badge-red { @apply bg-expense-20 text-expense-100; }
+  .badge-yellow { @apply bg-warning-20 text-warning-100; }
+  .badge-blue { @apply bg-info-20 text-info-100; }
+
+  /* Bottom sheet / modal overlay */
+  .overlay {
+    @apply fixed inset-0 bg-black/50 z-50 animate-fade-in;
+  }
+  .bottom-sheet {
+    @apply fixed bottom-0 left-0 right-0 bg-white dark:bg-card-dark
+      rounded-t-3xl p-6 z-50 animate-slide-up max-h-[90vh] overflow-y-auto;
+  }
+
+  /* Section titles */
+  .section-title {
+    @apply text-lg font-semibold text-dark-900 dark:text-white;
+  }
+  .section-subtitle {
+    @apply text-sm text-muted;
+  }
 }
 
 /* Print styles for monthly reports */
 @media print {
-  /* Hide non-essential elements */
   header,
   .print\\:hidden {
     display: none !important;
   }
 
-  /* Reset background and colors */
   body {
     background: white !important;
     color: black !important;
@@ -44,15 +139,14 @@
     margin: 0 !important;
   }
 
-  /* Force white backgrounds for cards */
   .bg-white,
-  .dark\\:bg-gray-900 {
+  .dark\\:bg-gray-900,
+  .dark\\:bg-card-dark {
     background: white !important;
     box-shadow: none !important;
     border-color: #e5e7eb !important;
   }
 
-  /* Ensure dark text */
   .text-gray-900,
   .dark\\:text-white,
   .dark\\:text-gray-100 {
@@ -66,14 +160,13 @@
     color: #6b7280 !important;
   }
 
-  /* Page break management */
-  .rounded-xl {
+  .rounded-xl,
+  .rounded-montra {
     break-inside: avoid;
     page-break-inside: avoid;
     margin-bottom: 16px;
   }
 
-  /* Ensure charts are visible */
   .recharts-wrapper {
     page-break-inside: avoid;
   }
