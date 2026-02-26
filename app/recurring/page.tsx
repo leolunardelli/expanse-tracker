@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
 import { getRecurringExpenses, getRecurringStats } from '../actions/recurring';
-import Header from '@/components/Header';
+import AppShell from '@/components/AppShell';
 import RecurringStats from '@/components/recurring/RecurringStats';
 import RecurringList from '@/components/recurring/RecurringList';
 import Link from 'next/link';
@@ -21,10 +21,7 @@ export default async function RecurringPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <Header userName={session.user?.name} userImage={session.user?.image} />
-
-      <main className="max-w-7xl mx-auto px-4 py-8">
+    <AppShell userName={session.user?.name} userImage={session.user?.image}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <Link
@@ -98,7 +95,6 @@ export default async function RecurringPage() {
         )}
 
         <RecurringList expenses={expenses} />
-      </main>
-    </div>
+    </AppShell>
   );
 }

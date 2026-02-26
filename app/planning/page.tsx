@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import Header from '@/components/Header';
+import AppShell from '@/components/AppShell';
 import IncomeForm from '@/components/planning/IncomeForm';
 import IncomeList from '@/components/planning/IncomeList';
 import PlannedExpenseForm from '@/components/planning/PlannedExpenseForm';
@@ -27,17 +27,15 @@ export default async function PlanningPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Planejamento Mensal
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Defina sua renda e despesas para visualizar quanto sobra no final do mês.
-          </p>
-        </div>
+    <AppShell userName={session.user?.name} userImage={session.user?.image}>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
+          Monthly Planning
+        </h1>
+        <p className="text-sm text-muted mt-1">
+          Set your income and expenses to see how much you have left at the end of the month.
+        </p>
+      </div>
 
         {/* Overview section */}
         <section className="mb-8">
@@ -85,7 +83,6 @@ export default async function PlanningPage() {
         <section className="mb-8">
           <CategoryComparison data={summary.categoryComparison} />
         </section>
-      </main>
-    </div>
+    </AppShell>
   );
 }

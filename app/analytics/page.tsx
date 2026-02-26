@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
 import { getAnalyticsData } from '../actions/analytics';
 import { getYearOverYearData } from '../actions/yoy';
-import Header from '@/components/Header';
+import AppShell from '@/components/AppShell';
 import SummaryCards from '@/components/charts/SummaryCards';
 import CategoryPieChart from '@/components/charts/CategoryPieChart';
 import MonthlyBarChart from '@/components/charts/MonthlyBarChart';
@@ -24,42 +24,29 @@ export default async function AnalyticsPage() {
   const yoyData = await getYearOverYearData();
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <Header userName={session.user?.name} userImage={session.user?.image} />
+    <AppShell userName={session.user?.name} userImage={session.user?.image}>
+      <h1 className="text-2xl font-bold text-dark-900 dark:text-white mb-6">Analytics</h1>
       
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center gap-4 mb-6">
-          <Link 
-            href="/"
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition"
-          >
-            <ArrowLeft size={20} />
-            <span>Back to Dashboard</span>
-          </Link>
-          <h1 className="text-2xl font-bold">📊 Analytics</h1>
-        </div>
-        
-        <SummaryCards data={analytics.summary} />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <CategoryPieChart data={analytics.categoryData} />
-          <MonthlyBarChart data={analytics.monthlyData} />
-        </div>
-        
-        <div className="mt-6">
-          <SpendingTrendChart data={analytics.trendData} />
-        </div>
+      <SummaryCards data={analytics.summary} />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <CategoryPieChart data={analytics.categoryData} />
+        <MonthlyBarChart data={analytics.monthlyData} />
+      </div>
+      
+      <div className="mt-6">
+        <SpendingTrendChart data={analytics.trendData} />
+      </div>
 
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">📈 Year-over-Year Analysis</h2>
-          <YoYStatsCards stats={yoyData} />
-          <YearOverYearChart 
-            data={yoyData.chartData} 
-            currentYear={yoyData.currentYear}
-            previousYear={yoyData.previousYear}
-          />
-        </div>
-      </main>
-    </div>
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Year-over-Year Analysis</h2>
+        <YoYStatsCards stats={yoyData} />
+        <YearOverYearChart 
+          data={yoyData.chartData} 
+          currentYear={yoyData.currentYear}
+          previousYear={yoyData.previousYear}
+        />
+      </div>
+    </AppShell>
   );
 }

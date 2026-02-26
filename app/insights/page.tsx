@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
-import Header from '@/components/Header';
+import AppShell from '@/components/AppShell';
 import SavingTips from '@/components/ai/SavingTips';
 import SpendingPrediction from '@/components/ai/SpendingPrediction';
 import WeeklyAnalysis from '@/components/ai/WeeklyAnalysis';
@@ -15,24 +15,21 @@ export default async function InsightsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header userName={session.user?.name} userImage={session.user?.image} />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              AI Insights
-            </h1>
+    <AppShell userName={session.user?.name} userImage={session.user?.image}>
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 bg-violet-100 rounded-montra-sm">
+            <Brain className="w-5 h-5 text-white" />
           </div>
-          <p className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-yellow-500" />
-            Powered by OpenAI - Personalized spending analysis and recommendations
-          </p>
+          <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
+            AI Insights
+          </h1>
         </div>
+        <p className="text-muted flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-warning-100" />
+          Powered by OpenAI - Personalized spending analysis and recommendations
+        </p>
+      </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-6">
@@ -76,7 +73,6 @@ export default async function InsightsPage() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </AppShell>
   );
 }
