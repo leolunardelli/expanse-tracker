@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { Trash2, Pencil, Receipt, Lock, Shuffle, CalendarDays } from 'lucide-react';
-import { deletePlannedExpense, updatePlannedExpense, toMonthly } from '@/app/actions/planning';
+import { deletePlannedExpense, updatePlannedExpense } from '@/app/actions/planning';
+import { toMonthly } from '@/lib/planning';
 import { formatCurrency } from '@/lib/currency';
 
 type PlannedExpense = {

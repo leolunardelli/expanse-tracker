@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { Trash2, Pencil, DollarSign, TrendingUp, Briefcase, Home, MoreHorizontal } from 'lucide-react';
-import { deleteIncome, updateIncome, toMonthly } from '@/app/actions/planning';
+import { deleteIncome, updateIncome } from '@/app/actions/planning';
+import { toMonthly } from '@/lib/planning';
 import { formatCurrency } from '@/lib/currency';
 
 type Income = {
