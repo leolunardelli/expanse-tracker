@@ -228,3 +228,17 @@ export async function getExpenseStats() {
   
   return { total, byCategory, count: expenses.length };
 }
+
+export async function getTags(): Promise<string[]> {
+  const userId = await getUserId();
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId, tags: { isEmpty: false } },
+    select: { tags: true },
+  });
+
+  const tagSet = new Set<string>();
+  expenses.forEach((e) => e.tags.forEach((t) => tagSet.add(t)));
+
+  return Array.from(tagSet).sort();
+}

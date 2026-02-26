@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { getFilteredExpenses, getCategories, getExpenseStats } from './actions/expenses';
+import { getFilteredExpenses, getCategories, getExpenseStats, getTags } from './actions/expenses';
 import { getAIInsights } from './actions/ai';
 import Header from '@/components/Header';
 import ExpenseForm from '@/components/ExpenseForm';
@@ -20,11 +20,12 @@ export default async function HomePage() {
     redirect('/auth/signin');
   }
   
-  const [{ expenses, pagination }, categories, stats, insights] = await Promise.all([
+  const [{ expenses, pagination }, categories, stats, insights, availableTags] = await Promise.all([
     getFilteredExpenses({ page: 1, pageSize: 10 }),
     getCategories(),
     getExpenseStats(),
     getAIInsights(),
+    getTags(),
   ]);
   
   return (
@@ -62,6 +63,7 @@ export default async function HomePage() {
         }>
           <FilteredExpenseList
             categories={categories}
+            availableTags={availableTags}
             initialExpenses={expenses}
             initialPagination={pagination}
           />
