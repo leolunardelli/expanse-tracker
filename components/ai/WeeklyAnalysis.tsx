@@ -35,14 +35,14 @@ export default function WeeklyAnalysis() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-green-500" />
+      <div className="card p-6">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-income-100" />
           Weekly Analysis
         </h3>
         <div className="animate-pulse space-y-4">
-          <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded-lg" />
-          <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+          <div className="h-24 bg-surface-light dark:bg-dark-700 rounded-montra-sm" />
+          <div className="h-16 bg-surface-light dark:bg-dark-700 rounded-montra-sm" />
         </div>
       </div>
     );
@@ -50,12 +50,12 @@ export default function WeeklyAnalysis() {
 
   if (!data) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-green-500" />
+      <div className="card p-6">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-income-100" />
           Weekly Analysis
         </h3>
-        <p className="text-gray-500 dark:text-gray-400">
+        <p className="text-muted-foreground">
           Add more expenses to see your weekly spending analysis!
         </p>
       </div>
@@ -65,15 +65,15 @@ export default function WeeklyAnalysis() {
   const isIncrease = data.changePercent > 0;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+    <div className="card p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-green-500" />
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-income-100" />
           Weekly Analysis
         </h3>
         <button
           onClick={fetchAnalysis}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          className="p-2 text-muted-foreground hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
           title="Refresh analysis"
         >
           <RefreshCw className="w-4 h-4" />
@@ -81,24 +81,24 @@ export default function WeeklyAnalysis() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-100 dark:border-green-800">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">This Week</p>
+        <div className="p-4 bg-income-100/5 dark:bg-income-100/10 rounded-montra-sm border border-income-100/20 dark:border-income-100/10">
+          <p className="text-xs text-muted-foreground mb-1">This Week</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(data.thisWeekTotal)}
           </p>
         </div>
-        <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Last Week</p>
+        <div className="p-4 bg-surface-light dark:bg-dark-700 rounded-montra-sm">
+          <p className="text-xs text-muted-foreground mb-1">Last Week</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(data.lastWeekTotal)}
           </p>
         </div>
       </div>
 
-      <div className={`flex items-center justify-center gap-2 p-3 rounded-lg mb-4 ${
+      <div className={`flex items-center justify-center gap-2 p-3 rounded-montra-sm mb-4 ${
         isIncrease 
-          ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400' 
-          : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+          ? 'bg-expense-100/5 dark:bg-expense-100/10 text-expense-100' 
+          : 'bg-income-100/5 dark:bg-income-100/10 text-income-100'
       }`}>
         {isIncrease ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
         <span className="font-semibold">
@@ -106,14 +106,14 @@ export default function WeeklyAnalysis() {
         </span>
       </div>
 
-      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg mb-4">
-        <span className="text-sm text-gray-600 dark:text-gray-400">Top Category This Week</span>
-        <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+      <div className="flex items-center justify-between p-3 bg-surface-light dark:bg-dark-700 rounded-montra-sm mb-4">
+        <span className="text-sm text-muted-foreground">Top Category This Week</span>
+        <span className="px-3 py-1 bg-violet-20 dark:bg-violet-100/10 text-violet-100 dark:text-violet-60 rounded-full text-sm font-medium">
           {data.topCategory}
         </span>
       </div>
 
-      <div className="p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800">
+      <div className="p-4 bg-violet-20 dark:bg-violet-100/10 rounded-montra-sm border border-violet-100/20 dark:border-violet-100/10">
         <p className="text-sm text-gray-700 dark:text-gray-300">
           {data.analysis}
         </p>

@@ -40,7 +40,7 @@ export default async function InsightsPage() {
           <div className="space-y-6">
             <SavingTips />
             
-            <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-violet-100 to-violet-60 rounded-montra-sm shadow-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                 <Sparkles className="w-5 h-5" />
                 AI Features
