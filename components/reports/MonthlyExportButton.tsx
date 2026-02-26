@@ -63,7 +63,7 @@ export default function MonthlyExportButton({ report }: MonthlyExportButtonProps
       <button
         onClick={handleExportCSV}
         disabled={exporting}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition disabled:opacity-50"
+        className="btn-outline flex items-center gap-2 px-4 py-2 text-sm font-medium"
       >
         {exporting ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -74,7 +74,7 @@ export default function MonthlyExportButton({ report }: MonthlyExportButtonProps
       </button>
       <button
         onClick={handlePrint}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition"
+        className="btn-outline flex items-center gap-2 px-4 py-2 text-sm font-medium"
       >
         <Printer className="w-4 h-4" />
         Print

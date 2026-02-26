@@ -84,8 +84,8 @@ export default function ReportView({
 
   if (months.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-12 text-center">
-        <p className="text-gray-500 dark:text-gray-400 text-lg">
+      <div className="card p-12 text-center">
+        <p className="text-muted-foreground text-lg">
           No expense data yet. Add expenses to generate monthly reports.
         </p>
       </div>
@@ -96,8 +96,8 @@ export default function ReportView({
     <div className="relative">
       {/* Loading overlay */}
       {isPending && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-gray-950/50 rounded-xl">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-dark-900/50 rounded-montra">
+          <Loader2 className="w-8 h-8 animate-spin text-violet-100" />
         </div>
       )}
 

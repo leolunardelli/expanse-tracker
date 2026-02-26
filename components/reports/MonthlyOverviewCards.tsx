@@ -36,30 +36,30 @@ export default function MonthlyOverviewCards({
       icon: DollarSign,
       label: 'Total Spent',
       value: formatCurrency(totalSpent),
-      color: 'text-blue-500',
-      bg: 'bg-blue-50 dark:bg-blue-900/20',
+      color: 'text-violet-100',
+      bg: 'bg-violet-20 dark:bg-violet-100/10',
     },
     {
       icon: Hash,
       label: 'Transactions',
       value: String(transactionCount),
       sub: `${daysWithSpending} of ${daysInMonth} days`,
-      color: 'text-purple-500',
-      bg: 'bg-purple-50 dark:bg-purple-900/20',
+      color: 'text-violet-60',
+      bg: 'bg-violet-20 dark:bg-violet-100/10',
     },
     {
       icon: TrendingUp,
       label: 'Avg / Transaction',
       value: formatCurrency(avgPerTransaction),
-      color: 'text-green-500',
-      bg: 'bg-green-50 dark:bg-green-900/20',
+      color: 'text-income-100',
+      bg: 'bg-income-20 dark:bg-income-100/10',
     },
     {
       icon: CalendarDays,
       label: 'Avg / Day',
       value: formatCurrency(avgPerDay),
-      color: 'text-amber-500',
-      bg: 'bg-amber-50 dark:bg-amber-900/20',
+      color: 'text-warning-100',
+      bg: 'bg-warning-20 dark:bg-warning-100/10',
     },
     {
       icon: ArrowUpRight,
@@ -72,8 +72,8 @@ export default function MonthlyOverviewCards({
             day: 'numeric',
           })
         : '—',
-      color: 'text-red-500',
-      bg: 'bg-red-50 dark:bg-red-900/20',
+      color: 'text-expense-100',
+      bg: 'bg-expense-20 dark:bg-expense-100/10',
     },
     {
       icon: ArrowDownRight,
@@ -86,8 +86,8 @@ export default function MonthlyOverviewCards({
             day: 'numeric',
           })
         : '—',
-      color: 'text-cyan-500',
-      bg: 'bg-cyan-50 dark:bg-cyan-900/20',
+      color: 'text-info-100',
+      bg: 'bg-info-100/10 dark:bg-info-100/10',
     },
   ];
 
@@ -96,19 +96,19 @@ export default function MonthlyOverviewCards({
       {cards.map((card) => (
         <div
           key={card.label}
-          className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4"
+          className="card p-4"
         >
-          <div className={`inline-flex p-2 rounded-lg ${card.bg} mb-2`}>
+          <div className={`inline-flex p-2 rounded-montra-sm ${card.bg} mb-2`}>
             <card.icon className={`w-4 h-4 ${card.color}`} />
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <p className="text-xs text-muted-foreground mb-1">
             {card.label}
           </p>
           <p className="text-lg font-bold text-gray-900 dark:text-white">
             {card.value}
           </p>
           {card.sub && (
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               {card.sub}
             </p>
           )}

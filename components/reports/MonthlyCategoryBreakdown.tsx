@@ -16,7 +16,7 @@ type MonthlyCategoryBreakdownProps = {
 };
 
 const COLORS = [
-  '#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444',
+  '#7F3DFF', '#00A86B', '#FD3C4A', '#FCAC12', '#0077FF',
   '#06b6d4', '#ec4899', '#84cc16', '#f97316', '#6366f1',
   '#14b8a6', '#e11d48',
 ];
@@ -26,11 +26,11 @@ export default function MonthlyCategoryBreakdown({
 }: MonthlyCategoryBreakdownProps) {
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <div className="card p-6">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
           Category Breakdown
         </h3>
-        <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+        <p className="text-muted-foreground text-center py-8">
           No category data for this month
         </p>
       </div>
@@ -38,8 +38,8 @@ export default function MonthlyCategoryBreakdown({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="card p-6">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
         Category Breakdown
       </h3>
 
@@ -68,9 +68,10 @@ export default function MonthlyCategoryBreakdown({
               <Tooltip
                 formatter={(value) => formatCurrency(Number(value))}
                 contentStyle={{
-                  backgroundColor: 'var(--tooltip-bg, #fff)',
-                  border: '1px solid var(--tooltip-border, #e5e7eb)',
-                  borderRadius: '8px',
+                  backgroundColor: '#212325',
+                  border: '1px solid #333338',
+                  borderRadius: '12px',
+                  color: '#FFFFFF',
                 }}
               />
             </PieChart>
@@ -95,7 +96,7 @@ export default function MonthlyCategoryBreakdown({
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+                  <div className="flex-1 bg-surface-light dark:bg-dark-700 rounded-full h-1.5">
                     <div
                       className="h-1.5 rounded-full transition-all"
                       style={{
@@ -104,11 +105,11 @@ export default function MonthlyCategoryBreakdown({
                       }}
                     />
                   </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 w-12 text-right">
+                  <span className="text-xs text-muted-foreground shrink-0 w-12 text-right">
                     {cat.percentage}%
                   </span>
                 </div>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {cat.count} transaction{cat.count !== 1 ? 's' : ''}
                 </p>
               </div>

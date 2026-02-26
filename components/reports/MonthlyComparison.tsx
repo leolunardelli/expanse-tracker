@@ -29,23 +29,23 @@ export default function MonthlyComparison({
   const directionConfig = {
     up: {
       icon: TrendingUp,
-      color: 'text-red-500',
-      bg: 'bg-red-50 dark:bg-red-900/20',
-      border: 'border-red-200 dark:border-red-800',
+      color: 'text-expense-100',
+      bg: 'bg-expense-20 dark:bg-expense-100/10',
+      border: 'border-expense-100/20 dark:border-expense-100/20',
       label: 'Increased',
     },
     down: {
       icon: TrendingDown,
-      color: 'text-green-500',
-      bg: 'bg-green-50 dark:bg-green-900/20',
-      border: 'border-green-200 dark:border-green-800',
+      color: 'text-income-100',
+      bg: 'bg-income-20 dark:bg-income-100/10',
+      border: 'border-income-100/20 dark:border-income-100/20',
       label: 'Decreased',
     },
     same: {
       icon: Minus,
-      color: 'text-gray-500',
-      bg: 'bg-gray-50 dark:bg-gray-800',
-      border: 'border-gray-200 dark:border-gray-700',
+      color: 'text-muted-foreground',
+      bg: 'bg-surface-light dark:bg-dark-700',
+      border: 'border-light-40 dark:border-dark-600',
       label: 'No change',
     },
   };
@@ -54,15 +54,15 @@ export default function MonthlyComparison({
   const DirectionIcon = config.icon;
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="card p-6">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
         Month-over-Month
       </h3>
 
       <div className="flex flex-col sm:flex-row items-center gap-4">
         {/* Previous month */}
-        <div className="flex-1 text-center p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 w-full">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+        <div className="flex-1 text-center p-4 rounded-montra-sm bg-surface-light dark:bg-dark-700 w-full">
+          <p className="text-sm text-muted-foreground mb-1">
             {prevMonthLabel}
           </p>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -84,18 +84,18 @@ export default function MonthlyComparison({
             </span>
           </div>
           {direction !== 'same' && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               {config.label} {formatCurrency(Math.abs(changeAmount))}
             </p>
           )}
         </div>
 
         {/* Current month */}
-        <div className="flex-1 text-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 w-full">
-          <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">
+        <div className="flex-1 text-center p-4 rounded-montra-sm bg-violet-20 dark:bg-violet-100/10 border border-violet-40 dark:border-violet-100/10 w-full">
+          <p className="text-sm text-violet-100 mb-1">
             {currentMonthLabel}
           </p>
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+          <p className="text-2xl font-bold text-violet-100">
             {formatCurrency(currentTotal)}
           </p>
         </div>
