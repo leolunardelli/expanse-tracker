@@ -54,6 +54,8 @@ export async function updateExpense(
     date: Date;
     isRecurring?: boolean;
     recurrenceType?: string | null;
+    tags?: string[];
+    notes?: string | null;
   }
 ) {
   const userId = await getUserId();
@@ -73,6 +75,8 @@ export async function updateExpense(
       date: data.date,
       isRecurring: data.isRecurring ?? false,
       recurrenceType: data.isRecurring ? data.recurrenceType : null,
+      tags: data.tags ?? [],
+      notes: data.notes ?? null,
     },
   });
   
