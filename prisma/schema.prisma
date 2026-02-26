@@ -56,6 +56,8 @@ model User {
   expenses      Expense[]
   budgets       Budget[]
   settings      UserSettings?
+  incomes       Income[]
+  plannedExpenses PlannedExpense[]
 }
 
 // User Settings & Preferences
@@ -122,5 +124,23 @@ model Budget {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([userId, category]) // One budget per category per user
+  @@index([userId])
+}
+
+// Income Sources
+model Income {
+  id          String   @id @default(cuid())
+  description String   // "Salary", "Freelance", etc.
+  amount      Float    // Gross amount per period
+  type        String   @default("salary") // salary, freelance, investment, rental, other
+  frequency   String   @default("monthly") // monthly, biweekly, weekly
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
