@@ -20,6 +20,16 @@ export async function createExpense(formData: FormData) {
   const date = new Date(formData.get('date') as string);
   const isRecurring = formData.get('isRecurring') === 'true';
   const recurrenceType = formData.get('recurrenceType') as string | null;
+  const tagsRaw = formData.get('tags') as string | null;
+  const notes = (formData.get('notes') as string | null) || null;
+
+  // Parse tags from comma-separated string
+  const tags = tagsRaw
+    ? tagsRaw
+        .split(',')
+        .map((t) => t.trim().toLowerCase())
+        .filter((t) => t.length > 0)
+    : [];
   
   if (!category || category === 'Other') {
     try {
@@ -30,7 +40,7 @@ export async function createExpense(formData: FormData) {
   }
   
   await prisma.expense.create({
-    data: { description, amount, category, date, isRecurring, recurrenceType: isRecurring ? recurrenceType : null, userId },
+    data: { description, amount, category, date, isRecurring, recurrenceType: isRecurring ? recurrenceType : null, tags, notes, userId },
   });
   revalidatePath('/');
 }
