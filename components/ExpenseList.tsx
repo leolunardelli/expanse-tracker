@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Pencil, Search, RefreshCw } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 import { deleteExpense } from '@/app/actions/expenses';
 import { formatCurrency } from '@/lib/currency';
+import { CategoryIcon } from '@/components/ui';
+import { type CategoryKey } from '@/lib/design-tokens';
 import EditExpenseModal from './EditExpenseModal';
-import { getTagColor } from '@/components/tags/TagInput';
+import TransactionDetailSheet from './TransactionDetailSheet';
+import DeleteConfirmDialog from './DeleteConfirmDialog';
 
 type Expense = {
   id: string;
@@ -19,7 +22,16 @@ type Expense = {
   notes?: string | null;
 }
 
-const formatDate = (date: Date | string) => new Date(date).toISOString().split('T')[0];
+const formatDate = (date: Date | string) => {
+  const d = new Date(date);
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
 
 const getRecurrenceLabel = (type?: string | null) => {
   const labels: Record<string, string> = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', yearly: 'Yearly' };
@@ -28,6 +40,8 @@ const getRecurrenceLabel = (type?: string | null) => {
 
 export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [viewingExpense, setViewingExpense] = useState<Expense | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredExpenses = expenses.filter(expense => 
@@ -36,9 +50,10 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
   );
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this expense?')) return;
     try {
       await deleteExpense(id);
+      setDeletingId(null);
+      setViewingExpense(null);
     } catch {
       alert('Delete failed');
     }
@@ -46,101 +61,96 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
 
   if (expenses.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-        <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-center py-8">No expenses yet. Add one to get started!</p>
+      <div className="card p-6">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent Expenses</h2>
+        <p className="text-muted-foreground text-center py-8">No expenses yet. Add one to get started!</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
+      <div className="card p-5">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Recent Expenses</h2>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{filteredExpenses.length} of {expenses.length}</span>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Recent Expenses</h2>
+          <span className="text-xs text-muted-foreground">{filteredExpenses.length} of {expenses.length}</span>
         </div>
         
+        {/* Search */}
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
           <input
             type="text"
             placeholder="Search expenses..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input pl-9"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-gray-900 dark:hover:text-white text-sm"
             >
               ✕
             </button>
           )}
         </div>
         
-        <div className="space-y-2 max-h-[400px] overflow-y-auto">
+        {/* Transaction List */}
+        <div className="space-y-1 max-h-[500px] overflow-y-auto">
           {filteredExpenses.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-4">No expenses match "{searchQuery}"</p>
+            <p className="text-muted-foreground text-center py-6 text-sm">No expenses match &ldquo;{searchQuery}&rdquo;</p>
           ) : (
             filteredExpenses.map((expense) => (
-              <div key={expense.id} className="flex justify-between items-center p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium text-gray-900 dark:text-gray-100">{expense.description}</p>
+              <div
+                key={expense.id}
+                onClick={() => setViewingExpense(expense)}
+                className="flex items-center gap-3 p-3 rounded-montra-sm hover:bg-surface-light dark:hover:bg-dark-700 transition-colors cursor-pointer -mx-1"
+              >
+                <CategoryIcon category={expense.category as CategoryKey} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{expense.description}</p>
                     {expense.isRecurring && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">
-                        <RefreshCw size={10} />
+                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-info-20 dark:bg-info-100/10 text-info-100 text-[10px] rounded-full font-medium">
+                        <RefreshCw size={8} />
                         {getRecurrenceLabel(expense.recurrenceType)}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{expense.category} • {formatDate(expense.date)}</p>
-                  {expense.tags && expense.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {expense.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTagColor(tag)}`}
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {expense.notes && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 truncate max-w-xs">
-                      {expense.notes}
-                    </p>
-                  )}
+                  <p className="text-xs text-muted-foreground">{expense.category} • {formatDate(expense.date)}</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <p className="font-bold text-lg">{formatCurrency(expense.amount)}</p>
-                  <button
-                    onClick={() => setEditingExpense(expense)}
-                    className="p-2 hover:bg-blue-100 text-blue-600 rounded transition"
-                    title="Edit"
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(expense.id)}
-                    className="p-2 hover:bg-red-100 text-red-600 rounded transition"
-                    title="Delete"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                <p className="font-semibold text-sm text-expense-100">-{formatCurrency(expense.amount)}</p>
               </div>
             ))
           )}
         </div>
       </div>
       
+      {/* Detail Sheet */}
+      <TransactionDetailSheet
+        transaction={viewingExpense}
+        onClose={() => setViewingExpense(null)}
+        onEdit={(tx) => {
+          setViewingExpense(null);
+          setEditingExpense(tx);
+        }}
+        onDelete={(id) => {
+          setDeletingId(id);
+        }}
+      />
+
+      {/* Edit Modal */}
       <EditExpenseModal 
         expense={editingExpense} 
         onClose={() => setEditingExpense(null)} 
+      />
+
+      {/* Delete Confirm */}
+      <DeleteConfirmDialog
+        isOpen={!!deletingId}
+        onConfirm={() => handleDelete(deletingId!)}
+        onCancel={() => setDeletingId(null)}
       />
     </>
   );
