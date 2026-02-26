@@ -9,14 +9,14 @@ type CategoryData = {
 }
 
 const COLORS = [
-  '#3B82F6', // blue
-  '#10B981', // green
-  '#F59E0B', // amber
-  '#EF4444', // red
-  '#8B5CF6', // violet
-  '#EC4899', // pink
-  '#06B6D4', // cyan
-  '#F97316', // orange
+  '#7F3DFF', // violet
+  '#00A86B', // green
+  '#FD3C4A', // red
+  '#FCAC12', // yellow
+  '#0077FF', // blue
+  '#B18AFF', // violet-60
+  '#65D1A3', // green-60
+  '#FD6F7A', // red-60
 ];
 
 export default function CategoryPieChart({ data }: { data: CategoryData[] }) {
@@ -25,16 +25,16 @@ export default function CategoryPieChart({ data }: { data: CategoryData[] }) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-        <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-center py-8">No data yet</p>
+      <div className="card p-5">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Spending by Category</h3>
+        <p className="text-muted-foreground text-center py-8 text-sm">No data yet</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-      <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
+    <div className="card p-5">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Spending by Category</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -55,10 +55,10 @@ export default function CategoryPieChart({ data }: { data: CategoryData[] }) {
           <Tooltip 
             formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Amount']}
             contentStyle={{
-              backgroundColor: isDark ? '#1f2937' : '#fff',
-              border: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`,
-              borderRadius: '8px',
-              color: isDark ? '#f3f4f6' : '#111827',
+              backgroundColor: isDark ? '#212325' : '#fff',
+              border: `1px solid ${isDark ? '#333338' : '#E0E0E0'}`,
+              borderRadius: '12px',
+              color: isDark ? '#fff' : '#212325',
             }}
           />
           <Legend />

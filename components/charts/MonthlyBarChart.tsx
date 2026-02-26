@@ -14,42 +14,42 @@ export default function MonthlyBarChart({ data }: { data: MonthlyData[] }) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-        <h3 className="text-lg font-semibold mb-4">Monthly Spending</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-center py-8">No data yet</p>
+      <div className="card p-5">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Monthly Spending</h3>
+        <p className="text-muted-foreground text-center py-8 text-sm">No data yet</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-      <h3 className="text-lg font-semibold mb-4">Monthly Spending</h3>
+    <div className="card p-5">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Monthly Spending</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#E5E7EB'} />
+          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#333338' : '#E0E0E0'} />
           <XAxis 
             dataKey="month" 
-            tick={{ fill: isDark ? '#9ca3af' : '#6B7280', fontSize: 12 }}
+            tick={{ fill: isDark ? '#91919F' : '#91919F', fontSize: 12 }}
             tickLine={false}
           />
           <YAxis 
-            tick={{ fill: isDark ? '#9ca3af' : '#6B7280', fontSize: 12 }}
+            tick={{ fill: isDark ? '#91919F' : '#91919F', fontSize: 12 }}
             tickLine={false}
             tickFormatter={(value) => `$${value}`}
           />
           <Tooltip 
             formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Spent']}
             contentStyle={{ 
-              backgroundColor: isDark ? '#1f2937' : '#fff', 
-              border: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`,
-              borderRadius: '8px',
-              color: isDark ? '#f3f4f6' : '#111827',
+              backgroundColor: isDark ? '#212325' : '#fff', 
+              border: `1px solid ${isDark ? '#333338' : '#E0E0E0'}`,
+              borderRadius: '12px',
+              color: isDark ? '#fff' : '#212325',
             }}
           />
           <Bar 
             dataKey="amount" 
-            fill="#3B82F6" 
-            radius={[4, 4, 0, 0]}
+            fill="#7F3DFF" 
+            radius={[6, 6, 0, 0]}
           />
         </BarChart>
       </ResponsiveContainer>
