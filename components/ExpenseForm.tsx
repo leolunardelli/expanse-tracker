@@ -41,8 +41,8 @@ export default function ExpenseForm() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-800/50 p-6">
-      <h2 className="text-xl font-bold mb-4">Add Expense</h2>
+    <div className="card p-5">
+      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Add Expense</h2>
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
@@ -50,12 +50,12 @@ export default function ExpenseForm() {
             type="text"
             name="description"
             required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input"
             placeholder="Coffee, Uber, etc."
           />
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
             <input
@@ -64,7 +64,7 @@ export default function ExpenseForm() {
               required
               step="0.01"
               min="0"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="input"
               placeholder="0.00"
             />
           </div>
@@ -76,7 +76,7 @@ export default function ExpenseForm() {
               name="date"
               defaultValue={getTodayDate()}
               required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="input"
             />
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function ExpenseForm() {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
           <select
             name="category"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="input"
           >
             {EXPENSE_CATEGORIES.map((cat) => (
               <option key={cat.value} value={cat.value}>
@@ -95,31 +95,28 @@ export default function ExpenseForm() {
           </select>
         </div>
         
-        <div className="border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
+        <div className="p-3 rounded-montra-sm bg-surface-light dark:bg-dark-700">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={isRecurring}
               onChange={(e) => setIsRecurring(e.target.checked)}
-              className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-violet-100 border-gray-300 rounded focus:ring-violet-100"
             />
-            <RefreshCw size={16} className={isRecurring ? 'text-blue-600' : 'text-gray-400 dark:text-gray-500'} />
+            <RefreshCw size={16} className={isRecurring ? 'text-violet-100' : 'text-muted-foreground'} />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Recurring expense</span>
           </label>
           
           {isRecurring && (
-            <div className="mt-3">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Repeat</label>
-              <select
-                name="recurrenceType"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
-              >
-                <option value="monthly">Monthly</option>
-                <option value="weekly">Weekly</option>
-                <option value="daily">Daily</option>
-                <option value="yearly">Yearly</option>
-              </select>
-            </div>
+            <select
+              name="recurrenceType"
+              className="input mt-2"
+            >
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+              <option value="daily">Daily</option>
+              <option value="yearly">Yearly</option>
+            </select>
           )}
         </div>
         
@@ -129,7 +126,7 @@ export default function ExpenseForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium transition"
+          className="btn-primary w-full py-2.5"
         >
           {loading ? 'Adding...' : 'Add Expense'}
         </button>
