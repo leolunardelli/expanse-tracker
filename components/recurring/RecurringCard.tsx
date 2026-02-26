@@ -33,24 +33,24 @@ const frequencyConfig: Record<
 > = {
   daily: {
     label: 'Daily',
-    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    color: 'bg-expense-20 text-expense-100 dark:bg-expense-100/10 dark:text-expense-100',
     monthlyMultiplier: 30,
   },
   weekly: {
     label: 'Weekly',
     color:
-      'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+      'bg-warning-20 text-warning-100 dark:bg-warning-100/10 dark:text-warning-100',
     monthlyMultiplier: 4.33,
   },
   monthly: {
     label: 'Monthly',
-    color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    color: 'bg-violet-20 text-violet-100 dark:bg-violet-100/10 dark:text-violet-100',
     monthlyMultiplier: 1,
   },
   yearly: {
     label: 'Yearly',
     color:
-      'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+      'bg-income-20 text-income-100 dark:bg-income-100/10 dark:text-income-100',
     monthlyMultiplier: 1 / 12,
   },
 };
@@ -80,12 +80,12 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-5 hover:shadow-md transition-shadow">
+    <div className="card p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           {/* Title & Category */}
           <div className="flex items-center gap-2 mb-2">
-            <RotateCcw className="w-4 h-4 text-blue-500 flex-shrink-0" />
+            <RotateCcw className="w-4 h-4 text-violet-100 flex-shrink-0" />
             <h3 className="font-semibold text-gray-900 dark:text-white truncate">
               {expense.description}
             </h3>
@@ -99,7 +99,7 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
               <CalendarClock className="w-3 h-3" />
               {freq.label}
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-surface-light text-gray-700 dark:bg-dark-700 dark:text-gray-300">
               <Tag className="w-3 h-3" />
               {expense.category}
             </span>
@@ -109,18 +109,18 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
           <div className="space-y-1">
             <p className="text-lg font-bold text-gray-900 dark:text-white">
               {formatCurrency(expense.amount)}
-              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+              <span className="text-sm font-normal text-muted-foreground">
                 /{expense.recurrenceType || 'month'}
               </span>
             </p>
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <span>{formatCurrency(monthlyAmount)}/mo</span>
               <span>{formatCurrency(yearlyAmount)}/yr</span>
             </div>
           </div>
 
           {/* Start date */}
-          <div className="flex items-center gap-1 mt-3 text-xs text-gray-400 dark:text-gray-500">
+          <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
             <Calendar className="w-3 h-3" />
             <span>
               Since{' '}
@@ -137,7 +137,7 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
         <div className="flex-shrink-0">
           {showConfirm ? (
             <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+              <div className="flex items-center gap-1 text-xs text-warning-100">
                 <AlertTriangle className="w-3 h-3" />
                 <span>Cancel this?</span>
               </div>
@@ -145,13 +145,13 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
                 <button
                   onClick={handleCancel}
                   disabled={loading}
-                  className="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition"
+                  className="btn-danger px-3 py-1 text-xs"
                 >
                   {loading ? 'Canceling...' : 'Yes'}
                 </button>
                 <button
                   onClick={() => setShowConfirm(false)}
-                  className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                  className="btn-outline px-3 py-1 text-xs"
                 >
                   No
                 </button>
@@ -160,7 +160,7 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
           ) : (
             <button
               onClick={() => setShowConfirm(true)}
-              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
+              className="p-2 text-muted-foreground hover:text-expense-100 hover:bg-expense-20 dark:hover:bg-expense-100/10 rounded-montra-sm transition"
               title="Cancel recurring expense"
             >
               <XCircle className="w-5 h-5" />

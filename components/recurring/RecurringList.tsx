@@ -66,10 +66,10 @@ export default function RecurringList({ expenses }: RecurringListProps) {
   return (
     <div>
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 mb-6">
+      <div className="card p-4 mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <SlidersHorizontal className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-muted-foreground">
             Filters
           </span>
         </div>
@@ -83,7 +83,7 @@ export default function RecurringList({ expenses }: RecurringListProps) {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full pl-9 pr-3 py-2 text-sm input"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default function RecurringList({ expenses }: RecurringListProps) {
           <select
             value={filterFrequency}
             onChange={(e) => setFilterFrequency(e.target.value)}
-            className="px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="input text-sm"
           >
             <option value="all">All Frequencies</option>
             {frequencies.map((f) => (
@@ -105,7 +105,7 @@ export default function RecurringList({ expenses }: RecurringListProps) {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="input text-sm"
           >
             <option value="all">All Categories</option>
             {categories.map((c) => (
@@ -121,7 +121,7 @@ export default function RecurringList({ expenses }: RecurringListProps) {
             onChange={(e) =>
               setSortBy(e.target.value as 'amount' | 'date' | 'name')
             }
-            className="px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="input text-sm"
           >
             <option value="amount">Sort by Amount</option>
             <option value="date">Sort by Date</option>
@@ -133,12 +133,12 @@ export default function RecurringList({ expenses }: RecurringListProps) {
       {/* List */}
       {filtered.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             {expenses.length === 0
               ? 'No recurring expenses yet'
               : 'No matching recurring expenses'}
           </p>
-          <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+          <p className="text-muted-foreground text-sm mt-2">
             {expenses.length === 0
               ? 'Mark expenses as recurring when creating or editing them'
               : 'Try adjusting your filters'}
@@ -154,7 +154,7 @@ export default function RecurringList({ expenses }: RecurringListProps) {
 
       {/* Count indicator */}
       {filtered.length > 0 && (
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-4 text-center">
+        <p className="text-sm text-muted-foreground mt-4 text-center">
           Showing {filtered.length} of {expenses.length} recurring expense
           {expenses.length !== 1 ? 's' : ''}
         </p>
