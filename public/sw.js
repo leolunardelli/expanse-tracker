@@ -1,5 +1,5 @@
-const CACHE = 'expenseflow-v1';
-const PRECACHE = ['/', '/analytics', '/budget', '/insights'];
+const CACHE = 'expenseflow-v2';
+const PRECACHE = ['/', '/analytics', '/budget', '/insights', '/recurring', '/planning', '/reports', '/settings'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
