@@ -63,7 +63,7 @@ model User {
 // User Settings & Preferences
 model UserSettings {
   id                  String   @id @default(cuid())
-  currency            String   @default("USD")
+  currency            String   @default("BRL")
   language            String   @default("en")
   budgetAlerts        Boolean  @default(true)
   weeklyReport        Boolean  @default(false)
