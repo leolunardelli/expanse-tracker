@@ -144,3 +144,24 @@ model Income {
 
   @@index([userId])
 }
+
+// Planned Monthly Expenses
+model PlannedExpense {
+  id          String   @id @default(cuid())
+  description String   // "Rent", "Internet", "Groceries estimate"
+  amount      Float    // Amount per period
+  category    String   // Same categories as Expense
+  frequency   String   @default("monthly") // monthly, weekly, yearly, daily
+  isFixed     Boolean  @default(true) // fixed (rent) vs variable (food estimate)
+  dueDay      Int?     // Day of month when due (1-31), optional
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([category])
+}
