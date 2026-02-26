@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
 import BottomNav from '@/components/BottomNav';
+import QuickAddFAB from '@/components/QuickAddFAB';
 
 type AppShellProps = {
   children: ReactNode;
@@ -35,6 +36,9 @@ export default function AppShell({ children, userName, userImage }: AppShellProp
 
       {/* Mobile bottom navigation */}
       <BottomNav />
+
+      {/* Quick add floating action button */}
+      <QuickAddFAB />
     </div>
   );
 }
