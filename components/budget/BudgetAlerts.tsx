@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { AlertTriangle, Target } from 'lucide-react';
 import { getBudgetAlerts } from '@/app/actions/budget';
 import { formatCurrency } from '@/lib/currency';
+import { getCategoryConfig } from '@/lib/design-tokens';
+import { CategoryIcon } from '@/components/ui';
+import { type CategoryKey } from '@/lib/design-tokens';
 import Link from 'next/link';
 
 type BudgetAlert = {
@@ -18,17 +21,6 @@ type BudgetAlert = {
   alertAt: number;
 }
 
-const CATEGORY_EMOJI: Record<string, string> = {
-  all: '💰',
-  food: '🍔',
-  transport: '🚗',
-  entertainment: '🎬',
-  shopping: '🛍️',
-  bills: '📄',
-  health: '🏥',
-  other: '📦',
-};
-
 export default function BudgetAlerts() {
   const [alerts, setAlerts] = useState<BudgetAlert[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,70 +34,68 @@ export default function BudgetAlerts() {
     fetchAlerts();
   }, []);
 
-  if (loading) {
-    return null;
-  }
-
-  if (alerts.length === 0) {
-    return null;
-  }
+  if (loading || alerts.length === 0) return null;
 
   return (
     <div className="mb-6">
-      <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl border border-red-200 dark:border-red-800 p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <AlertTriangle className="w-5 h-5 text-red-500" />
-          <h3 className="font-semibold text-red-700 dark:text-red-400">
-            Budget Alerts
-          </h3>
+      <div className="card overflow-hidden">
+        <div className="bg-gradient-to-r from-expense-20 to-warning-20 dark:from-expense-100/10 dark:to-warning-100/10 px-4 py-3 border-b border-gray-100 dark:border-dark-700">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-expense-100" />
+            <h3 className="font-semibold text-sm text-expense-100">
+              Budget Alerts
+            </h3>
+            <span className="ml-auto text-xs text-muted-foreground">{alerts.length} alert{alerts.length > 1 ? 's' : ''}</span>
+          </div>
         </div>
-        
-        <div className="space-y-2">
-          {alerts.map((alert) => (
-            <div 
-              key={alert.id}
-              className={`flex items-center justify-between p-3 rounded-lg ${
-                alert.isOverBudget 
-                  ? 'bg-red-100 dark:bg-red-900/30' 
-                  : 'bg-yellow-100 dark:bg-yellow-900/30'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{CATEGORY_EMOJI[alert.category] || '📦'}</span>
-                <div>
-                  <p className={`font-medium ${
-                    alert.isOverBudget 
-                      ? 'text-red-700 dark:text-red-400' 
-                      : 'text-yellow-700 dark:text-yellow-400'
-                  }`}>
-                    {alert.category === 'all' ? 'Total Budget' : alert.category}
+
+        <div className="p-3 space-y-2">
+          {alerts.map((alert) => {
+            const config = getCategoryConfig(alert.category);
+            return (
+              <div
+                key={alert.id}
+                className={`flex items-center gap-3 p-3 rounded-montra-sm ${
+                  alert.isOverBudget
+                    ? 'bg-expense-20/50 dark:bg-expense-100/5'
+                    : 'bg-warning-20/50 dark:bg-warning-100/5'
+                }`}
+              >
+                <CategoryIcon category={alert.category as CategoryKey} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {alert.category === 'all' ? 'Total Budget' : config.label}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="flex-1 h-1.5 bg-gray-200 dark:bg-dark-600 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.min(alert.percentage, 100)}%`,
+                          backgroundColor: alert.isOverBudget ? '#FD3C4A' : '#FCAC12',
+                        }}
+                      />
+                    </div>
+                    <span className={`text-xs font-bold ${
+                      alert.isOverBudget ? 'text-expense-100' : 'text-warning-100'
+                    }`}>
+                      {alert.percentage.toFixed(0)}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {formatCurrency(alert.spent)} / {formatCurrency(alert.budgetAmount)}
                   </p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className={`font-bold ${
-                  alert.isOverBudget 
-                    ? 'text-red-600 dark:text-red-400' 
-                    : 'text-yellow-600 dark:text-yellow-400'
-                }`}>
-                  {alert.percentage.toFixed(0)}%
-                </p>
-                <p className="text-xs text-gray-500">
-                  {alert.isOverBudget ? 'Over budget!' : 'Near limit'}
-                </p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <Link 
+        <Link
           href="/budget"
-          className="mt-3 flex items-center justify-center gap-2 w-full py-2 text-sm text-purple-600 dark:text-purple-400 hover:underline"
+          className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium text-violet-100 hover:bg-violet-20 dark:hover:bg-violet-100/5 transition border-t border-gray-100 dark:border-dark-700"
         >
-          <Target size={16} />
+          <Target size={14} />
           Manage Budgets
         </Link>
       </div>

@@ -27,17 +27,17 @@ export default function ExportButton() {
     <button
       onClick={handleExport}
       disabled={loading}
-      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 font-medium transition"
+      className="flex items-center gap-2 px-4 py-2 bg-income-100 text-white rounded-montra-md hover:bg-income-80 disabled:opacity-50 font-medium text-sm transition"
       title="Export expenses to CSV"
     >
       {loading ? (
         <>
-          <Loader size={18} className="animate-spin" />
+          <Loader size={16} className="animate-spin" />
           Exporting...
         </>
       ) : (
         <>
-          <Download size={18} />
+          <Download size={16} />
           Export CSV
         </>
       )}
