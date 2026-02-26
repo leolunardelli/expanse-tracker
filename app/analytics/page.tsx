@@ -10,8 +10,7 @@ import MonthlyBarChart from '@/components/charts/MonthlyBarChart';
 import SpendingTrendChart from '@/components/charts/SpendingTrendChart';
 import YearOverYearChart from '@/components/charts/YearOverYearChart';
 import YoYStatsCards from '@/components/charts/YoYStatsCards';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+
 
 export default async function AnalyticsPage() {
   const session = await getServerSession(authOptions);

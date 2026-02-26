@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, DollarSign, Calendar, Tag, FileText, RefreshCw, Check } from 'lucide-react';
 import { createExpense } from '@/app/actions/expenses';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
-import { getCategoryConfig, type CategoryKey } from '@/lib/design-tokens';
+import { getCategoryConfig } from '@/lib/design-tokens';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
 

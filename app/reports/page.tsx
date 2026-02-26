@@ -5,8 +5,7 @@ import { getMonthlyReport, getAvailableMonths } from '../actions/reports';
 import { getBudgets } from '../actions/budget';
 import AppShell from '@/components/AppShell';
 import ReportView from '@/components/reports/ReportView';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+
 
 export default async function ReportsPage() {
   const session = await getServerSession(authOptions);

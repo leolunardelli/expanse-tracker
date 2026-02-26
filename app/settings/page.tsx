@@ -8,8 +8,7 @@ import CurrencySelect from '@/components/settings/CurrencySelect';
 import NotificationPrefs from '@/components/settings/NotificationPrefs';
 import ThemePrefs from '@/components/settings/ThemePrefs';
 import DangerZone from '@/components/settings/DangerZone';
-import { Settings, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Settings } from 'lucide-react';
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);

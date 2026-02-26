@@ -3,7 +3,7 @@ import {
   Heart, GraduationCap, Home, CreditCard, MoreHorizontal,
   type LucideIcon,
 } from 'lucide-react';
-import { getCategoryConfig, type CategoryKey } from '@/lib/design-tokens';
+import { getCategoryConfig } from '@/lib/design-tokens';
 
 const iconMap: Record<string, LucideIcon> = {
   UtensilsCrossed,
