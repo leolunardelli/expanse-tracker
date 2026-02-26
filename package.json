@@ -2,20 +2,34 @@
   "name": "expenseflow",
   "version": "1.0.0",
   "private": false,
-  "description": "A beautiful, modern expense tracking application built with React & TypeScript. Features dark mode, interactive charts, category management, and data export.",
+  "description": "Full-stack expense tracker with AI-powered insights — Next.js 15, TypeScript, PostgreSQL, OpenAI",
   "keywords": [
     "expense-tracker",
+    "nextjs",
     "react",
     "typescript",
     "tailwindcss",
+    "prisma",
+    "postgresql",
+    "openai",
+    "ai",
     "finance",
     "budget",
-    "money-management",
-    "recharts",
-    "vite"
+    "server-actions"
   ],
-  "author": "ExpenseFlow",
+  "author": "Leonardo Lunardelli",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leolunardelli/expanse-tracker.git"
+  },
+  "homepage": "https://y-nine-flame.vercel.app",
+  "bugs": {
+    "url": "https://github.com/leolunardelli/expanse-tracker/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
