@@ -5,6 +5,7 @@ import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
+import { checkRateLimit } from './rate-limit';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as NextAuthOptions['adapter'],
@@ -33,6 +34,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         const email = credentials.email.trim().toLowerCase();
+        const rateLimit = checkRateLimit(`signin:${email}`, 10, 10 * 60 * 1000);
+        if (!rateLimit.allowed) {
+          return null;
+        }
 
         const user = await prisma.user.findFirst({
           where: {

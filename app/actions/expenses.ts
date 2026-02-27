@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { categorizeExpense } from '@/lib/ai';
+import { expenseFormSchema, updateExpenseSchema } from '@/lib/validation';
 
 async function getUserId() {
   const session = await getServerSession(authOptions);
@@ -15,13 +16,13 @@ async function getUserId() {
 export async function createExpense(formData: FormData) {
   const userId = await getUserId();
   const description = formData.get('description') as string;
-  const amount = parseFloat(formData.get('amount') as string);
-  let category = formData.get('category') as string;
+  const amount = Number(formData.get('amount') as string);
+  let category = (formData.get('category') as string) || 'Other';
   const date = new Date(formData.get('date') as string);
   const isRecurring = formData.get('isRecurring') === 'true';
   const recurrenceType = formData.get('recurrenceType') as string | null;
   const tagsRaw = formData.get('tags') as string | null;
-  const notes = (formData.get('notes') as string | null) || null;
+  const notesRaw = (formData.get('notes') as string | null) || null;
 
   // Parse tags from comma-separated string
   const tags = tagsRaw
@@ -30,6 +31,23 @@ export async function createExpense(formData: FormData) {
         .map((t) => t.trim().toLowerCase())
         .filter((t) => t.length > 0)
     : [];
+
+  const parsed = expenseFormSchema.safeParse({
+    description,
+    amount,
+    category,
+    date,
+    isRecurring,
+    recurrenceType,
+    tags,
+    notes: notesRaw,
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || 'Invalid expense data');
+  }
+
+  let { notes } = parsed.data;
   
   if (!category || category === 'Other') {
     try {
@@ -40,7 +58,17 @@ export async function createExpense(formData: FormData) {
   }
   
   await prisma.expense.create({
-    data: { description, amount, category, date, isRecurring, recurrenceType: isRecurring ? recurrenceType : null, tags, notes, userId },
+    data: {
+      description: parsed.data.description,
+      amount: parsed.data.amount,
+      category,
+      date: parsed.data.date,
+      isRecurring: parsed.data.isRecurring,
+      recurrenceType: parsed.data.isRecurring ? parsed.data.recurrenceType : null,
+      tags: parsed.data.tags,
+      notes,
+      userId,
+    },
   });
   revalidatePath('/');
 }
@@ -59,6 +87,13 @@ export async function updateExpense(
   }
 ) {
   const userId = await getUserId();
+  const parsed = updateExpenseSchema.safeParse(data);
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || 'Invalid expense data');
+  }
+
+  const validatedData = parsed.data;
   
   const expense = await prisma.expense.findFirst({
     where: { id, userId },
@@ -69,14 +104,15 @@ export async function updateExpense(
   await prisma.expense.update({
     where: { id },
     data: {
-      description: data.description,
-      amount: data.amount,
-      category: data.category,
-      date: data.date,
-      isRecurring: data.isRecurring ?? false,
-      recurrenceType: data.isRecurring ? data.recurrenceType : null,
-      tags: data.tags ?? [],
-      notes: data.notes ?? null,
+      description: validatedData.description,
+      amount: validatedData.amount,
+      category: validatedData.category,
+      date: validatedData.date,
+      isRecurring: validatedData.isRecurring ?? false,
+      recurrenceType:
+        validatedData.isRecurring ? validatedData.recurrenceType : null,
+      tags: validatedData.tags ?? [],
+      notes: validatedData.notes ?? null,
     },
   });
   
@@ -138,6 +174,10 @@ export async function getFilteredExpenses(filters: FilterParams = {}) {
     pageSize = 10,
   } = filters;
 
+  const safePage = Number.isFinite(page) && page > 0 ? page : 1;
+  const safePageSize =
+    Number.isFinite(pageSize) && pageSize > 0 && pageSize <= 100 ? pageSize : 10;
+
   // Build where clause
   const where: Record<string, unknown> = { userId };
 
@@ -166,8 +206,18 @@ export async function getFilteredExpenses(filters: FilterParams = {}) {
 
   if (amountMin || amountMax) {
     where.amount = {};
-    if (amountMin) (where.amount as Record<string, unknown>).gte = parseFloat(amountMin);
-    if (amountMax) (where.amount as Record<string, unknown>).lte = parseFloat(amountMax);
+    if (amountMin) {
+      const parsedMin = Number(amountMin);
+      if (!Number.isNaN(parsedMin)) {
+        (where.amount as Record<string, unknown>).gte = parsedMin;
+      }
+    }
+    if (amountMax) {
+      const parsedMax = Number(amountMax);
+      if (!Number.isNaN(parsedMax)) {
+        (where.amount as Record<string, unknown>).lte = parsedMax;
+      }
+    }
   }
 
   // Build order by
@@ -182,19 +232,19 @@ export async function getFilteredExpenses(filters: FilterParams = {}) {
   const expenses = await prisma.expense.findMany({
     where,
     orderBy,
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    skip: (safePage - 1) * safePageSize,
+    take: safePageSize,
   });
 
   return {
     expenses,
     pagination: {
-      page,
-      pageSize,
+      page: safePage,
+      pageSize: safePageSize,
       totalCount,
-      totalPages: Math.ceil(totalCount / pageSize),
-      hasNext: page * pageSize < totalCount,
-      hasPrev: page > 1,
+      totalPages: Math.ceil(totalCount / safePageSize),
+      hasNext: safePage * safePageSize < totalCount,
+      hasPrev: safePage > 1,
     },
   };
 }
@@ -214,19 +264,26 @@ export async function getCategories() {
 
 export async function getExpenseStats() {
   const userId = await getUserId();
-  
-  const expenses = await prisma.expense.findMany({
-    where: { userId },
-    select: { amount: true, category: true },
-  });
-  
-  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
-  const byCategory = expenses.reduce((acc, e) => {
-    acc[e.category] = (acc[e.category] || 0) + e.amount;
+
+  const [count, totals, grouped] = await Promise.all([
+    prisma.expense.count({ where: { userId } }),
+    prisma.expense.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
+    prisma.expense.groupBy({
+      by: ['category'],
+      where: { userId },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const byCategory = grouped.reduce((acc, item) => {
+    acc[item.category] = item._sum.amount || 0;
     return acc;
   }, {} as Record<string, number>);
-  
-  return { total, byCategory, count: expenses.length };
+
+  return { total: totals._sum.amount || 0, byCategory, count };
 }
 
 export async function getTags(): Promise<string[]> {

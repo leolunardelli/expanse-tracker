@@ -21,8 +21,10 @@ We will respond within **48 hours** and work on a fix promptly.
 
 ## Security Measures
 
-- OAuth 2.0 authentication via Google (no password storage)
+- OAuth 2.0 authentication via Google and GitHub
+- Optional email/password authentication with bcrypt-hashed passwords
 - Database sessions with NextAuth.js
-- Server-side data validation
+- Server-side input validation and normalization
+- Credentials throttling on sign-in, sign-up, and password reset flows
 - Environment variables for all secrets
 - HTTPS enforced in production (Vercel)

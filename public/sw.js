@@ -1,5 +1,6 @@
-const CACHE = 'expenseflow-v2';
-const PRECACHE = ['/', '/analytics', '/budget', '/insights', '/recurring', '/planning', '/reports', '/settings'];
+const CACHE = 'expenseflow-v3';
+const OFFLINE_URL = '/offline';
+const PRECACHE = ['/', '/analytics', '/budget', '/insights', '/recurring', '/planning', '/reports', '/settings', '/transactions', OFFLINE_URL];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -32,6 +33,16 @@ self.addEventListener('fetch', (e) => {
         }
         return res;
       })
-      .catch(() => caches.match(e.request))
+      .catch(async () => {
+        const cached = await caches.match(e.request);
+        if (cached) return cached;
+
+        if (e.request.mode === 'navigate') {
+          const offlineFallback = await caches.match(OFFLINE_URL);
+          if (offlineFallback) return offlineFallback;
+        }
+
+        return Response.error();
+      })
   );
 });

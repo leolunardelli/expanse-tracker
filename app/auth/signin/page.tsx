@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { getSignInMethodHint } from '@/app/actions/auth';
 
 const emptySubscribe = () => () => {};
 
@@ -21,7 +22,7 @@ export default function SignIn() {
     setError('');
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
+    const email = (formData.get('email') as string).trim().toLowerCase();
     const password = formData.get('password') as string;
 
     const result = await signIn('credentials', {
@@ -31,7 +32,8 @@ export default function SignIn() {
     });
 
     if (result?.error) {
-      setError('Invalid email or password');
+      const hint = await getSignInMethodHint(email);
+      setError(hint.message || 'Invalid email or password');
       setIsLoading(false);
     } else {
       window.location.href = '/';

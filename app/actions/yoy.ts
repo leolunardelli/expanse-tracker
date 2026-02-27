@@ -38,7 +38,11 @@ export async function getYearOverYearData() {
   });
 
   const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // TODO: use locale
+  const monthFormatter = new Intl.DateTimeFormat(undefined, { month: 'short' });
+  const monthNames = months.map((month) => {
+    const numericMonth = Number(month) - 1;
+    return monthFormatter.format(new Date(Date.UTC(2020, numericMonth, 1)));
+  });
   
   const chartData = months.map((month, idx) => ({
     month: monthNames[idx],

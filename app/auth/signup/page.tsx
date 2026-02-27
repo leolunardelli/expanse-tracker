@@ -40,7 +40,7 @@ export default function SignUpPage() {
 
     // Auto sign in after registration
     await signIn('credentials', {
-      email: formData.get('email') as string,
+      email: (formData.get('email') as string).trim().toLowerCase(),
       password,
       callbackUrl: '/',
       redirect: true,

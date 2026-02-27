@@ -4,18 +4,27 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { prisma } from '@/lib/prisma';
 import { sendPasswordResetEmail } from '@/lib/email';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { emailSchema, passwordSchema, registerSchema } from '@/lib/validation';
 
 export async function registerUser(formData: FormData) {
-  const name = formData.get('name') as string;
-  const email = (formData.get('email') as string).trim().toLowerCase();
-  const password = formData.get('password') as string;
+  const parsed = registerSchema.safeParse({
+    name: formData.get('name') as string,
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  });
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' };
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid registration data' };
   }
 
-  if (password.length < 8) {
-    return { error: 'Password must be at least 8 characters' };
+  const name = parsed.data.name;
+  const email = parsed.data.email;
+  const password = parsed.data.password;
+
+  const signupLimit = checkRateLimit(`signup:${email}`, 5, 10 * 60 * 1000);
+  if (!signupLimit.allowed) {
+    return { error: 'Too many signup attempts. Please try again in a few minutes.' };
   }
 
   // Check if user already exists
@@ -74,10 +83,17 @@ export async function registerUser(formData: FormData) {
 }
 
 export async function requestPasswordReset(formData: FormData) {
-  const email = (formData.get('email') as string).trim().toLowerCase();
+  const parsed = emailSchema.safeParse(formData.get('email') as string);
 
-  if (!email) {
+  if (!parsed.success) {
     return { error: 'Email is required' };
+  }
+
+  const email = parsed.data;
+
+  const resetLimit = checkRateLimit(`reset-request:${email}`, 5, 10 * 60 * 1000);
+  if (!resetLimit.allowed) {
+    return { error: 'Too many reset requests. Please try again later.' };
   }
 
   const user = await prisma.user.findFirst({
@@ -123,15 +139,18 @@ export async function requestPasswordReset(formData: FormData) {
 
 export async function resetPassword(formData: FormData) {
   const token = formData.get('token') as string;
-  const password = formData.get('password') as string;
+  const parsedPassword = passwordSchema.safeParse(formData.get('password') as string);
 
-  if (!token || !password) {
+  if (!token || !parsedPassword.success) {
     return { error: 'Token and password are required' };
   }
 
-  if (password.length < 8) {
-    return { error: 'Password must be at least 8 characters' };
+  const resetLimit = checkRateLimit(`reset-password:${token}`, 10, 10 * 60 * 1000);
+  if (!resetLimit.allowed) {
+    return { error: 'Too many attempts. Please request a new reset link.' };
   }
+
+  const password = parsedPassword.data;
 
   // Find valid token
   const resetToken = await prisma.passwordResetToken.findUnique({
@@ -161,4 +180,44 @@ export async function resetPassword(formData: FormData) {
   await prisma.passwordResetToken.delete({ where: { id: resetToken.id } });
 
   return { success: true };
+}
+
+export async function getSignInMethodHint(emailInput: string) {
+  const parsed = emailSchema.safeParse(emailInput);
+  if (!parsed.success) {
+    return { message: null as string | null };
+  }
+
+  const email = parsed.data;
+  const user = await prisma.user.findFirst({
+    where: {
+      email: {
+        equals: email,
+        mode: 'insensitive',
+      },
+    },
+    select: {
+      password: true,
+      accounts: {
+        select: {
+          provider: true,
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    return { message: null as string | null };
+  }
+
+  if (!user.password && user.accounts.length > 0) {
+    const provider = user.accounts[0]?.provider;
+    if (provider) {
+      return {
+        message: `This account is linked to ${provider}. Use ${provider} sign-in or set a password on Sign Up.`,
+      };
+    }
+  }
+
+  return { message: null as string | null };
 }
