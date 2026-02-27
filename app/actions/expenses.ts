@@ -135,15 +135,6 @@ export async function deleteExpense(id: string) {
   revalidatePath('/');
 }
 
-export async function getExpenses() {
-  const userId = await getUserId();
-  
-  return prisma.expense.findMany({
-    where: { userId },
-    orderBy: { date: 'desc' },
-  });
-}
-
 export type FilterParams = {
   search?: string;
   category?: string;

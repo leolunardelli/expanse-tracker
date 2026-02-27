@@ -1,4 +1,4 @@
-import { CATEGORIES, getCategoryConfig, type CategoryKey } from './design-tokens';
+import { CATEGORIES, getCategoryConfig } from './design-tokens';
 
 // Expense categories for forms (value + label)
 export const EXPENSE_CATEGORIES = CATEGORIES.map((key) => ({
@@ -17,5 +17,3 @@ export const BUDGET_CATEGORIES = [
 
 // Categories for AI categorization prompt
 export const AI_CATEGORY_LIST = CATEGORIES.join(', ');
-
-export { CATEGORIES, getCategoryConfig, type CategoryKey };

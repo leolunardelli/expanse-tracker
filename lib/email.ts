@@ -12,7 +12,7 @@ interface SendEmailOptions {
   html: string;
 }
 
-export async function sendEmail({ to, subject, html }: SendEmailOptions) {
+async function sendEmail({ to, subject, html }: SendEmailOptions) {
   if (!RESEND_API_KEY || RESEND_API_KEY === 'placeholder') {
     // Dev mode – no email provider configured
     if (process.env.NODE_ENV === 'development') {

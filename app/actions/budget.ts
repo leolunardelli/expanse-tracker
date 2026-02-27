@@ -16,20 +16,6 @@ export async function getBudgets() {
   });
 }
 
-export async function getBudgetByCategory(category: string) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return null;
-
-  return prisma.budget.findUnique({
-    where: {
-      userId_category: {
-        userId: session.user.id,
-        category,
-      },
-    },
-  });
-}
-
 export async function saveBudget(formData: FormData) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
