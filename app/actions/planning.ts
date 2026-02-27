@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { toMonthly } from '@/lib/planning';
+import { incomeSchema, plannedExpenseSchema } from '@/lib/validation';
 
 async function getUserId(): Promise<string> {
   const session = await getServerSession(authOptions);
@@ -26,21 +27,23 @@ export async function getIncomes() {
 export async function addIncome(formData: FormData) {
   const userId = await getUserId();
 
-  const description = formData.get('description') as string;
-  const amount = parseFloat(formData.get('amount') as string);
-  const type = (formData.get('type') as string) || 'salary';
-  const frequency = (formData.get('frequency') as string) || 'monthly';
+  const parsed = incomeSchema.safeParse({
+    description: formData.get('description') as string,
+    amount: parseFloat(formData.get('amount') as string),
+    type: (formData.get('type') as string) || 'salary',
+    frequency: (formData.get('frequency') as string) || 'monthly',
+  });
 
-  if (!description || isNaN(amount) || amount <= 0) {
-    return { error: 'Invalid income data' };
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid income data' };
   }
 
   await prisma.income.create({
     data: {
-      description,
-      amount,
-      type,
-      frequency,
+      description: parsed.data.description,
+      amount: parsed.data.amount,
+      type: parsed.data.type,
+      frequency: parsed.data.frequency,
       userId,
     },
   });
@@ -105,26 +108,29 @@ export async function getPlannedExpenses() {
 export async function addPlannedExpense(formData: FormData) {
   const userId = await getUserId();
 
-  const description = formData.get('description') as string;
-  const amount = parseFloat(formData.get('amount') as string);
-  const category = (formData.get('category') as string) || 'Other';
-  const frequency = (formData.get('frequency') as string) || 'monthly';
-  const isFixed = formData.get('isFixed') === 'true';
   const dueDayStr = formData.get('dueDay') as string;
-  const dueDay = dueDayStr ? parseInt(dueDayStr) : null;
 
-  if (!description || isNaN(amount) || amount <= 0) {
-    return { error: 'Invalid planned expense data' };
+  const parsed = plannedExpenseSchema.safeParse({
+    description: formData.get('description') as string,
+    amount: parseFloat(formData.get('amount') as string),
+    category: (formData.get('category') as string) || 'Other',
+    frequency: (formData.get('frequency') as string) || 'monthly',
+    isFixed: formData.get('isFixed') === 'true',
+    dueDay: dueDayStr ? parseInt(dueDayStr) : null,
+  });
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid planned expense data' };
   }
 
   await prisma.plannedExpense.create({
     data: {
-      description,
-      amount,
-      category,
-      frequency,
-      isFixed,
-      dueDay,
+      description: parsed.data.description,
+      amount: parsed.data.amount,
+      category: parsed.data.category,
+      frequency: parsed.data.frequency,
+      isFixed: parsed.data.isFixed,
+      dueDay: parsed.data.dueDay,
       userId,
     },
   });

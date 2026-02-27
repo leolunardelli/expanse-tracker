@@ -14,11 +14,10 @@ interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, html }: SendEmailOptions) {
   if (!RESEND_API_KEY || RESEND_API_KEY === 'placeholder') {
-    console.log('=== EMAIL (dev mode) ===');
-    console.log(`To: ${to}`);
-    console.log(`Subject: ${subject}`);
-    console.log(`Body: ${html}`);
-    console.log('========================');
+    // Dev mode – no email provider configured
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Email Dev] To: ${to} | Subject: ${subject}`);
+    }
     return { success: true, dev: true };
   }
 

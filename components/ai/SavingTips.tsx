@@ -21,7 +21,7 @@ export default function SavingTips() {
       const data = await getSavingTips();
       setTips(data);
     } catch {
-      console.error('Failed to load tips');
+      // AI service unavailable – silently handled
     } finally {
       setLoading(false);
     }

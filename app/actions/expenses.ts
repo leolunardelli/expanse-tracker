@@ -47,7 +47,7 @@ export async function createExpense(formData: FormData) {
     throw new Error(parsed.error.issues[0]?.message || 'Invalid expense data');
   }
 
-  let { notes } = parsed.data;
+  const { notes } = parsed.data;
   
   if (!category || category === 'Other') {
     try {

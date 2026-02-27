@@ -51,3 +51,25 @@ export const exportFilterSchema = z.object({
   category: z.string().optional(),
   format: z.enum(['csv', 'json']).default('csv'),
 });
+
+export const incomeSchema = z.object({
+  description: z.string().trim().min(1, 'Description is required').max(140),
+  amount: z.number().positive('Amount must be positive').max(1_000_000_000),
+  type: z.enum(['salary', 'freelance', 'investment', 'rental', 'other']).default('salary'),
+  frequency: z.enum(['monthly', 'biweekly', 'weekly']).default('monthly'),
+});
+
+export const plannedExpenseSchema = z.object({
+  description: z.string().trim().min(1, 'Description is required').max(140),
+  amount: z.number().positive('Amount must be positive').max(1_000_000_000),
+  category: z.string().trim().min(1).max(60).default('Other'),
+  frequency: z.enum(['monthly', 'weekly', 'yearly', 'daily']).default('monthly'),
+  isFixed: z.boolean().default(true),
+  dueDay: z.number().int().min(1).max(31).nullable().default(null),
+});
+
+export const budgetSchema = z.object({
+  category: z.string().trim().min(1, 'Category is required').max(60),
+  amount: z.number().positive('Amount must be positive').max(1_000_000_000),
+  alertAt: z.number().int().min(1).max(100).default(80),
+});

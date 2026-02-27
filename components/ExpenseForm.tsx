@@ -6,6 +6,7 @@ import { RefreshCw } from 'lucide-react';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { useToast } from '@/components/Toast';
 
 function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -17,6 +18,7 @@ export default function ExpenseForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,7 +36,7 @@ export default function ExpenseForm() {
       setTags([]);
       setNotes('');
     } catch {
-      alert('Failed to save');
+      toast('Failed to save', 'error');
     } finally {
       setLoading(false);
     }

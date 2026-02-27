@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { Download, Loader } from 'lucide-react';
 import { exportExpensesAsCSV } from '@/app/actions/export';
+import { useToast } from '@/components/Toast';
 
 export default function ExportButton() {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleExport = async () => {
     setLoading(true);
@@ -17,7 +19,7 @@ export default function ExportButton() {
       link.download = filename;
       link.click();
     } catch {
-      alert('Failed to export');
+      toast('Failed to export', 'error');
     } finally {
       setLoading(false);
     }

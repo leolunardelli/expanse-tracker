@@ -31,7 +31,7 @@ export async function getAIInsights() {
     
     return await generateExpenseInsight(expenses);
   } catch {
-    console.error('AI Insights error');
+    // AI service unavailable – graceful fallback
     return 'Unable to generate insights at this time.';
   }
 }
@@ -45,7 +45,7 @@ export async function getSavingTips() {
     
     return await generateSavingTips(expenses);
   } catch {
-    console.error('Saving Tips error');
+    // AI service unavailable – graceful fallback
     return [];
   }
 }
@@ -59,7 +59,7 @@ export async function getSpendingPrediction() {
     
     return await predictMonthlySpending(expenses);
   } catch {
-    console.error('Prediction error');
+    // AI service unavailable – graceful fallback
     return null;
   }
 }
@@ -73,7 +73,7 @@ export async function getWeeklyAnalysis() {
     
     return await generateWeeklyAnalysis(expenses);
   } catch {
-    console.error('Weekly Analysis error');
+    // AI service unavailable – graceful fallback
     return null;
   }
 }

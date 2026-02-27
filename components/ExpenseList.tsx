@@ -9,6 +9,7 @@ import { type CategoryKey } from '@/lib/design-tokens';
 import EditExpenseModal from './EditExpenseModal';
 import TransactionDetailSheet from './TransactionDetailSheet';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
+import { useToast } from '@/components/Toast';
 
 type Expense = {
   id: string;
@@ -43,6 +44,7 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
   const [viewingExpense, setViewingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const { toast } = useToast();
 
   const filteredExpenses = expenses.filter(expense => 
     expense.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,7 +57,7 @@ export default function ExpenseList({ expenses }: { expenses: Expense[] }) {
       setDeletingId(null);
       setViewingExpense(null);
     } catch {
-      alert('Delete failed');
+      toast('Delete failed', 'error');
     }
   }
 

@@ -24,7 +24,7 @@ export default function SpendingPrediction() {
       const data = await getSpendingPrediction();
       setPrediction(data);
     } catch {
-      console.error('Failed to load prediction');
+      // AI service unavailable – silently handled
     } finally {
       setLoading(false);
     }

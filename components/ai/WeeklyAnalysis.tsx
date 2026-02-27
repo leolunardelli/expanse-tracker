@@ -23,7 +23,7 @@ export default function WeeklyAnalysis() {
       const result = await getWeeklyAnalysis();
       setData(result);
     } catch {
-      console.error('Failed to load analysis');
+      // AI service unavailable – silently handled
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,8 @@ import { Trash2, Pencil, DollarSign, TrendingUp, Briefcase, Home, MoreHorizontal
 import { deleteIncome, updateIncome } from '@/app/actions/planning';
 import { toMonthly } from '@/lib/planning';
 import { formatCurrency } from '@/lib/currency';
+import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
+import { useToast } from '@/components/Toast';
 
 type Income = {
   id: string;
@@ -33,17 +35,25 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editAmount, setEditAmount] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const totalMonthly = incomes
     .filter((i) => i.isActive)
     .reduce((sum, i) => sum + toMonthly(i.amount, i.frequency), 0);
 
   async function handleDelete(id: string) {
-    if (!confirm('Remove this income source?')) return;
+    setDeletingId(id);
+  }
+
+  async function confirmDelete() {
+    if (!deletingId) return;
     try {
-      await deleteIncome(id);
+      await deleteIncome(deletingId);
     } catch {
-      alert('Failed to remove');
+      toast('Failed to remove', 'error');
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -61,7 +71,7 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
       });
       setEditingId(null);
     } catch {
-      alert('Failed to update');
+      toast('Failed to update', 'error');
     }
   }
 
@@ -112,13 +122,13 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
                         onClick={() => saveEdit(income.id)}
                         className="text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                       >
-                        Salvar
+                        Save
                       </button>
                       <button
                         onClick={() => setEditingId(null)}
                         className="text-xs px-2 py-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                       >
-                        Cancelar
+                        Cancel
                       </button>
                     </div>
                   ) : (
@@ -170,6 +180,14 @@ export default function IncomeList({ incomes }: { incomes: Income[] }) {
           {formatCurrency(totalMonthly)}
         </span>
       </div>
+
+      <DeleteConfirmDialog
+        isOpen={!!deletingId}
+        title="Remove Income"
+        message="Are you sure you want to remove this income source?"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeletingId(null)}
+      />
     </div>
   );
 }

@@ -9,6 +9,8 @@ import FilterBar, { FilterState } from '@/components/filters/FilterBar';
 import ActiveFilters from '@/components/filters/ActiveFilters';
 import Pagination from '@/components/filters/Pagination';
 import EditExpenseModal from '@/components/EditExpenseModal';
+import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
+import { useToast } from '@/components/Toast';
 import { getTagColor } from '@/components/tags/TagInput';
 
 type Expense = {
@@ -62,7 +64,9 @@ export default function FilteredExpenseList({
   const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
   const [pagination, setPagination] = useState<PaginationData>(initialPagination);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const activeFilterCount = Object.entries(filters).filter(
     ([key, value]) =>
@@ -120,12 +124,18 @@ export default function FilteredExpenseList({
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this expense?')) return;
+    setDeletingId(id);
+  }
+
+  async function confirmDelete() {
+    if (!deletingId) return;
     try {
-      await deleteExpense(id);
+      await deleteExpense(deletingId);
       fetchExpenses(filters, page);
     } catch {
-      alert('Delete failed');
+      toast('Delete failed', 'error');
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -244,6 +254,14 @@ export default function FilteredExpenseList({
       <EditExpenseModal
         expense={editingExpense}
         onClose={() => setEditingExpense(null)}
+      />
+
+      <DeleteConfirmDialog
+        isOpen={!!deletingId}
+        title="Delete Expense"
+        message="Are you sure you want to delete this expense? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeletingId(null)}
       />
     </div>
   );

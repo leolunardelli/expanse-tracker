@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Plus, Receipt } from 'lucide-react';
 import { addPlannedExpense } from '@/app/actions/planning';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { useToast } from '@/components/Toast';
 
 const CATEGORIES = EXPENSE_CATEGORIES.map((c) => c.value);
 
@@ -19,6 +20,7 @@ export default function PlannedExpenseForm() {
   const [open, setOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,7 +35,7 @@ export default function PlannedExpenseForm() {
       setIsFixed(true);
       setOpen(false);
     } catch {
-      alert('Failed to save planned expense');
+      toast('Failed to save planned expense', 'error');
     } finally {
       setLoading(false);
     }

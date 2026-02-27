@@ -5,6 +5,8 @@ import { Trash2, Pencil, Receipt, Lock, Shuffle, CalendarDays } from 'lucide-rea
 import { deletePlannedExpense, updatePlannedExpense } from '@/app/actions/planning';
 import { toMonthly } from '@/lib/planning';
 import { formatCurrency } from '@/lib/currency';
+import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
+import { useToast } from '@/components/Toast';
 
 type PlannedExpense = {
   id: string;
@@ -43,6 +45,8 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editAmount, setEditAmount] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const fixed = expenses.filter((e) => e.isFixed && e.isActive);
   const variable = expenses.filter((e) => !e.isFixed && e.isActive);
@@ -53,11 +57,17 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
   const total = totalFixed + totalVariable;
 
   async function handleDelete(id: string) {
-    if (!confirm('Remove this planned expense?')) return;
+    setDeletingId(id);
+  }
+
+  async function confirmDelete() {
+    if (!deletingId) return;
     try {
-      await deletePlannedExpense(id);
+      await deletePlannedExpense(deletingId);
     } catch {
-      alert('Failed to remove');
+      toast('Failed to remove', 'error');
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -75,7 +85,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
       });
       setEditingId(null);
     } catch {
-      alert('Failed to update');
+      toast('Failed to update', 'error');
     }
   }
 
@@ -122,13 +132,13 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
                   onClick={() => saveEdit(expense.id)}
                   className="text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                 >
-                  Salvar
+                  Save
                 </button>
                 <button
                   onClick={() => setEditingId(null)}
                   className="text-xs px-2 py-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                 >
-                  Cancelar
+                  Cancel
                 </button>
               </div>
             ) : (
@@ -140,7 +150,7 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
                   {FREQ_LABELS[expense.frequency] || expense.frequency}
                   {expense.dueDay && (
                     <span className="inline-flex items-center gap-0.5">
-                      <CalendarDays size={10} /> dia {expense.dueDay}
+                      <CalendarDays size={10} /> day {expense.dueDay}
                     </span>
                   )}
                   {expense.frequency !== 'monthly' && (
@@ -228,6 +238,14 @@ export default function PlannedExpenseList({ expenses }: { expenses: PlannedExpe
           {formatCurrency(total)}
         </span>
       </div>
+
+      <DeleteConfirmDialog
+        isOpen={!!deletingId}
+        title="Remove Planned Expense"
+        message="Are you sure you want to remove this planned expense?"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeletingId(null)}
+      />
     </div>
   );
 }

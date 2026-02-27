@@ -7,6 +7,7 @@ import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
 import { getCategoryConfig } from '@/lib/design-tokens';
+import { useToast } from '@/components/Toast';
 
 type Expense = {
   id: string;
@@ -35,6 +36,7 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
   const [recurrenceType, setRecurrenceType] = useState('monthly');
   const [tags, setTags] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
+  const { toast } = useToast();
 
   useEffect(() => {
     if (expense) {
@@ -71,7 +73,7 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
       });
       onClose();
     } catch {
-      alert('Update failed');
+      toast('Update failed', 'error');
     } finally {
       setLoading(false);
     }

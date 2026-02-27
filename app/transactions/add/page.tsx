@@ -8,6 +8,7 @@ import { EXPENSE_CATEGORIES } from '@/lib/categories';
 import { getCategoryConfig } from '@/lib/design-tokens';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
+import { useToast } from '@/components/Toast';
 
 function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -22,6 +23,7 @@ export default function AddTransactionPage() {
   const [selectedCategory, setSelectedCategory] = useState('Other');
   const [success, setSuccess] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,7 +43,7 @@ export default function AddTransactionPage() {
         router.refresh();
       }, 1000);
     } catch {
-      alert('Failed to save');
+      toast('Failed to save', 'error');
     } finally {
       setLoading(false);
     }

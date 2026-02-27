@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { budgetSchema } from '@/lib/validation';
 
 export async function getBudgets() {
   const session = await getServerSession(authOptions);
@@ -39,8 +40,10 @@ export async function saveBudget(formData: FormData) {
   const amount = parseFloat(formData.get('amount') as string);
   const alertAt = parseInt(formData.get('alertAt') as string) || 80;
 
-  if (!category || isNaN(amount) || amount <= 0) {
-    return { error: 'Invalid budget data' };
+  const parsed = budgetSchema.safeParse({ category, amount, alertAt });
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid budget data' };
   }
 
   try {
@@ -48,17 +51,17 @@ export async function saveBudget(formData: FormData) {
       where: {
         userId_category: {
           userId: session.user.id,
-          category,
+          category: parsed.data.category,
         },
       },
       update: {
-        amount,
-        alertAt,
+        amount: parsed.data.amount,
+        alertAt: parsed.data.alertAt,
       },
       create: {
-        category,
-        amount,
-        alertAt,
+        category: parsed.data.category,
+        amount: parsed.data.amount,
+        alertAt: parsed.data.alertAt,
         userId: session.user.id,
       },
     });
@@ -67,7 +70,6 @@ export async function saveBudget(formData: FormData) {
     revalidatePath('/budget');
     return { success: true };
   } catch {
-    console.error('Save budget error');
     return { error: 'Failed to save budget' };
   }
 }
@@ -90,7 +92,6 @@ export async function deleteBudget(id: string) {
     revalidatePath('/budget');
     return { success: true };
   } catch {
-    console.error('Delete budget error');
     return { error: 'Failed to delete budget' };
   }
 }

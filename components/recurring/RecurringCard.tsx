@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { formatCurrency } from '@/lib/currency';
 import { cancelRecurring } from '@/app/actions/recurring';
+import { useToast } from '@/components/Toast';
 import {
   CalendarClock,
   XCircle,
@@ -58,6 +59,7 @@ const frequencyConfig: Record<
 export default function RecurringCard({ expense }: RecurringCardProps) {
   const [loading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { toast } = useToast();
 
   const freq = frequencyConfig[expense.recurrenceType || 'monthly'] ||
     frequencyConfig.monthly;
@@ -72,7 +74,7 @@ export default function RecurringCard({ expense }: RecurringCardProps) {
     try {
       await cancelRecurring(expense.id);
     } catch {
-      alert('Failed to cancel recurring expense');
+      toast('Failed to cancel recurring expense', 'error');
     } finally {
       setLoading(false);
       setShowConfirm(false);

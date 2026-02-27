@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { Plus, DollarSign } from 'lucide-react';
 import { addIncome } from '@/app/actions/planning';
+import { useToast } from '@/components/Toast';
 
 const INCOME_TYPES = [
   { value: 'salary', label: 'Salary' },
@@ -22,6 +23,7 @@ export default function IncomeForm() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,7 +36,7 @@ export default function IncomeForm() {
       formRef.current?.reset();
       setOpen(false);
     } catch {
-      alert('Failed to save income');
+      toast('Failed to save income', 'error');
     } finally {
       setLoading(false);
     }

@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { deleteUserAccount } from '@/app/actions/settings';
 import { AlertTriangle, Trash2, Loader2, ShieldAlert } from 'lucide-react';
+import { useToast } from '@/components/Toast';
 
 export default function DangerZone() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const CONFIRM_PHRASE = 'DELETE';
 
@@ -20,7 +22,7 @@ export default function DangerZone() {
       await deleteUserAccount();
       signOut({ callbackUrl: '/auth/signin' });
     } catch {
-      alert('Failed to delete account. Please try again.');
+      toast('Failed to delete account. Please try again.', 'error');
       setLoading(false);
     }
   }
