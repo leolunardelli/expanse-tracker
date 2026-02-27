@@ -7,7 +7,7 @@ import { sendPasswordResetEmail } from '@/lib/email';
 
 export async function registerUser(formData: FormData) {
   const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
+  const email = (formData.get('email') as string).trim().toLowerCase();
   const password = formData.get('password') as string;
 
   if (!email || !password) {
@@ -19,16 +19,41 @@ export async function registerUser(formData: FormData) {
   }
 
   // Check if user already exists
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      email: {
+        equals: email,
+        mode: 'insensitive',
+      },
+    },
   });
 
-  if (existingUser) {
-    return { error: 'An account with this email already exists' };
-  }
-
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 12);
+
+  if (existingUser) {
+    if (existingUser.password) {
+      return { error: 'An account with this email already exists' };
+    }
+
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        name: name || existingUser.name,
+        password: hashedPassword,
+        settings: {
+          upsert: {
+            create: {
+              currency: 'BRL',
+              language: 'en',
+            },
+            update: {},
+          },
+        },
+      },
+    });
+
+    return { success: true };
+  }
 
   // Create user
   await prisma.user.create({
@@ -49,14 +74,19 @@ export async function registerUser(formData: FormData) {
 }
 
 export async function requestPasswordReset(formData: FormData) {
-  const email = formData.get('email') as string;
+  const email = (formData.get('email') as string).trim().toLowerCase();
 
   if (!email) {
     return { error: 'Email is required' };
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email },
+  const user = await prisma.user.findFirst({
+    where: {
+      email: {
+        equals: email,
+        mode: 'insensitive',
+      },
+    },
   });
 
   // Always return success to prevent email enumeration

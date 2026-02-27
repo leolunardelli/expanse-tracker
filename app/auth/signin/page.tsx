@@ -1,18 +1,22 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+
+const emptySubscribe = () => () => {};
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const isHydrated = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!isHydrated) return;
     setIsLoading(true);
     setError('');
 
@@ -106,7 +110,7 @@ export default function SignIn() {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !isHydrated}
             className="btn-primary w-full"
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
