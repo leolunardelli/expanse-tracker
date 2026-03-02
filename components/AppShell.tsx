@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
 import BottomNav from '@/components/BottomNav';
 import QuickAddFAB from '@/components/QuickAddFAB';
+import KeyboardShortcuts from '@/components/KeyboardShortcuts';
 
 type AppShellProps = {
   children: ReactNode;
@@ -39,6 +40,9 @@ export default function AppShell({ children, userName, userImage }: AppShellProp
 
       {/* Quick add floating action button */}
       <QuickAddFAB />
+
+      {/* Keyboard shortcuts handler */}
+      <KeyboardShortcuts />
     </div>
   );
 }

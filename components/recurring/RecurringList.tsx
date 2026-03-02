@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import RecurringCard from './RecurringCard';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, RefreshCw, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 type Expense = {
   id: string;
@@ -132,17 +133,26 @@ export default function RecurringList({ expenses }: RecurringListProps) {
 
       {/* List */}
       {filtered.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">
+        <div className="card p-12 text-center">
+          <div className="w-16 h-16 rounded-full bg-violet-20 dark:bg-violet-100/10 flex items-center justify-center mx-auto mb-4">
+            <RefreshCw className="w-8 h-8 text-violet-100" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {expenses.length === 0
               ? 'No recurring expenses yet'
-              : 'No matching recurring expenses'}
-          </p>
-          <p className="text-muted-foreground text-sm mt-2">
+              : 'No matching results'}
+          </h3>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto mb-5">
             {expenses.length === 0
-              ? 'Mark expenses as recurring when creating or editing them'
-              : 'Try adjusting your filters'}
+              ? 'Track subscriptions and recurring costs by marking expenses as recurring when you add them.'
+              : 'Try adjusting your search or filters to find what you\'re looking for.'}
           </p>
+          {expenses.length === 0 && (
+            <Link href="/" className="btn-primary text-sm px-5 py-2.5 inline-flex items-center gap-2">
+              <Plus size={16} />
+              Add Expense
+            </Link>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -71,6 +71,7 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
         tags,
         notes: notes || null,
       });
+      toast('Expense updated', 'success');
       onClose();
     } catch {
       toast('Update failed', 'error');

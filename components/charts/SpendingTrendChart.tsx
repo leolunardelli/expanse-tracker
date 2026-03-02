@@ -16,7 +16,15 @@ export default function SpendingTrendChart({ data }: { data: TrendData[] }) {
     return (
       <div className="card p-5">
         <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Spending Trend (Last 30 Days)</h3>
-        <p className="text-muted-foreground text-center py-8 text-sm">No data yet</p>
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="w-14 h-14 rounded-full bg-violet-20 dark:bg-violet-100/10 flex items-center justify-center mb-3">
+            <svg className="w-7 h-7 text-violet-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">No trend data yet</p>
+          <p className="text-xs text-muted-foreground mt-1">Trends appear after a few days of tracking</p>
+        </div>
       </div>
     );
   }

@@ -2,6 +2,7 @@
 
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Hash } from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
+import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 
 type SummaryData = {
   totalExpenses: number;
@@ -14,6 +15,10 @@ type SummaryData = {
 
 export default function SummaryCards({ data }: { data: SummaryData }) {
   const isPositiveChange = data.monthlyChange > 0;
+  const animatedTotal = useAnimatedNumber(data.totalSpent);
+  const animatedCount = useAnimatedNumber(data.totalExpenses);
+  const animatedMonth = useAnimatedNumber(data.currentMonthTotal);
+  const animatedAvg = useAnimatedNumber(data.avgPerDay);
   
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -22,7 +27,7 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
           <DollarSign size={16} />
           <span className="text-xs font-medium">Total Spent</span>
         </div>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(data.totalSpent)}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(animatedTotal)}</p>
       </div>
       
       <div className="card p-4">
@@ -30,7 +35,7 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
           <Hash size={16} />
           <span className="text-xs font-medium">Transactions</span>
         </div>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.totalExpenses}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{Math.round(animatedCount)}</p>
       </div>
       
       <div className="card p-4">
@@ -38,7 +43,7 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
           <Calendar size={16} />
           <span className="text-xs font-medium">This Month</span>
         </div>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(data.currentMonthTotal)}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(animatedMonth)}</p>
         <div className={`flex items-center gap-1 text-xs mt-1 ${isPositiveChange ? 'text-expense-100' : 'text-income-100'}`}>
           {isPositiveChange ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
           <span>{Math.abs(data.monthlyChange)}% vs last month</span>
@@ -50,7 +55,7 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
           <TrendingUp size={16} />
           <span className="text-xs font-medium">Avg/Day</span>
         </div>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(data.avgPerDay)}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(animatedAvg)}</p>
         <p className="text-xs text-muted-foreground mt-1">this month</p>
       </div>
     </div>

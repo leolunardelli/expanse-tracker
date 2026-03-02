@@ -15,6 +15,8 @@ import BalanceCard from '@/components/dashboard/BalanceCard';
 import SpendingBreakdown from '@/components/dashboard/SpendingBreakdown';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import QuickActions from '@/components/dashboard/QuickActions';
+import DashboardGreeting from '@/components/dashboard/DashboardGreeting';
+import { TransactionListSkeleton } from '@/components/Skeletons';
 import { authOptions } from '@/lib/auth';
 import { formatCurrency } from '@/lib/currency';
 import { Wallet, Receipt, FolderOpen } from 'lucide-react';
@@ -39,6 +41,11 @@ export default async function HomePage() {
     <AppShell userName={session.user?.name} userImage={session.user?.image}>
       <BudgetAlerts />
       
+      {/* Greeting */}
+      <div className="mb-6">
+        <DashboardGreeting userName={session.user?.name} />
+      </div>
+
       {/* Balance Hero Card */}
       <div className="mb-6">
         <BalanceCard
@@ -95,16 +102,7 @@ export default async function HomePage() {
       </div>
 
       {/* Full Transaction List */}
-      <Suspense fallback={
-        <div className="card p-6 animate-pulse">
-          <div className="h-6 bg-surface-light dark:bg-dark-700 rounded w-32 mb-4" />
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-surface-light dark:bg-dark-700 rounded-montra-sm" />
-            ))}
-          </div>
-        </div>
-      }>
+      <Suspense fallback={<TransactionListSkeleton />}>
         <FilteredExpenseList
           categories={categories}
           availableTags={availableTags}

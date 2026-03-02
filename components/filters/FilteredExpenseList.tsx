@@ -131,6 +131,7 @@ export default function FilteredExpenseList({
     if (!deletingId) return;
     try {
       await deleteExpense(deletingId);
+      toast('Expense deleted', 'success');
       fetchExpenses(filters, page);
     } catch {
       toast('Delete failed', 'error');

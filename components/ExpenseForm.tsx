@@ -35,6 +35,7 @@ export default function ExpenseForm() {
       setIsRecurring(false);
       setTags([]);
       setNotes('');
+      toast('Expense added successfully', 'success');
     } catch {
       toast('Failed to save', 'error');
     } finally {

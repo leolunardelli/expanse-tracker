@@ -2,6 +2,7 @@
 
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
+import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 
 interface BalanceCardProps {
   totalSpent: number;
@@ -11,7 +12,11 @@ interface BalanceCardProps {
 }
 
 export default function BalanceCard({ totalSpent, monthlyIncome, remaining }: BalanceCardProps) {
+  const animatedRemaining = useAnimatedNumber(remaining);
+  const animatedIncome = useAnimatedNumber(monthlyIncome);
+  const animatedSpent = useAnimatedNumber(totalSpent);
   const spentPercentage = monthlyIncome > 0 ? Math.min((totalSpent / monthlyIncome) * 100, 100) : 0;
+  const animatedPercentage = useAnimatedNumber(spentPercentage);
 
   return (
     <div className="relative overflow-hidden rounded-montra-lg bg-gradient-to-br from-violet-100 to-violet-80 p-6 text-white">
@@ -21,7 +26,7 @@ export default function BalanceCard({ totalSpent, monthlyIncome, remaining }: Ba
 
       <div className="relative z-10">
         <p className="text-white/70 text-sm font-medium mb-1">Account Balance</p>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-6">{formatCurrency(remaining)}</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-6">{formatCurrency(animatedRemaining)}</h1>
 
         <div className="grid grid-cols-2 gap-4">
           {/* Income */}
@@ -32,7 +37,7 @@ export default function BalanceCard({ totalSpent, monthlyIncome, remaining }: Ba
               </div>
               <span className="text-white/70 text-xs font-medium">Income</span>
             </div>
-            <p className="text-lg font-bold">{formatCurrency(monthlyIncome)}</p>
+            <p className="text-lg font-bold">{formatCurrency(animatedIncome)}</p>
           </div>
 
           {/* Expenses */}
@@ -43,7 +48,7 @@ export default function BalanceCard({ totalSpent, monthlyIncome, remaining }: Ba
               </div>
               <span className="text-white/70 text-xs font-medium">Expenses</span>
             </div>
-            <p className="text-lg font-bold">{formatCurrency(totalSpent)}</p>
+            <p className="text-lg font-bold">{formatCurrency(animatedSpent)}</p>
           </div>
         </div>
 
@@ -51,13 +56,13 @@ export default function BalanceCard({ totalSpent, monthlyIncome, remaining }: Ba
         <div className="mt-4">
           <div className="flex justify-between text-xs text-white/60 mb-1">
             <span>Budget used</span>
-            <span>{spentPercentage.toFixed(0)}%</span>
+            <span>{animatedPercentage.toFixed(0)}%</span>
           </div>
           <div className="h-2 bg-white/20 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
-                width: `${spentPercentage}%`,
+                width: `${animatedPercentage}%`,
                 backgroundColor: spentPercentage > 80 ? '#FD3C4A' : spentPercentage > 60 ? '#FCAC12' : '#00A86B',
               }}
             />
