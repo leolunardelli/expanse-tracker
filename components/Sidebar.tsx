@@ -33,9 +33,8 @@ export default function Sidebar({ userName, userImage }: SidebarProps) {
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-white dark:bg-card-dark border-r border-border-light dark:border-border-dark h-screen sticky top-0">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-3 px-6 py-5 border-b border-border-light dark:border-border-dark hover:bg-surface-light dark:hover:bg-dark-700 transition-colors">
-        <img src="/logo.png" alt="ExpanseFlow" className="w-18 h-18 object-contain" />
-        <span className="text-xl font-bold text-dark-900 dark:text-white">ExpanseFlow</span>
+      <Link href="/" className="flex items-center justify-center px-6 py-4 border-b border-border-light dark:border-border-dark hover:bg-surface-light dark:hover:bg-dark-700 transition-colors">
+        <img src="/logo.png" alt="ExpanseFlow" className="w-28 h-16 object-contain" />
       </Link>
 
       {/* Navigation */}
