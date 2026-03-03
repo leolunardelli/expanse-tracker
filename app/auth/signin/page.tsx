@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react';
 import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { getSignInMethodHint } from '@/app/actions/auth';
 
@@ -54,7 +55,7 @@ export default function SignIn() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <img src="/logo.png" alt="ExpanseFlow" className="w-full max-w-xs object-contain mb-4" />
+          <Image src="/logo.png" alt="ExpanseFlow" width={320} height={200} className="object-contain mb-4" unoptimized />
           <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
             Welcome Back
           </h1>

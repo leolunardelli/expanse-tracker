@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Sidebar from '@/components/Sidebar';
 import BottomNav from '@/components/BottomNav';
 import QuickAddFAB from '@/components/QuickAddFAB';
@@ -24,7 +25,7 @@ export default function AppShell({ children, userName, userImage }: AppShellProp
         {/* Mobile header */}
         <header className="lg:hidden flex items-center justify-center px-4 py-2 bg-white dark:bg-card-dark border-b border-border-light dark:border-border-dark">
           <Link href="/">
-            <img src="/logo.png" alt="ExpanseFlow" className="h-64 object-contain" />
+            <Image src="/logo.png" alt="ExpanseFlow" width={400} height={256} className="object-contain" unoptimized />
           </Link>
         </header>
 

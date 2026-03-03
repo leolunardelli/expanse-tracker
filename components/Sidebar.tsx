@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
@@ -34,7 +35,7 @@ export default function Sidebar({ userName, userImage }: SidebarProps) {
     <aside className="hidden lg:flex flex-col w-64 bg-white dark:bg-card-dark border-r border-border-light dark:border-border-dark h-screen sticky top-0">
       {/* Logo */}
       <Link href="/" className="flex items-center justify-center px-6 py-2 border-b border-border-light dark:border-border-dark hover:bg-surface-light dark:hover:bg-dark-700 transition-colors">
-        <img src="/logo.png" alt="ExpanseFlow" className="w-18 h-18 object-contain" />
+        <Image src="/logo.png" alt="ExpanseFlow" width={200} height={72} className="object-contain" unoptimized />
       </Link>
 
       {/* Navigation */}
