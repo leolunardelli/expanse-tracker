@@ -237,6 +237,40 @@ export async function saveBudgetAllocations(
   revalidatePath('/');
 }
 
+export type RecurringByCategory = {
+  category: string;
+  total: number;
+  items: { description: string; monthlyAmount: number }[];
+};
+
+export async function getRecurringByCategory(): Promise<RecurringByCategory[]> {
+  const userId = await getUserId();
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId, isRecurring: true },
+    select: { description: true, amount: true, category: true, recurrenceType: true },
+    orderBy: { amount: 'desc' },
+  });
+
+  const map = new Map<string, { total: number; items: { description: string; monthlyAmount: number }[] }>();
+
+  for (const e of expenses) {
+    const monthly = toMonthly(e.amount, e.recurrenceType || 'monthly');
+    const entry = map.get(e.category) || { total: 0, items: [] };
+    entry.total += monthly;
+    entry.items.push({ description: e.description, monthlyAmount: monthly });
+    map.set(e.category, entry);
+  }
+
+  return Array.from(map.entries())
+    .map(([category, data]) => ({
+      category,
+      total: Math.round(data.total * 100) / 100,
+      items: data.items,
+    }))
+    .sort((a, b) => b.total - a.total);
+}
+
 export type MonthlyPlanSummary = {
   income: number;
   plannedFixed: number;

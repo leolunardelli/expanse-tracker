@@ -4,31 +4,28 @@ import { authOptions } from '@/lib/auth';
 import AppShell from '@/components/AppShell';
 import IncomeForm from '@/components/planning/IncomeForm';
 import IncomeList from '@/components/planning/IncomeList';
-import PlannedExpenseForm from '@/components/planning/PlannedExpenseForm';
-import PlannedExpenseList from '@/components/planning/PlannedExpenseList';
-import MonthlyOverview from '@/components/planning/MonthlyOverview';
-import PlanningProgressBar from '@/components/planning/PlanningProgressBar';
-import CategoryComparison from '@/components/planning/CategoryComparison';
+import BudgetSummaryBar from '@/components/planning/BudgetSummaryBar';
 import RecurringInPlanning from '@/components/planning/RecurringInPlanning';
 import BudgetAllocation from '@/components/planning/BudgetAllocation';
-import { getIncomes, getPlannedExpenses, getMonthlyPlanSummary, getRecurringExpenseItems } from '@/app/actions/planning';
+import CategoryComparison from '@/components/planning/CategoryComparison';
+import { getIncomes, getMonthlyPlanSummary, getRecurringExpenseItems, getRecurringByCategory } from '@/app/actions/planning';
 import { getBudgets } from '@/app/actions/budget';
 import { CATEGORIES } from '@/lib/design-tokens';
 
 export const metadata = {
-  title: 'Monthly Planning | Expanse Tracker',
-  description: 'Plan your monthly income and expenses to keep your budget on track.',
+  title: 'Monthly Budget | Expanse Tracker',
+  description: 'Set your salary, see your fixed bills, and allocate the rest.',
 };
 
 export default async function PlanningPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect('/auth/signin');
 
-  const [incomes, expenses, summary, recurringItems, budgets] = await Promise.all([
+  const [incomes, summary, recurringItems, recurringByCat, budgets] = await Promise.all([
     getIncomes(),
-    getPlannedExpenses(),
     getMonthlyPlanSummary(),
     getRecurringExpenseItems(),
+    getRecurringByCategory(),
     getBudgets(),
   ]);
 
@@ -36,79 +33,76 @@ export default async function PlanningPage() {
     <AppShell userName={session.user?.name} userImage={session.user?.image}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
-          Monthly Planning
+          Monthly Budget
         </h1>
         <p className="text-sm text-muted mt-1">
-          Set your income and expenses to see how much you have left at the end of the month.
+          Salary → Fixed bills → Allocate the rest
         </p>
       </div>
 
-        {/* Overview section */}
-        <section className="mb-8">
-          <MonthlyOverview summary={summary} />
-        </section>
+      {/* Summary bar — key numbers at a glance */}
+      <section className="mb-8">
+        <BudgetSummaryBar
+          income={summary.income}
+          recurringTotal={summary.recurringTotal}
+          budgetTotal={summary.budgetTotal}
+          actualSpent={summary.actualSpent}
+        />
+      </section>
 
-        {/* Progress bar */}
-        <section className="mb-8">
-          <PlanningProgressBar
-            income={summary.income}
-            plannedFixed={summary.plannedFixed}
-            plannedVariable={summary.plannedVariable}
-            recurringTotal={summary.recurringTotal}
-            actualSpent={summary.actualSpent}
-          />
-        </section>
-
-        {/* Income and Expenses side by side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Income section */}
-          <section className="card p-5">
-            <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-income-100" />
-              Income Sources
-            </h2>
-            <IncomeForm />
-            <div className="mt-4">
-              <IncomeList incomes={incomes} />
-            </div>
-          </section>
-
-          {/* Planned expenses section */}
-          <section className="card p-5">
-            <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-expense-100" />
-              Planned Expenses
-            </h2>
-            <PlannedExpenseForm />
-            <div className="mt-4">
-              <PlannedExpenseList expenses={expenses} />
-            </div>
-          </section>
+      {/* Step 1: Income / Salary */}
+      <section className="card p-5 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-income-20 text-income-100 text-xs font-bold dark:bg-income-100/10">
+            1
+          </span>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            Your Income
+          </h2>
         </div>
-
-        {/* Recurring Expenses + Budget Allocation side by side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Recurring expenses from Expense model, shown by name */}
-          <section className="card p-5">
-            <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-violet-100" />
-              Recurring Expenses
-            </h2>
-            <RecurringInPlanning items={recurringItems} />
-          </section>
-
-          {/* Budget allocation from income */}
-          <BudgetAllocation
-            income={summary.income}
-            currentBudgets={budgets.map((b) => ({ category: b.category, amount: b.amount }))}
-            categories={CATEGORIES as unknown as string[]}
-          />
+        <IncomeForm />
+        <div className="mt-4">
+          <IncomeList incomes={incomes} />
         </div>
+      </section>
 
-        {/* Category comparison */}
-        <section className="mb-8">
-          <CategoryComparison data={summary.categoryComparison} />
-        </section>
+      {/* Step 2: Fixed / Recurring Expenses (auto-pulled) */}
+      <section className="card p-5 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-expense-20 text-expense-100 text-xs font-bold dark:bg-expense-100/10">
+            2
+          </span>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            Fixed Bills
+          </h2>
+          <span className="text-xs text-muted-foreground ml-auto">Auto-synced from recurring expenses</span>
+        </div>
+        <RecurringInPlanning items={recurringItems} />
+      </section>
+
+      {/* Step 3: Allocate remaining income to categories */}
+      <section className="mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-violet-20 text-violet-100 text-xs font-bold dark:bg-violet-100/10">
+            3
+          </span>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            Allocate the Rest
+          </h2>
+        </div>
+        <BudgetAllocation
+          income={summary.income}
+          recurringTotal={summary.recurringTotal}
+          currentBudgets={budgets.map((b) => ({ category: b.category, amount: b.amount }))}
+          recurringByCategory={recurringByCat}
+          categories={CATEGORIES as unknown as string[]}
+        />
+      </section>
+
+      {/* Category comparison — planned vs actual this month */}
+      <section className="mb-8">
+        <CategoryComparison data={summary.categoryComparison} />
+      </section>
     </AppShell>
   );
 }
