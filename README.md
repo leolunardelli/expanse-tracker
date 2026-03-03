@@ -7,7 +7,7 @@
 **Full-stack expense tracker with AI-powered insights, built with Next.js 15, TypeScript, PostgreSQL & OpenAI.**
 
 [![CI](https://github.com/leolunardelli/expanse-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/leolunardelli/expanse-tracker/actions/workflows/ci.yml)
-[![Live Demo](https://img.shields.io/badge/demo-live-00C853?style=flat-square)](https://y-nine-flame.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-00C853?style=flat-square)](https://expanseflow.vercel.app)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square&logo=typescript)](tsconfig.json)
 
