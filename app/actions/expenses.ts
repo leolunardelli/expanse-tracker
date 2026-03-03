@@ -355,3 +355,25 @@ export async function getTags(): Promise<string[]> {
 
   return Array.from(tagSet).sort();
 }
+
+export async function recategorizeExpenses(
+  descriptions: string[],
+  newCategory: string
+) {
+  const userId = await getUserId();
+
+  const result = await prisma.expense.updateMany({
+    where: {
+      userId,
+      description: { in: descriptions },
+    },
+    data: { category: newCategory },
+  });
+
+  revalidatePath('/');
+  revalidatePath('/planning');
+  revalidatePath('/recurring');
+  revalidatePath('/budget');
+
+  return { updated: result.count };
+}
