@@ -24,7 +24,7 @@ export default function AppShell({ children, userName, userImage }: AppShellProp
         {/* Mobile header */}
         <header className="lg:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 bg-white dark:bg-card-dark border-b border-border-light dark:border-border-dark">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="ExpanseFlow" className="w-8 h-8 object-contain" />
+            <img src="/logo.png" alt="ExpanseFlow" className="w-12 h-12 object-contain" />
             <span className="text-lg font-bold text-dark-900 dark:text-white">ExpanseFlow</span>
           </Link>
         </header>

@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { BarChart3, PieChart, FileText, Target, Calendar, TrendingUp } from 'lucide-react';
 
 const actions = [
-  { label: 'Analytics', href: '/analytics', icon: PieChart, color: '#0099CC', bg: '#E0F7FF', darkBg: '#1A3D4A' },
+  { label: 'Analytics', href: '/analytics', icon: PieChart, color: '#0D7390', bg: '#D6EFF5', darkBg: '#1A3D4A' },
   { label: 'Budget', href: '/budget', icon: Target, color: '#00A86B', bg: '#CFFAEA', darkBg: '#1A4A33' },
   { label: 'Reports', href: '/reports', icon: FileText, color: '#0077FF', bg: '#BDDCFF', darkBg: '#1A3352' },
   { label: 'Planning', href: '/planning', icon: Calendar, color: '#FCAC12', bg: '#FCEED4', darkBg: '#4A3A1A' },
   { label: 'Insights', href: '/insights', icon: TrendingUp, color: '#FD3C4A', bg: '#FDD5D7', darkBg: '#4A1F22' },
-  { label: 'YoY', href: '/analytics', icon: BarChart3, color: '#0099CC', bg: '#E0F7FF', darkBg: '#1A3D4A' },
+  { label: 'YoY', href: '/analytics', icon: BarChart3, color: '#0D7390', bg: '#D6EFF5', darkBg: '#1A3D4A' },
 ];
 
 export default function QuickActions() {

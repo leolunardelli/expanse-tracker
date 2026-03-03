@@ -16,7 +16,7 @@ type MonthlyCategoryBreakdownProps = {
 };
 
 const COLORS = [
-  '#0099CC', '#00A86B', '#FD3C4A', '#FCAC12', '#0077FF',
+  '#0D7390', '#00A86B', '#FD3C4A', '#FCAC12', '#0077FF',
   '#06b6d4', '#ec4899', '#84cc16', '#f97316', '#6366f1',
   '#14b8a6', '#e11d48',
 ];

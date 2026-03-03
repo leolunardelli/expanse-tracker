@@ -39,7 +39,7 @@ export default function YearOverYearChart({ data, currentYear, previousYear }: {
           <Line 
             type="monotone" 
             dataKey="current" 
-            stroke="#0099CC" 
+            stroke="#0D7390" 
             name={`${currentYear}`}
             strokeWidth={2}
           />

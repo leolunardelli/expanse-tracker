@@ -103,7 +103,7 @@ export default function MonthlyDailyChart({
             />
             <Bar
               dataKey="amount"
-              fill="#0099CC"
+              fill="#0D7390"
               radius={[6, 6, 0, 0]}
               maxBarSize={20}
             />

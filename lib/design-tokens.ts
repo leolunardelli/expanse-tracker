@@ -19,8 +19,8 @@ export const categoryConfig = {
   },
   Entertainment: {
     label: 'Entertainment',
-    color: '#0099CC',
-    bgColor: '#E0F7FF',
+    color: '#0D7390',
+    bgColor: '#D6EFF5',
     darkBgColor: '#1A3D4A',
     icon: 'Gamepad2',
   },
@@ -54,8 +54,8 @@ export const categoryConfig = {
   },
   Housing: {
     label: 'Housing',
-    color: '#0099CC',
-    bgColor: '#E0F7FF',
+    color: '#0D7390',
+    bgColor: '#D6EFF5',
     darkBgColor: '#1A3D4A',
     icon: 'Home',
   },

@@ -9,13 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary — cyan/blue (from ExpanseFlow logo)
+        // Primary — deep teal/blue (from ExpanseFlow logo)
         violet: {
-          20: '#E0F7FF',
-          40: '#B3ECFF',
-          60: '#4DD4FF',
-          80: '#00B8E6',
-          100: '#0099CC',
+          20: '#D6EFF5',
+          40: '#9DD4E5',
+          60: '#3DABC7',
+          80: '#1A8BA8',
+          100: '#0D7390',
         },
         // Income — green
         income: {
@@ -69,17 +69,17 @@ export default {
         },
         // Legacy aliases (for easier migration)
         primary: {
-          50: '#E0F7FF',
-          100: '#E0F7FF',
-          200: '#B3ECFF',
-          300: '#4DD4FF',
-          400: '#00B8E6',
-          500: '#0099CC',
-          600: '#0088B3',
-          700: '#006680',
-          800: '#004D60',
-          900: '#003340',
-          950: '#001A20',
+          50: '#D6EFF5',
+          100: '#D6EFF5',
+          200: '#9DD4E5',
+          300: '#3DABC7',
+          400: '#1A8BA8',
+          500: '#0D7390',
+          600: '#0A6178',
+          700: '#084F60',
+          800: '#063D48',
+          900: '#042B30',
+          950: '#021A1E',
         },
         accent: {
           50: '#CFFAEA',
@@ -122,7 +122,7 @@ export default {
         'card-hover': '0 8px 24px rgba(0, 0, 0, 0.08)',
         'card-dark': '0 2px 8px rgba(0, 0, 0, 0.3)',
         'bottom-nav': '0 -4px 20px rgba(0, 0, 0, 0.06)',
-        'fab': '0 8px 24px rgba(0, 153, 204, 0.35)',
+        'fab': '0 8px 24px rgba(13, 115, 144, 0.35)',
       },
       backdropBlur: {
         xs: '2px',

@@ -9,7 +9,7 @@ type CategoryData = {
 }
 
 const COLORS = [
-  '#0099CC', // cyan
+  '#0D7390', // deep teal
   '#00A86B', // green
   '#FD3C4A', // red
   '#FCAC12', // yellow
