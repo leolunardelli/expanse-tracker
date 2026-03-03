@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: 'ExpanseFlow',
   description: 'Track your expenses with AI-powered insights',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/icons/icon-192.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
