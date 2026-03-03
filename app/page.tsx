@@ -2,12 +2,10 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { getFilteredExpenses, getCategories, getExpenseStats, getTags } from './actions/expenses';
-import { getAIInsights } from './actions/ai';
 import { getMonthlyPlanSummary } from './actions/planning';
 import AppShell from '@/components/AppShell';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExportButton from '@/components/ExportButton';
-import AIInsights from '@/components/AIInsights';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
 import FilteredExpenseList from '@/components/filters/FilteredExpenseList';
 import BalanceCard from '@/components/dashboard/BalanceCard';
@@ -16,7 +14,8 @@ import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import QuickActions from '@/components/dashboard/QuickActions';
 import DashboardGreeting from '@/components/dashboard/DashboardGreeting';
 import ExpenseTemplates from '@/components/dashboard/ExpenseTemplates';
-import { TransactionListSkeleton } from '@/components/Skeletons';
+import AsyncAIInsights from '@/components/dashboard/AsyncAIInsights';
+import { TransactionListSkeleton, Skeleton } from '@/components/Skeletons';
 import { authOptions } from '@/lib/auth';
 
 export default async function HomePage() {
@@ -26,11 +25,10 @@ export default async function HomePage() {
     redirect('/auth/signin');
   }
   
-  const [{ expenses, pagination }, categories, stats, insights, availableTags, planSummary] = await Promise.all([
+  const [{ expenses, pagination }, categories, stats, availableTags, planSummary] = await Promise.all([
     getFilteredExpenses({ page: 1, pageSize: 10 }),
     getCategories(),
     getExpenseStats('month'),
-    getAIInsights(),
     getTags(),
     getMonthlyPlanSummary(),
   ]);
@@ -62,9 +60,20 @@ export default async function HomePage() {
         <ExpenseTemplates />
       </div>
 
-      {/* AI Insights */}
+      {/* AI Insights (streamed independently) */}
       <div className="mb-6">
-        <AIInsights insights={insights} />
+        <Suspense fallback={
+          <div className="card p-4 space-y-3 animate-pulse">
+            <div className="flex items-center gap-2">
+              <Skeleton className="w-6 h-6 rounded-full" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-3/4" />
+          </div>
+        }>
+          <AsyncAIInsights />
+        </Suspense>
       </div>
       
       {/* Recent Transactions */}
