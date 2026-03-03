@@ -4,18 +4,18 @@ import InstallPrompt from '@/components/InstallPrompt';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ExpenseFlow',
+  title: 'ExpanseFlow',
   description: 'Track your expenses with AI-powered insights',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ExpenseFlow',
+    title: 'ExpanseFlow',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#3b82f6',
+  themeColor: '#0099CC',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,

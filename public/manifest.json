@@ -1,11 +1,11 @@
 {
-  "name": "ExpenseFlow",
-  "short_name": "ExpenseFlow",
+  "name": "ExpanseFlow",
+  "short_name": "ExpanseFlow",
   "description": "Track expenses with AI insights",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#7F3DFF",
+  "theme_color": "#0099CC",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -13,7 +13,7 @@ import { getBudgets, getBudgetStatus } from '@/app/actions/budget';
 import { CATEGORIES } from '@/lib/design-tokens';
 
 export const metadata = {
-  title: 'Monthly Budget | Expanse Tracker',
+  title: 'Monthly Budget | ExpanseFlow',
   description: 'Set your salary, see your fixed bills, and allocate the rest.',
 };
 

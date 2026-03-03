@@ -48,11 +48,11 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 
   await sendEmail({
     to: email,
-    subject: 'Reset your ExpenseFlow password',
+    subject: 'Reset your ExpanseFlow password',
     html: `
       <div style="font-family: 'Inter', sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
         <div style="text-align: center; margin-bottom: 32px;">
-          <div style="width: 56px; height: 56px; background: #7F3DFF; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;">
+          <div style="width: 56px; height: 56px; background: #0099CC; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;">
             <span style="color: white; font-weight: bold; font-size: 24px;">E</span>
           </div>
         </div>
@@ -66,7 +66,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
         </p>
         
         <div style="text-align: center; margin-bottom: 32px;">
-          <a href="${resetUrl}" style="display: inline-block; background: #7F3DFF; color: white; padding: 14px 32px; border-radius: 16px; text-decoration: none; font-weight: 600; font-size: 16px;">
+          <a href="${resetUrl}" style="display: inline-block; background: #0099CC; color: white; padding: 14px 32px; border-radius: 16px; text-decoration: none; font-weight: 600; font-size: 16px;">
             Reset Password
           </a>
         </div>
@@ -78,7 +78,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
         <hr style="border: none; border-top: 1px solid #E0E0E0; margin: 32px 0;" />
         
         <p style="color: #C6C6C6; font-size: 12px; text-align: center;">
-          ExpenseFlow - Smart Expense Tracking
+          ExpanseFlow - Smart Expense Tracking
         </p>
       </div>
     `,

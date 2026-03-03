@@ -19,9 +19,9 @@ export const categoryConfig = {
   },
   Entertainment: {
     label: 'Entertainment',
-    color: '#7F3DFF',
-    bgColor: '#EEE5FF',
-    darkBgColor: '#2D1F4A',
+    color: '#0099CC',
+    bgColor: '#E0F7FF',
+    darkBgColor: '#1A3D4A',
     icon: 'Gamepad2',
   },
   Shopping: {
@@ -54,9 +54,9 @@ export const categoryConfig = {
   },
   Housing: {
     label: 'Housing',
-    color: '#7F3DFF',
-    bgColor: '#EEE5FF',
-    darkBgColor: '#2D1F4A',
+    color: '#0099CC',
+    bgColor: '#E0F7FF',
+    darkBgColor: '#1A3D4A',
     icon: 'Home',
   },
   Subscription: {

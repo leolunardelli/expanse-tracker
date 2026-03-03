@@ -40,7 +40,7 @@ export default function InstallPrompt() {
         <Download className="w-5 h-5 text-violet-100" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 dark:text-white">Install ExpenseFlow</p>
+        <p className="text-sm font-medium text-gray-900 dark:text-white">Install ExpanseFlow</p>
         <p className="text-xs text-muted-foreground">Add to home screen for quick access</p>
       </div>
       <button onClick={install} className="btn-primary px-3 py-1.5 text-sm shrink-0">

@@ -36,8 +36,8 @@ export default function SpendingTrendChart({ data }: { data: TrendData[] }) {
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#7F3DFF" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#7F3DFF" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#0099CC" stopOpacity={0.3}/>
+              <stop offset="95%" stopColor="#0099CC" stopOpacity={0}/>
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#333338' : '#E0E0E0'} />
@@ -64,7 +64,7 @@ export default function SpendingTrendChart({ data }: { data: TrendData[] }) {
           <Area 
             type="monotone" 
             dataKey="amount" 
-            stroke="#7F3DFF" 
+            stroke="#0099CC" 
             strokeWidth={2}
             fill="url(#colorAmount)"
           />
