@@ -55,7 +55,7 @@ export default function SignIn() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <Image src="/logo.png" alt="ExpanseFlow" width={320} height={200} className="object-contain mb-4" unoptimized />
+          <Image src="/logo.png" alt="ExpanseFlow" width={240} height={240} className="object-contain mb-4" unoptimized />
           <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
             Welcome Back
           </h1>
