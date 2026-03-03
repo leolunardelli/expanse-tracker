@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from './providers';
-import InstallPrompt from '@/components/InstallPrompt';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -33,7 +32,6 @@ export default function RootLayout({
       </head>
       <body className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
         <AuthProvider>{children}</AuthProvider>
-        <InstallPrompt />
       </body>
     </html>
   );
