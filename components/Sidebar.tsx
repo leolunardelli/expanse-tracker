@@ -33,12 +33,12 @@ export default function Sidebar({ userName, userImage }: SidebarProps) {
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-white dark:bg-card-dark border-r border-border-light dark:border-border-dark h-screen sticky top-0">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-border-light dark:border-border-dark">
+      <Link href="/" className="flex items-center gap-3 px-6 py-5 border-b border-border-light dark:border-border-dark hover:bg-surface-light dark:hover:bg-dark-700 transition-colors">
         <div className="w-9 h-9 rounded-montra-sm bg-violet-100 flex items-center justify-center">
           <span className="text-white font-bold text-lg">E</span>
         </div>
         <span className="text-xl font-bold text-dark-900 dark:text-white">ExpenseFlow</span>
-      </div>
+      </Link>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
