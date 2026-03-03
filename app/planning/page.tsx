@@ -9,7 +9,11 @@ import PlannedExpenseList from '@/components/planning/PlannedExpenseList';
 import MonthlyOverview from '@/components/planning/MonthlyOverview';
 import PlanningProgressBar from '@/components/planning/PlanningProgressBar';
 import CategoryComparison from '@/components/planning/CategoryComparison';
-import { getIncomes, getPlannedExpenses, getMonthlyPlanSummary } from '@/app/actions/planning';
+import RecurringInPlanning from '@/components/planning/RecurringInPlanning';
+import BudgetAllocation from '@/components/planning/BudgetAllocation';
+import { getIncomes, getPlannedExpenses, getMonthlyPlanSummary, getRecurringExpenseItems } from '@/app/actions/planning';
+import { getBudgets } from '@/app/actions/budget';
+import { CATEGORIES } from '@/lib/design-tokens';
 
 export const metadata = {
   title: 'Monthly Planning | Expanse Tracker',
@@ -20,10 +24,12 @@ export default async function PlanningPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect('/auth/signin');
 
-  const [incomes, expenses, summary] = await Promise.all([
+  const [incomes, expenses, summary, recurringItems, budgets] = await Promise.all([
     getIncomes(),
     getPlannedExpenses(),
     getMonthlyPlanSummary(),
+    getRecurringExpenseItems(),
+    getBudgets(),
   ]);
 
   return (
@@ -78,6 +84,25 @@ export default async function PlanningPage() {
               <PlannedExpenseList expenses={expenses} />
             </div>
           </section>
+        </div>
+
+        {/* Recurring Expenses + Budget Allocation side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Recurring expenses from Expense model, shown by name */}
+          <section className="card p-5">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-violet-100" />
+              Recurring Expenses
+            </h2>
+            <RecurringInPlanning items={recurringItems} />
+          </section>
+
+          {/* Budget allocation from income */}
+          <BudgetAllocation
+            income={summary.income}
+            currentBudgets={budgets.map((b) => ({ category: b.category, amount: b.amount }))}
+            categories={CATEGORIES as unknown as string[]}
+          />
         </div>
 
         {/* Category comparison */}

@@ -175,6 +175,68 @@ export async function deletePlannedExpense(id: string) {
 
 // ─── Monthly Plan Summary ─────────────────────────────────────────
 
+export type RecurringExpenseItem = {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  recurrenceType: string;
+  monthlyAmount: number;
+};
+
+export async function getRecurringExpenseItems(): Promise<RecurringExpenseItem[]> {
+  const userId = await getUserId();
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId, isRecurring: true },
+    select: { id: true, description: true, amount: true, category: true, recurrenceType: true },
+    orderBy: { amount: 'desc' },
+  });
+
+  return expenses.map((e) => ({
+    id: e.id,
+    description: e.description,
+    amount: e.amount,
+    category: e.category,
+    recurrenceType: e.recurrenceType || 'monthly',
+    monthlyAmount: toMonthly(e.amount, e.recurrenceType || 'monthly'),
+  }));
+}
+
+// ─── Budget Allocation from Income ────────────────────────────────
+
+export async function saveBudgetAllocations(
+  allocations: { category: string; amount: number }[]
+) {
+  const userId = await getUserId();
+
+  for (const alloc of allocations) {
+    if (alloc.amount <= 0) {
+      // Delete budget if amount is 0
+      await prisma.budget.deleteMany({
+        where: { userId, category: alloc.category },
+      });
+    } else {
+      await prisma.budget.upsert({
+        where: {
+          userId_category: { userId, category: alloc.category },
+        },
+        update: { amount: alloc.amount },
+        create: {
+          category: alloc.category,
+          amount: alloc.amount,
+          alertAt: 80,
+          userId,
+        },
+      });
+    }
+  }
+
+  revalidatePath('/planning');
+  revalidatePath('/budget');
+  revalidatePath('/');
+}
+
 export type MonthlyPlanSummary = {
   income: number;
   plannedFixed: number;
