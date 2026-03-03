@@ -22,9 +22,9 @@ export default function AppShell({ children, userName, userImage }: AppShellProp
       {/* Main content */}
       <main className="flex-1 min-w-0">
         {/* Mobile header */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-1 bg-white dark:bg-card-dark border-b border-border-light dark:border-border-dark">
+        <header className="lg:hidden flex items-center justify-center px-4 py-1 bg-white dark:bg-card-dark border-b border-border-light dark:border-border-dark">
           <Link href="/">
-            <img src="/logo.png" alt="ExpanseFlow" className="w-16 h-16 object-contain" />
+            <img src="/logo.png" alt="ExpanseFlow" className="w-32 h-32 object-contain" />
           </Link>
         </header>
 
