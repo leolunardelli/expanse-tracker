@@ -253,18 +253,51 @@ export async function getCategories() {
   return expenses.map((e) => e.category);
 }
 
-export async function getExpenseStats() {
+export async function getExpenseStats(period?: 'month' | '30d' | '3m' | 'year' | 'all') {
   const userId = await getUserId();
 
+  // Build date filter based on period
+  const now = new Date();
+  let dateFilter: { gte?: Date; lte?: Date } | undefined;
+
+  switch (period) {
+    case 'month': {
+      dateFilter = { gte: new Date(now.getFullYear(), now.getMonth(), 1) };
+      break;
+    }
+    case '30d': {
+      const d = new Date();
+      d.setDate(d.getDate() - 30);
+      dateFilter = { gte: d };
+      break;
+    }
+    case '3m': {
+      const d = new Date();
+      d.setMonth(d.getMonth() - 3);
+      dateFilter = { gte: d };
+      break;
+    }
+    case 'year': {
+      dateFilter = { gte: new Date(now.getFullYear(), 0, 1) };
+      break;
+    }
+    default:
+      // 'all' or undefined — no date filter
+      break;
+  }
+
+  const where: Record<string, unknown> = { userId };
+  if (dateFilter) where.date = dateFilter;
+
   const [count, totals, grouped] = await Promise.all([
-    prisma.expense.count({ where: { userId } }),
+    prisma.expense.count({ where }),
     prisma.expense.aggregate({
-      where: { userId },
+      where,
       _sum: { amount: true },
     }),
     prisma.expense.groupBy({
       by: ['category'],
-      where: { userId },
+      where,
       _sum: { amount: true },
     }),
   ]);

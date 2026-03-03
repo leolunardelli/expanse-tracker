@@ -7,19 +7,17 @@ import { getMonthlyPlanSummary } from './actions/planning';
 import AppShell from '@/components/AppShell';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExportButton from '@/components/ExportButton';
-import StatsCard from '@/components/StatsCard';
 import AIInsights from '@/components/AIInsights';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
 import FilteredExpenseList from '@/components/filters/FilteredExpenseList';
 import BalanceCard from '@/components/dashboard/BalanceCard';
-import SpendingBreakdown from '@/components/dashboard/SpendingBreakdown';
+import DashboardStats from '@/components/dashboard/DashboardStats';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import QuickActions from '@/components/dashboard/QuickActions';
 import DashboardGreeting from '@/components/dashboard/DashboardGreeting';
+import ExpenseTemplates from '@/components/dashboard/ExpenseTemplates';
 import { TransactionListSkeleton } from '@/components/Skeletons';
 import { authOptions } from '@/lib/auth';
-import { formatCurrency } from '@/lib/currency';
-import { Wallet, Receipt, FolderOpen } from 'lucide-react';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -31,7 +29,7 @@ export default async function HomePage() {
   const [{ expenses, pagination }, categories, stats, insights, availableTags, planSummary] = await Promise.all([
     getFilteredExpenses({ page: 1, pageSize: 10 }),
     getCategories(),
-    getExpenseStats(),
+    getExpenseStats('month'),
     getAIInsights(),
     getTags(),
     getMonthlyPlanSummary(),
@@ -56,23 +54,12 @@ export default async function HomePage() {
         />
       </div>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <StatsCard
-          title="Spent"
-          value={formatCurrency(stats.total)}
-          icon={<Wallet size={16} />}
-        />
-        <StatsCard
-          title="Transactions"
-          value={stats.count}
-          icon={<Receipt size={16} />}
-        />
-        <StatsCard
-          title="Categories"
-          value={Object.keys(stats.byCategory).length}
-          icon={<FolderOpen size={16} />}
-        />
+      {/* Stats with Date Range Filter + Spending Breakdown */}
+      <DashboardStats initialStats={stats} />
+
+      {/* Quick Add Templates */}
+      <div className="mb-6">
+        <ExpenseTemplates />
       </div>
 
       {/* AI Insights */}
@@ -80,9 +67,8 @@ export default async function HomePage() {
         <AIInsights insights={insights} />
       </div>
       
-      {/* Two Column Layout: Spending + Recent */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-        <SpendingBreakdown byCategory={stats.byCategory} total={stats.total} />
+      {/* Recent Transactions */}
+      <div className="mb-6">
         <RecentTransactions transactions={expenses} />
       </div>
 

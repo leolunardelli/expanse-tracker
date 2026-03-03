@@ -6,9 +6,10 @@ import { formatCurrency } from '@/lib/currency';
 interface SpendingBreakdownProps {
   byCategory: Record<string, number>;
   total: number;
+  periodLabel?: string;
 }
 
-export default function SpendingBreakdown({ byCategory, total }: SpendingBreakdownProps) {
+export default function SpendingBreakdown({ byCategory, total, periodLabel }: SpendingBreakdownProps) {
   const sorted = Object.entries(byCategory)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 6);
@@ -26,7 +27,7 @@ export default function SpendingBreakdown({ byCategory, total }: SpendingBreakdo
     <div className="card p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-900 dark:text-white">Spending Breakdown</h3>
-        <span className="text-xs text-muted-foreground">This month</span>
+        <span className="text-xs text-muted-foreground">{periodLabel || 'This month'}</span>
       </div>
 
       <div className="space-y-3">
