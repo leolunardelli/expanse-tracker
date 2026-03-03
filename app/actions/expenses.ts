@@ -70,8 +70,37 @@ export async function createExpense(formData: FormData) {
       userId,
     },
   });
+
+  // Check budget for this category and return feedback
+  let budgetFeedback: { category: string; budgetAmount: number; spent: number; remaining: number } | null = null;
+
+  const budget = await prisma.budget.findUnique({
+    where: { userId_category: { userId, category } },
+  });
+
+  if (budget) {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+    const monthExpenses = await prisma.expense.aggregate({
+      where: { userId, category, date: { gte: monthStart, lte: monthEnd } },
+      _sum: { amount: true },
+    });
+
+    const spent = monthExpenses._sum.amount || 0;
+    budgetFeedback = {
+      category,
+      budgetAmount: budget.amount,
+      spent,
+      remaining: budget.amount - spent,
+    };
+  }
+
   revalidatePath('/');
   revalidatePath('/planning');
+
+  return { budgetFeedback };
 }
 
 export async function updateExpense(

@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Bookmark, Plus, X, Zap } from 'lucide-react';
 import { createExpense } from '@/app/actions/expenses';
-import { useToast } from '@/components/Toast';
 import { formatCurrency } from '@/lib/currency';
+import { useToast } from '@/components/Toast';
 
 export interface ExpenseTemplate {
   id: string;
@@ -80,8 +80,17 @@ export default function ExpenseTemplates() {
       formData.set('isRecurring', 'false');
       formData.set('tags', '');
       formData.set('notes', '');
-      await createExpense(formData);
-      toast(`Added "${template.description}"`, 'success');
+      const result = await createExpense(formData);
+      if (result?.budgetFeedback) {
+        const fb = result.budgetFeedback;
+        if (fb.remaining < 0) {
+          toast(`${fb.category}: over budget by ${formatCurrency(Math.abs(fb.remaining))}`, 'error');
+        } else {
+          toast(`Added "${template.description}" — ${fb.category}: ${formatCurrency(fb.remaining)} left`, 'success');
+        }
+      } else {
+        toast(`Added "${template.description}"`, 'success');
+      }
     } catch {
       toast('Failed to add expense', 'error');
     } finally {

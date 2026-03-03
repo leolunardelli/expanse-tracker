@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, DollarSign, Calendar, Tag, FileText, RefreshCw, Check } from 'lucide-react';
 import { createExpense } from '@/app/actions/expenses';
+import { formatCurrency } from '@/lib/currency';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
 import { getCategoryConfig } from '@/lib/design-tokens';
 import TagInput from '@/components/tags/TagInput';
@@ -36,7 +37,15 @@ export default function AddTransactionPage() {
     formData.set('category', selectedCategory);
 
     try {
-      await createExpense(formData);
+      const result = await createExpense(formData);
+      if (result?.budgetFeedback) {
+        const fb = result.budgetFeedback;
+        if (fb.remaining < 0) {
+          toast(`${fb.category}: over budget by ${formatCurrency(Math.abs(fb.remaining))}`, 'error');
+        } else if (fb.remaining / fb.budgetAmount < 0.2) {
+          toast(`${fb.category}: only ${formatCurrency(fb.remaining)} left of ${formatCurrency(fb.budgetAmount)}`, 'warning');
+        }
+      }
       setSuccess(true);
       setTimeout(() => {
         router.push('/');

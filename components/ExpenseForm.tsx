@@ -7,6 +7,7 @@ import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
 import { EXPENSE_CATEGORIES } from '@/lib/categories';
 import { useToast } from '@/components/Toast';
+import { formatCurrency } from '@/lib/currency';
 
 function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -30,12 +31,34 @@ export default function ExpenseForm() {
     formData.set('notes', notes);
     
     try {
-      await createExpense(formData);
+      const result = await createExpense(formData);
       formRef.current?.reset();
       setIsRecurring(false);
       setTags([]);
       setNotes('');
-      toast('Expense added successfully', 'success');
+
+      // Show budget feedback if available
+      if (result?.budgetFeedback) {
+        const fb = result.budgetFeedback;
+        if (fb.remaining < 0) {
+          toast(
+            `${fb.category}: over budget by ${formatCurrency(Math.abs(fb.remaining))}`,
+            'error'
+          );
+        } else if (fb.remaining / fb.budgetAmount < 0.2) {
+          toast(
+            `${fb.category}: only ${formatCurrency(fb.remaining)} left of ${formatCurrency(fb.budgetAmount)}`,
+            'warning'
+          );
+        } else {
+          toast(
+            `Expense added — ${fb.category}: ${formatCurrency(fb.remaining)} left of ${formatCurrency(fb.budgetAmount)}`,
+            'success'
+          );
+        }
+      } else {
+        toast('Expense added successfully', 'success');
+      }
     } catch {
       toast('Failed to save', 'error');
     } finally {

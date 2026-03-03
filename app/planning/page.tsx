@@ -7,9 +7,9 @@ import IncomeList from '@/components/planning/IncomeList';
 import BudgetSummaryBar from '@/components/planning/BudgetSummaryBar';
 import RecurringInPlanning from '@/components/planning/RecurringInPlanning';
 import BudgetAllocation from '@/components/planning/BudgetAllocation';
-import CategoryComparison from '@/components/planning/CategoryComparison';
+import BudgetTracker from '@/components/planning/BudgetTracker';
 import { getIncomes, getMonthlyPlanSummary, getRecurringExpenseItems, getRecurringByCategory } from '@/app/actions/planning';
-import { getBudgets } from '@/app/actions/budget';
+import { getBudgets, getBudgetStatus } from '@/app/actions/budget';
 import { CATEGORIES } from '@/lib/design-tokens';
 
 export const metadata = {
@@ -21,12 +21,13 @@ export default async function PlanningPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect('/auth/signin');
 
-  const [incomes, summary, recurringItems, recurringByCat, budgets] = await Promise.all([
+  const [incomes, summary, recurringItems, recurringByCat, budgets, budgetStatus] = await Promise.all([
     getIncomes(),
     getMonthlyPlanSummary(),
     getRecurringExpenseItems(),
     getRecurringByCategory(),
     getBudgets(),
+    getBudgetStatus(),
   ]);
 
   return (
@@ -99,9 +100,18 @@ export default async function PlanningPage() {
         />
       </section>
 
-      {/* Category comparison — planned vs actual this month */}
+      {/* Step 4: Live budget tracking */}
       <section className="mb-8">
-        <CategoryComparison data={summary.categoryComparison} />
+        <div className="flex items-center gap-2 mb-4">
+          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-income-20 text-income-100 text-xs font-bold dark:bg-income-100/10">
+            4
+          </span>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            Track Spending
+          </h2>
+          <span className="text-xs text-muted-foreground ml-auto">Updates automatically when you add expenses</span>
+        </div>
+        <BudgetTracker budgets={budgetStatus} />
       </section>
     </AppShell>
   );
