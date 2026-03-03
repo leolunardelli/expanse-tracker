@@ -54,6 +54,7 @@ export async function saveBudget(formData: FormData) {
 
     revalidatePath('/');
     revalidatePath('/budget');
+    revalidatePath('/planning');
     return { success: true };
   } catch {
     return { error: 'Failed to save budget' };
@@ -76,6 +77,7 @@ export async function deleteBudget(id: string) {
 
     revalidatePath('/');
     revalidatePath('/budget');
+    revalidatePath('/planning');
     return { success: true };
   } catch {
     return { error: 'Failed to delete budget' };

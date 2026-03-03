@@ -1,15 +1,17 @@
-import { TrendingUp, TrendingDown, Wallet, PiggyBank, CreditCard, Receipt, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, PiggyBank, CreditCard, Receipt, ArrowUpRight, ArrowDownRight, RefreshCw, Target } from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
 
 type MonthlyPlanSummary = {
   income: number;
   plannedFixed: number;
   plannedVariable: number;
+  recurringTotal: number;
   totalPlanned: number;
   disposable: number;
   actualSpent: number;
   remaining: number;
   incomeUsedPercent: number;
+  budgetTotal: number;
 };
 
 function SummaryCard({
@@ -49,11 +51,13 @@ export default function MonthlyOverview({ summary }: { summary: MonthlyPlanSumma
     income,
     plannedFixed,
     plannedVariable,
+    recurringTotal,
     totalPlanned,
     disposable,
     actualSpent,
     remaining,
     incomeUsedPercent,
+    budgetTotal,
   } = summary;
 
   const isOverBudget = remaining < 0;
@@ -100,6 +104,24 @@ export default function MonthlyOverview({ summary }: { summary: MonthlyPlanSumma
           color="bg-warning-20 text-warning-100 dark:bg-warning-100/10 dark:text-warning-100"
           subtext={income > 0 ? `${((plannedVariable / income) * 100).toFixed(0)}% of income` : undefined}
         />
+        {recurringTotal > 0 && (
+          <SummaryCard
+            label="Recurring expenses"
+            value={recurringTotal}
+            icon={RefreshCw}
+            color="bg-violet-20 text-violet-100 dark:bg-violet-100/10 dark:text-violet-100"
+            subtext={income > 0 ? `${((recurringTotal / income) * 100).toFixed(0)}% of income` : undefined}
+          />
+        )}
+        {budgetTotal > 0 && (
+          <SummaryCard
+            label="Budget limits"
+            value={budgetTotal}
+            icon={Target}
+            color="bg-income-20 text-income-100 dark:bg-income-100/10 dark:text-income-100"
+            subtext="Total category budgets"
+          />
+        )}
       </div>
 
       {/* Disposable income highlight */}
@@ -118,6 +140,7 @@ export default function MonthlyOverview({ summary }: { summary: MonthlyPlanSumma
           <p className="text-3xl font-bold text-white">{formatCurrency(disposable)}</p>
           <p className="text-white/70 text-xs mt-1">
             {formatCurrency(income)} income − {formatCurrency(totalPlanned)} planned
+            {recurringTotal > 0 && ` (incl. ${formatCurrency(recurringTotal)} recurring)`}
           </p>
         </div>
         <div className="absolute -right-4 -bottom-4 opacity-10">

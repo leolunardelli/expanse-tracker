@@ -179,15 +179,18 @@ export type MonthlyPlanSummary = {
   income: number;
   plannedFixed: number;
   plannedVariable: number;
+  recurringTotal: number;
   totalPlanned: number;
   disposable: number;
   actualSpent: number;
   remaining: number;
   incomeUsedPercent: number;
+  budgetTotal: number;
   categoryComparison: {
     category: string;
     planned: number;
     actual: number;
+    budget: number;
     delta: number;
   }[];
 };
@@ -214,7 +217,28 @@ export async function getMonthlyPlanSummary(): Promise<MonthlyPlanSummary> {
     .filter((p) => !p.isFixed)
     .reduce((sum, p) => sum + toMonthly(p.amount, p.frequency), 0);
 
-  const totalPlanned = plannedFixed + plannedVariable;
+  // Get recurring expenses (from Expense model) as additional planned costs
+  const recurringExpenses = await prisma.expense.findMany({
+    where: { userId, isRecurring: true },
+    select: { amount: true, category: true, recurrenceType: true },
+  });
+
+  const recurringTotal = recurringExpenses.reduce(
+    (sum, e) => sum + toMonthly(e.amount, e.recurrenceType || 'monthly'),
+    0,
+  );
+
+  // Get budget limits
+  const budgets = await prisma.budget.findMany({
+    where: { userId },
+    select: { category: true, amount: true },
+  });
+
+  const budgetTotal = budgets
+    .filter((b) => b.category !== 'all')
+    .reduce((sum, b) => sum + b.amount, 0);
+
+  const totalPlanned = plannedFixed + plannedVariable + recurringTotal;
   const disposable = income - totalPlanned;
 
   // Get actual spending for current month
@@ -234,27 +258,51 @@ export async function getMonthlyPlanSummary(): Promise<MonthlyPlanSummary> {
   const remaining = income - actualSpent;
   const incomeUsedPercent = income > 0 ? (actualSpent / income) * 100 : 0;
 
-  // Category comparison: planned vs actual
-  const categoryMap = new Map<string, { planned: number; actual: number }>();
+  // Build budget map by category
+  const budgetMap = new Map<string, number>();
+  budgets.forEach((b) => {
+    if (b.category !== 'all') {
+      budgetMap.set(b.category, b.amount);
+    }
+  });
+
+  // Category comparison: planned + recurring vs actual vs budget
+  const categoryMap = new Map<string, { planned: number; actual: number; budget: number }>();
 
   planned.forEach((p) => {
     const monthlyAmount = toMonthly(p.amount, p.frequency);
-    const existing = categoryMap.get(p.category) || { planned: 0, actual: 0 };
+    const existing = categoryMap.get(p.category) || { planned: 0, actual: 0, budget: 0 };
     existing.planned += monthlyAmount;
     categoryMap.set(p.category, existing);
   });
 
+  // Add recurring expenses to planned amounts per category
+  recurringExpenses.forEach((e) => {
+    const monthlyAmount = toMonthly(e.amount, e.recurrenceType || 'monthly');
+    const existing = categoryMap.get(e.category) || { planned: 0, actual: 0, budget: 0 };
+    existing.planned += monthlyAmount;
+    categoryMap.set(e.category, existing);
+  });
+
   expenses.forEach((e) => {
-    const existing = categoryMap.get(e.category) || { planned: 0, actual: 0 };
+    const existing = categoryMap.get(e.category) || { planned: 0, actual: 0, budget: 0 };
     existing.actual += e.amount;
     categoryMap.set(e.category, existing);
   });
 
+  // Merge budget limits into categories
+  budgetMap.forEach((amount, category) => {
+    const existing = categoryMap.get(category) || { planned: 0, actual: 0, budget: 0 };
+    existing.budget = amount;
+    categoryMap.set(category, existing);
+  });
+
   const categoryComparison = Array.from(categoryMap.entries())
-    .map(([category, { planned: p, actual: a }]) => ({
+    .map(([category, { planned: p, actual: a, budget: b }]) => ({
       category,
       planned: Math.round(p * 100) / 100,
       actual: Math.round(a * 100) / 100,
+      budget: Math.round(b * 100) / 100,
       delta: Math.round((a - p) * 100) / 100,
     }))
     .sort((a, b) => b.planned - a.planned);
@@ -263,11 +311,13 @@ export async function getMonthlyPlanSummary(): Promise<MonthlyPlanSummary> {
     income: Math.round(income * 100) / 100,
     plannedFixed: Math.round(plannedFixed * 100) / 100,
     plannedVariable: Math.round(plannedVariable * 100) / 100,
+    recurringTotal: Math.round(recurringTotal * 100) / 100,
     totalPlanned: Math.round(totalPlanned * 100) / 100,
     disposable: Math.round(disposable * 100) / 100,
     actualSpent: Math.round(actualSpent * 100) / 100,
     remaining: Math.round(remaining * 100) / 100,
     incomeUsedPercent: Math.round(incomeUsedPercent * 10) / 10,
+    budgetTotal: Math.round(budgetTotal * 100) / 100,
     categoryComparison,
   };
 }

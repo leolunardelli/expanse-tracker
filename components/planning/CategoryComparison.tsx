@@ -7,6 +7,7 @@ type CategoryComparisonItem = {
   category: string;
   planned: number;
   actual: number;
+  budget: number;
   delta: number;
 };
 
@@ -31,6 +32,7 @@ export default function CategoryComparison({ data }: { data: CategoryComparisonI
             <tr className="text-xs text-muted-foreground uppercase border-b dark:border-dark-600">
               <th className="text-left py-2 pr-2">Category</th>
               <th className="text-right py-2 px-2">Planned</th>
+              <th className="text-right py-2 px-2">Budget</th>
               <th className="text-right py-2 px-2">Actual</th>
               <th className="text-right py-2 pl-2">Difference</th>
             </tr>
@@ -51,6 +53,9 @@ export default function CategoryComparison({ data }: { data: CategoryComparisonI
                   </td>
                   <td className="text-right py-2.5 px-2 text-gray-600 dark:text-gray-400">
                     {formatCurrency(item.planned)}
+                  </td>
+                  <td className="text-right py-2.5 px-2 text-gray-500 dark:text-gray-500">
+                    {item.budget > 0 ? formatCurrency(item.budget) : '—'}
                   </td>
                   <td className="text-right py-2.5 px-2 font-medium text-gray-900 dark:text-gray-100">
                     {formatCurrency(item.actual)}

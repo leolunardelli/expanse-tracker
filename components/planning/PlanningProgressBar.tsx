@@ -4,16 +4,18 @@ type ProgressProps = {
   income: number;
   plannedFixed: number;
   plannedVariable: number;
+  recurringTotal: number;
   actualSpent: number;
 };
 
-export default function PlanningProgressBar({ income, plannedFixed, plannedVariable, actualSpent }: ProgressProps) {
+export default function PlanningProgressBar({ income, plannedFixed, plannedVariable, recurringTotal, actualSpent }: ProgressProps) {
   if (income <= 0) return null;
 
   const fixedPct = Math.min((plannedFixed / income) * 100, 100);
   const variablePct = Math.min((plannedVariable / income) * 100, 100 - fixedPct);
+  const recurringPct = Math.min((recurringTotal / income) * 100, Math.max(100 - fixedPct - variablePct, 0));
   const spentPct = Math.min((actualSpent / income) * 100, 100);
-  const freePct = Math.max(100 - fixedPct - variablePct, 0);
+  const freePct = Math.max(100 - fixedPct - variablePct - recurringPct, 0);
 
   return (
     <div className="card p-4">
@@ -45,6 +47,16 @@ export default function PlanningProgressBar({ income, plannedFixed, plannedVaria
               )}
             </div>
           )}
+          {recurringPct > 0 && (
+            <div
+              className="h-full bg-violet-100 transition-all duration-700 flex items-center justify-center"
+              style={{ width: `${recurringPct}%` }}
+            >
+              {recurringPct > 8 && (
+                <span className="text-[10px] text-white font-medium">{recurringPct.toFixed(0)}%</span>
+              )}
+            </div>
+          )}
           {freePct > 0 && (
             <div
               className="h-full bg-income-100 dark:bg-income-100 transition-all duration-700 flex items-center justify-center"
@@ -65,9 +77,15 @@ export default function PlanningProgressBar({ income, plannedFixed, plannedVaria
             <span className="w-2.5 h-2.5 rounded-full bg-warning-100 inline-block" />
             Variable {formatCurrency(plannedVariable)}
           </span>
+          {recurringTotal > 0 && (
+            <span className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-100 inline-block" />
+              Recurring {formatCurrency(recurringTotal)}
+            </span>
+          )}
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-income-100 inline-block" />
-            Free {formatCurrency(Math.max(income - plannedFixed - plannedVariable, 0))}
+            Free {formatCurrency(Math.max(income - plannedFixed - plannedVariable - recurringTotal, 0))}
           </span>
         </div>
       </div>

@@ -104,6 +104,7 @@ export async function cancelRecurring(id: string) {
 
   revalidatePath('/recurring');
   revalidatePath('/');
+  revalidatePath('/planning');
 }
 
 export async function reactivateRecurring(id: string, recurrenceType: string) {
@@ -125,4 +126,5 @@ export async function reactivateRecurring(id: string, recurrenceType: string) {
 
   revalidatePath('/recurring');
   revalidatePath('/');
+  revalidatePath('/planning');
 }

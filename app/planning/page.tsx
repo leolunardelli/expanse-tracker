@@ -48,6 +48,7 @@ export default async function PlanningPage() {
             income={summary.income}
             plannedFixed={summary.plannedFixed}
             plannedVariable={summary.plannedVariable}
+            recurringTotal={summary.recurringTotal}
             actualSpent={summary.actualSpent}
           />
         </section>

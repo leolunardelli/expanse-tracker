@@ -71,6 +71,7 @@ export async function createExpense(formData: FormData) {
     },
   });
   revalidatePath('/');
+  revalidatePath('/planning');
 }
 
 export async function updateExpense(
@@ -117,6 +118,7 @@ export async function updateExpense(
   });
   
   revalidatePath('/');
+  revalidatePath('/planning');
 }
 
 export async function deleteExpense(id: string) {
@@ -133,6 +135,7 @@ export async function deleteExpense(id: string) {
   });
   
   revalidatePath('/');
+  revalidatePath('/planning');
 }
 
 export type FilterParams = {
