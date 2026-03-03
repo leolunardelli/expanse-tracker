@@ -5,8 +5,8 @@ import { getRecurringExpenses, getRecurringStats } from '../actions/recurring';
 import AppShell from '@/components/AppShell';
 import RecurringStats from '@/components/recurring/RecurringStats';
 import RecurringList from '@/components/recurring/RecurringList';
-import Link from 'next/link';
-import { ArrowLeft, RefreshCw, Plus } from 'lucide-react';
+import AddRecurringForm from '@/components/recurring/AddRecurringForm';
+import { RefreshCw, TrendingUp } from 'lucide-react';
 
 export default async function RecurringPage() {
   const session = await getServerSession(authOptions);
@@ -22,40 +22,28 @@ export default async function RecurringPage() {
 
   return (
     <AppShell userName={session.user?.name} userImage={session.user?.image}>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-muted-foreground hover:text-gray-900 dark:hover:text-gray-200 transition"
-            >
-              <ArrowLeft size={20} />
-              <span>Back</span>
-            </Link>
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-violet-100 to-violet-60 rounded-montra-sm">
-                <RefreshCw className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Recurring Expenses
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Track and manage your subscriptions & recurring costs
-                </p>
-              </div>
-            </div>
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 bg-violet-100 rounded-montra-sm">
+            <RefreshCw className="w-5 h-5 text-white" />
           </div>
-
-          <Link
-            href="/"
-            className="btn-primary flex items-center gap-2 px-4 py-2 text-sm font-medium"
-          >
-            <Plus size={16} />
-            <span className="hidden sm:inline">Add Expense</span>
-          </Link>
+          <h1 className="text-2xl font-bold text-dark-900 dark:text-white">
+            Recurring Expenses
+          </h1>
         </div>
+        <p className="text-muted flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-violet-100" />
+          Manage subscriptions and recurring bills
+        </p>
+      </div>
 
-        <RecurringStats stats={stats} />
+      <RecurringStats stats={stats} />
+
+      {/* Add Recurring Expense */}
+      <div className="mb-6">
+        <AddRecurringForm />
+      </div>
 
         {/* Category Breakdown */}
         {Object.keys(stats.byCategory).length > 0 && (
