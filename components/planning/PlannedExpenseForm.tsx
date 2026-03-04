@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Plus, Receipt } from 'lucide-react';
 import { addPlannedExpense } from '@/app/actions/planning';
-import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { EXPENSE_CATEGORIES, mergeExpenseCategories } from '@/lib/categories';
+import { getCustomCategories } from '@/app/actions/categories';
 import { useToast } from '@/components/Toast';
-
-const CATEGORIES = EXPENSE_CATEGORIES.map((c) => c.value);
 
 const FREQUENCIES = [
   { value: 'monthly', label: 'Monthly' },
@@ -19,8 +18,18 @@ export default function PlannedExpenseForm() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(true);
+  const [categories, setCategories] = useState(EXPENSE_CATEGORIES.map((c) => c.value));
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    getCustomCategories().then((custom) => {
+      if (custom.length > 0) {
+        const merged = mergeExpenseCategories(custom.map((c: { name: string; color: string; icon: string }) => ({ name: c.name, color: c.color, icon: c.icon })));
+        setCategories(merged.map((c) => c.value));
+      }
+    });
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,7 +105,7 @@ export default function PlannedExpenseForm() {
             name="category"
             className="input text-sm"
           >
-            {CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>

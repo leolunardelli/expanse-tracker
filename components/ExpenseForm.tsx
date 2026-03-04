@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { createExpense } from '@/app/actions/expenses';
+import { getCustomCategories } from '@/app/actions/categories';
 import { RefreshCw } from 'lucide-react';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
-import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { EXPENSE_CATEGORIES, mergeExpenseCategories } from '@/lib/categories';
 import { useToast } from '@/components/Toast';
 import { formatCurrency } from '@/lib/currency';
 
@@ -18,8 +19,17 @@ export default function ExpenseForm() {
   const [isRecurring, setIsRecurring] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
+  const [categories, setCategories] = useState(EXPENSE_CATEGORIES);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    getCustomCategories().then((custom) => {
+      if (custom.length > 0) {
+        setCategories(mergeExpenseCategories(custom.map((c) => ({ name: c.name, color: c.color, icon: c.icon }))));
+      }
+    });
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -113,7 +123,7 @@ export default function ExpenseForm() {
             name="category"
             className="input"
           >
-            {EXPENSE_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat.value} value={cat.value}>
                 {cat.value === 'Other' ? `${cat.label} (AI will categorize)` : cat.label}
               </option>

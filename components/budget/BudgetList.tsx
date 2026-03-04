@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getBudgetStatus } from '@/app/actions/budget';
+import { getCustomCategories } from '@/app/actions/categories';
 import BudgetForm from './BudgetForm';
 import BudgetCard from './BudgetCard';
 import { Wallet } from 'lucide-react';
@@ -18,22 +19,29 @@ type BudgetStatus = {
   alertAt: number;
 }
 
+type CustomCat = { name: string; color: string; icon: string };
+
 export default function BudgetList() {
   const [budgets, setBudgets] = useState<BudgetStatus[]>([]);
+  const [customCategories, setCustomCategories] = useState<CustomCat[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let mounted = true;
-    const fetchBudgets = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const data = await getBudgetStatus();
+      const [data, customCats] = await Promise.all([
+        getBudgetStatus(),
+        getCustomCategories(),
+      ]);
       if (mounted) {
         setBudgets(data);
+        setCustomCategories(customCats.map((c) => ({ name: c.name, color: c.color, icon: c.icon })));
         setLoading(false);
       }
     };
-    fetchBudgets();
+    fetchData();
     return () => { mounted = false; };
   }, [refreshKey]);
 
@@ -56,7 +64,7 @@ export default function BudgetList() {
 
   return (
     <div>
-      <BudgetForm existingCategories={existingCategories} onSuccess={handleRefresh} />
+      <BudgetForm existingCategories={existingCategories} customCategories={customCategories} onSuccess={handleRefresh} />
 
       {budgets.length === 0 ? (
         <div className="card p-12 text-center">

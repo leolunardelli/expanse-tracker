@@ -5,7 +5,8 @@ import { X, RefreshCw, Save, Loader2 } from 'lucide-react';
 import { updateExpense } from '@/app/actions/expenses';
 import TagInput from '@/components/tags/TagInput';
 import NoteInput from '@/components/tags/NoteInput';
-import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { EXPENSE_CATEGORIES, mergeExpenseCategories } from '@/lib/categories';
+import { getCustomCategories } from '@/app/actions/categories';
 import { getCategoryConfig } from '@/lib/design-tokens';
 import { useToast } from '@/components/Toast';
 
@@ -36,7 +37,16 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
   const [recurrenceType, setRecurrenceType] = useState('monthly');
   const [tags, setTags] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
+  const [categories, setCategories] = useState(EXPENSE_CATEGORIES);
   const { toast } = useToast();
+
+  useEffect(() => {
+    getCustomCategories().then((custom) => {
+      if (custom.length > 0) {
+        setCategories(mergeExpenseCategories(custom.map((c: { name: string; color: string; icon: string }) => ({ name: c.name, color: c.color, icon: c.icon }))));
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (expense) {
@@ -157,7 +167,7 @@ export default function EditExpenseModal({ expense, onClose }: EditExpenseModalP
               onChange={(e) => setCategory(e.target.value)}
               className="input"
             >
-              {EXPENSE_CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <option key={cat.value} value={cat.value}>
                   {cat.label}
                 </option>

@@ -17,3 +17,28 @@ export const BUDGET_CATEGORIES = [
 
 // Categories for AI categorization prompt
 export const AI_CATEGORY_LIST = CATEGORIES.join(', ');
+
+// Merge built-in categories with user's custom categories
+export function mergeExpenseCategories(
+  customCategories: { name: string; color: string; icon: string }[]
+) {
+  const base = EXPENSE_CATEGORIES.map((c) => ({ ...c }));
+  for (const cc of customCategories) {
+    if (!base.some((b) => b.value.toLowerCase() === cc.name.toLowerCase())) {
+      base.push({ value: cc.name, label: cc.name });
+    }
+  }
+  return base;
+}
+
+export function mergeBudgetCategories(
+  customCategories: { name: string; color: string; icon: string }[]
+) {
+  const base = BUDGET_CATEGORIES.map((c) => ({ ...c }));
+  for (const cc of customCategories) {
+    if (!base.some((b) => b.value.toLowerCase() === cc.name.toLowerCase())) {
+      base.push({ value: cc.name.toLowerCase(), label: cc.name });
+    }
+  }
+  return base;
+}

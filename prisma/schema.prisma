@@ -59,6 +59,7 @@ model User {
   settings      UserSettings?
   incomes       Income[]
   plannedExpenses PlannedExpense[]
+  customCategories CustomCategory[]
   passwordResetTokens PasswordResetToken[]
 }
 
@@ -160,6 +161,23 @@ model Income {
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
+}
+
+// Custom Categories
+model CustomCategory {
+  id        String   @id @default(cuid())
+  name      String   // Display name (e.g. "Investments")
+  color     String   @default("#91919F") // Hex color
+  icon      String   @default("Tag") // Lucide icon name
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
   @@index([userId])
 }
 
