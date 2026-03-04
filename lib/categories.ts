@@ -1,13 +1,13 @@
 import { CATEGORIES, getCategoryConfig } from './design-tokens';
 
 // Expense categories for forms (value + label)
-export const EXPENSE_CATEGORIES = CATEGORIES.map((key) => ({
+export const EXPENSE_CATEGORIES: { value: string; label: string }[] = CATEGORIES.map((key) => ({
   value: key,
   label: getCategoryConfig(key).label,
 }));
 
 // Budget categories include "all" for total budget
-export const BUDGET_CATEGORIES = [
+export const BUDGET_CATEGORIES: { value: string; label: string }[] = [
   { value: 'all', label: 'Total Budget' },
   ...CATEGORIES.map((key) => ({
     value: key.toLowerCase(),
