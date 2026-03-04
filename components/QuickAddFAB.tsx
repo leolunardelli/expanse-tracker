@@ -44,7 +44,7 @@ export default function QuickAddFAB() {
       {/* FAB Button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-[5.5rem] right-4 lg:bottom-8 lg:right-8 z-50 w-14 h-14 rounded-full bg-violet-100 text-white shadow-fab flex items-center justify-center hover:bg-violet-80 active:scale-95 transition-all"
+        className="fixed bottom-[7rem] right-6 lg:bottom-20 lg:right-8 z-50 w-14 h-14 rounded-full bg-violet-100 text-white shadow-fab flex items-center justify-center hover:bg-violet-80 active:scale-95 transition-all"
         aria-label="Add expense"
       >
         <Plus size={28} />
