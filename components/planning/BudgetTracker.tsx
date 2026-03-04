@@ -1,9 +1,9 @@
 'use client';
 
 import { formatCurrency } from '@/lib/currency';
-import { getCategoryConfig, type CategoryKey } from '@/lib/design-tokens';
+import { getCategoryConfig, categoryConfig, type CategoryKey } from '@/lib/design-tokens';
 import { CategoryIcon } from '@/components/ui';
-import { AlertTriangle, CheckCircle, TrendingUp, Wallet } from 'lucide-react';
+import { AlertTriangle, CheckCircle, TrendingUp, Wallet, Tag } from 'lucide-react';
 import Link from 'next/link';
 
 type BudgetStatus = {
@@ -93,9 +93,17 @@ export default function BudgetTracker({
             >
               {/* Category header */}
               <div className="flex items-center gap-2 mb-3">
-                <CategoryIcon category={b.category as CategoryKey} size="sm" />
+                {b.category in categoryConfig ? (
+                  <CategoryIcon category={b.category as CategoryKey} size="sm" />
+                ) : (
+                  <div className="w-8 h-8 rounded-montra-sm flex items-center justify-center bg-violet-20 dark:bg-violet-100/10 text-violet-100">
+                    <Tag size={14} />
+                  </div>
+                )}
                 <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                  {getCategoryConfig(b.category).label}
+                  {b.category in categoryConfig
+                    ? getCategoryConfig(b.category).label
+                    : b.category}
                 </span>
                 <span className="ml-auto">
                   {b.isOverBudget ? (
@@ -150,7 +158,7 @@ export default function BudgetTracker({
 
       <div className="text-right">
         <Link
-          href="/budget"
+          href="/planning"
           className="text-violet-100 text-xs hover:underline"
         >
           Manage budgets →

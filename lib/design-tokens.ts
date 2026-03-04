@@ -80,7 +80,14 @@ export type CategoryKey = keyof typeof categoryConfig;
 export const CATEGORIES = Object.keys(categoryConfig) as CategoryKey[];
 
 export function getCategoryConfig(category: string) {
-  return categoryConfig[category as CategoryKey] || categoryConfig.Other;
+  if (category in categoryConfig) {
+    return categoryConfig[category as CategoryKey];
+  }
+  // For custom/unknown categories, return Other-style config but with the actual name as label
+  return {
+    ...categoryConfig.Other,
+    label: category,
+  };
 }
 
 // Build a category config entry from a custom category
