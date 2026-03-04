@@ -10,6 +10,7 @@ import BudgetAllocation from '@/components/planning/BudgetAllocation';
 import BudgetTracker from '@/components/planning/BudgetTracker';
 import { getIncomes, getMonthlyPlanSummary, getRecurringExpenseItems, getRecurringByCategory } from '@/app/actions/planning';
 import { getBudgets, getBudgetStatus } from '@/app/actions/budget';
+import { getCustomCategories } from '@/app/actions/categories';
 import { CATEGORIES } from '@/lib/design-tokens';
 
 export const metadata = {
@@ -21,13 +22,14 @@ export default async function PlanningPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect('/auth/signin');
 
-  const [incomes, summary, recurringItems, recurringByCat, budgets, budgetStatus] = await Promise.all([
+  const [incomes, summary, recurringItems, recurringByCat, budgets, budgetStatus, customCats] = await Promise.all([
     getIncomes(),
     getMonthlyPlanSummary(),
     getRecurringExpenseItems(),
     getRecurringByCategory(),
     getBudgets(),
     getBudgetStatus(),
+    getCustomCategories(),
   ]);
 
   return (
@@ -97,6 +99,7 @@ export default async function PlanningPage() {
           currentBudgets={budgets.map((b) => ({ category: b.category, amount: b.amount }))}
           recurringByCategory={recurringByCat}
           categories={CATEGORIES as unknown as string[]}
+          customCategories={customCats.map((c) => ({ id: c.id, name: c.name, color: c.color, icon: c.icon }))}
         />
       </section>
 

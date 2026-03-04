@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
-  Home, ArrowLeftRight, CreditCard, RefreshCw,
+  Home, ArrowLeftRight, RefreshCw,
   Calculator, BarChart3, FileText, Brain,
   Settings, LogOut,
 } from 'lucide-react';
@@ -20,9 +20,8 @@ type SidebarProps = {
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
-  { href: '/budget', label: 'Budget', icon: CreditCard },
+  { href: '/planning', label: 'Budget', icon: Calculator },
   { href: '/recurring', label: 'Recurring', icon: RefreshCw },
-  { href: '/planning', label: 'Planning', icon: Calculator },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/reports', label: 'Reports', icon: FileText },
   { href: '/insights', label: 'AI Insights', icon: Brain },

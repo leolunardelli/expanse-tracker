@@ -9,7 +9,7 @@ import {
 const tabs = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/transactions', label: 'Transaction', icon: ArrowLeftRight },
-  { href: '/budget', label: 'Budget', icon: CreditCard },
+  { href: '/planning', label: 'Budget', icon: CreditCard },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/settings', label: 'Profile', icon: User },
 ];
