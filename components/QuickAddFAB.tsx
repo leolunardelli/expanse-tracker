@@ -1,14 +1,24 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 import { createExpense } from '@/app/actions/expenses';
-import { EXPENSE_CATEGORIES } from '@/lib/categories';
+import { getCustomCategories } from '@/app/actions/categories';
+import { EXPENSE_CATEGORIES, mergeExpenseCategories } from '@/lib/categories';
 
 export default function QuickAddFAB() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState(EXPENSE_CATEGORIES);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    getCustomCategories().then((custom) => {
+      if (custom.length > 0) {
+        setCategories(mergeExpenseCategories(custom.map((c: { name: string; color: string; icon: string }) => ({ name: c.name, color: c.color, icon: c.icon }))));
+      }
+    });
+  }, []);
 
   function getTodayDate() {
     return new Date().toISOString().split('T')[0];
@@ -34,7 +44,7 @@ export default function QuickAddFAB() {
       {/* FAB Button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-4 lg:bottom-8 lg:right-8 z-50 w-14 h-14 rounded-full bg-violet-100 text-white shadow-fab flex items-center justify-center hover:bg-violet-80 active:scale-95 transition-all"
+        className="fixed bottom-[5.5rem] right-4 lg:bottom-8 lg:right-8 z-50 w-14 h-14 rounded-full bg-violet-100 text-white shadow-fab flex items-center justify-center hover:bg-violet-80 active:scale-95 transition-all"
         aria-label="Add expense"
       >
         <Plus size={28} />
@@ -93,7 +103,7 @@ export default function QuickAddFAB() {
                 </div>
 
                 <select name="category" className="input">
-                  {EXPENSE_CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.value === 'Other' ? `${cat.label} (AI)` : cat.label}
                     </option>
