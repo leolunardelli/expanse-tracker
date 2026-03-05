@@ -10,7 +10,7 @@ export const EXPENSE_CATEGORIES: { value: string; label: string }[] = CATEGORIES
 export const BUDGET_CATEGORIES: { value: string; label: string }[] = [
   { value: 'all', label: 'Total Budget' },
   ...CATEGORIES.map((key) => ({
-    value: key.toLowerCase(),
+    value: key,
     label: getCategoryConfig(key).label,
   })),
 ];
@@ -37,7 +37,7 @@ export function mergeBudgetCategories(
   const base = BUDGET_CATEGORIES.map((c) => ({ ...c }));
   for (const cc of customCategories) {
     if (!base.some((b) => b.value.toLowerCase() === cc.name.toLowerCase())) {
-      base.push({ value: cc.name.toLowerCase(), label: cc.name });
+      base.push({ value: cc.name, label: cc.name });
     }
   }
   return base;

@@ -354,48 +354,58 @@ export async function getMonthlyPlanSummary(): Promise<MonthlyPlanSummary> {
   const remaining = income - actualSpent;
   const incomeUsedPercent = income > 0 ? (actualSpent / income) * 100 : 0;
 
-  // Build budget map by category
+  // Build budget map by category (case-insensitive keys, preserve display name)
   const budgetMap = new Map<string, number>();
+  const categoryDisplayNames = new Map<string, string>(); // lowercase → original name
   budgets.forEach((b) => {
     if (b.category !== 'all') {
-      budgetMap.set(b.category, b.amount);
+      const key = b.category.toLowerCase();
+      budgetMap.set(key, b.amount);
+      categoryDisplayNames.set(key, b.category);
     }
   });
 
   // Category comparison: planned + recurring vs actual vs budget
+  // Use lowercase keys for matching, track display names
   const categoryMap = new Map<string, { planned: number; actual: number; budget: number }>();
 
   planned.forEach((p) => {
     const monthlyAmount = toMonthly(p.amount, p.frequency);
-    const existing = categoryMap.get(p.category) || { planned: 0, actual: 0, budget: 0 };
+    const key = p.category.toLowerCase();
+    const existing = categoryMap.get(key) || { planned: 0, actual: 0, budget: 0 };
     existing.planned += monthlyAmount;
-    categoryMap.set(p.category, existing);
+    categoryMap.set(key, existing);
+    if (!categoryDisplayNames.has(key)) categoryDisplayNames.set(key, p.category);
   });
 
   // Add recurring expenses to planned amounts per category
   recurringExpenses.forEach((e) => {
     const monthlyAmount = toMonthly(e.amount, e.recurrenceType || 'monthly');
-    const existing = categoryMap.get(e.category) || { planned: 0, actual: 0, budget: 0 };
+    const key = e.category.toLowerCase();
+    const existing = categoryMap.get(key) || { planned: 0, actual: 0, budget: 0 };
     existing.planned += monthlyAmount;
-    categoryMap.set(e.category, existing);
+    categoryMap.set(key, existing);
+    if (!categoryDisplayNames.has(key)) categoryDisplayNames.set(key, e.category);
   });
 
   expenses.forEach((e) => {
-    const existing = categoryMap.get(e.category) || { planned: 0, actual: 0, budget: 0 };
+    const key = e.category.toLowerCase();
+    const existing = categoryMap.get(key) || { planned: 0, actual: 0, budget: 0 };
     existing.actual += e.amount;
-    categoryMap.set(e.category, existing);
+    categoryMap.set(key, existing);
+    if (!categoryDisplayNames.has(key)) categoryDisplayNames.set(key, e.category);
   });
 
   // Merge budget limits into categories
-  budgetMap.forEach((amount, category) => {
-    const existing = categoryMap.get(category) || { planned: 0, actual: 0, budget: 0 };
+  budgetMap.forEach((amount, key) => {
+    const existing = categoryMap.get(key) || { planned: 0, actual: 0, budget: 0 };
     existing.budget = amount;
-    categoryMap.set(category, existing);
+    categoryMap.set(key, existing);
   });
 
   const categoryComparison = Array.from(categoryMap.entries())
-    .map(([category, { planned: p, actual: a, budget: b }]) => ({
-      category,
+    .map(([key, { planned: p, actual: a, budget: b }]) => ({
+      category: categoryDisplayNames.get(key) || key,
       planned: Math.round(p * 100) / 100,
       actual: Math.round(a * 100) / 100,
       budget: Math.round(b * 100) / 100,

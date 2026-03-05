@@ -71,12 +71,15 @@ export async function createExpense(formData: FormData) {
     },
   });
 
-  // Check budget for this category and return feedback
+  // Check budget for this category and return feedback (case-insensitive)
   let budgetFeedback: { category: string; budgetAmount: number; spent: number; remaining: number } | null = null;
 
-  const budget = await prisma.budget.findUnique({
-    where: { userId_category: { userId, category } },
+  const allBudgets = await prisma.budget.findMany({
+    where: { userId },
   });
+  const budget = allBudgets.find(
+    (b) => b.category.toLowerCase() === category.toLowerCase()
+  );
 
   if (budget) {
     const now = new Date();

@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import { getFilteredExpenses, getCategories, getExpenseStats, getTags } from './actions/expenses';
 import { getMonthlyPlanSummary } from './actions/planning';
 import AppShell from '@/components/AppShell';
-import ExpenseForm from '@/components/ExpenseForm';
 import ExportButton from '@/components/ExportButton';
 import BudgetAlerts from '@/components/budget/BudgetAlerts';
 import FilteredExpenseList from '@/components/filters/FilteredExpenseList';
@@ -13,9 +12,8 @@ import DashboardStats from '@/components/dashboard/DashboardStats';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import QuickActions from '@/components/dashboard/QuickActions';
 import DashboardGreeting from '@/components/dashboard/DashboardGreeting';
-import ExpenseTemplates from '@/components/dashboard/ExpenseTemplates';
 import AsyncAIInsights from '@/components/dashboard/AsyncAIInsights';
-import { TransactionListSkeleton, Skeleton } from '@/components/Skeletons';
+import { TransactionListSkeleton } from '@/components/Skeletons';
 import { authOptions } from '@/lib/auth';
 
 export default async function HomePage() {
@@ -55,25 +53,9 @@ export default async function HomePage() {
       {/* Stats with Date Range Filter + Spending Breakdown */}
       <DashboardStats initialStats={stats} />
 
-      {/* Quick Add Templates */}
+      {/* AI Insights (loads client-side, non-blocking) */}
       <div className="mb-6">
-        <ExpenseTemplates />
-      </div>
-
-      {/* AI Insights (streamed independently) */}
-      <div className="mb-6">
-        <Suspense fallback={
-          <div className="card p-4 space-y-3 animate-pulse">
-            <div className="flex items-center gap-2">
-              <Skeleton className="w-6 h-6 rounded-full" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-            <Skeleton className="h-3 w-full" />
-            <Skeleton className="h-3 w-3/4" />
-          </div>
-        }>
-          <AsyncAIInsights />
-        </Suspense>
+        <AsyncAIInsights />
       </div>
       
       {/* Recent Transactions */}
@@ -91,11 +73,6 @@ export default async function HomePage() {
         <ExportButton />
       </div>
       
-      {/* Add Expense Form */}
-      <div className="mb-6">
-        <ExpenseForm />
-      </div>
-
       {/* Full Transaction List */}
       <Suspense fallback={<TransactionListSkeleton />}>
         <FilteredExpenseList

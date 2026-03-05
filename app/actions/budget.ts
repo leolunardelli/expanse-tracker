@@ -110,14 +110,16 @@ export async function getBudgetStatus() {
   let totalSpending = 0;
 
   expenses.forEach((expense) => {
-    spendingByCategory[expense.category] = (spendingByCategory[expense.category] || 0) + expense.amount;
+    // Use lowercase key for case-insensitive matching between budget and expense categories
+    const catKey = expense.category.toLowerCase();
+    spendingByCategory[catKey] = (spendingByCategory[catKey] || 0) + expense.amount;
     totalSpending += expense.amount;
   });
 
   return budgets.map((budget) => {
     const spent = budget.category === 'all' 
       ? totalSpending 
-      : (spendingByCategory[budget.category] || 0);
+      : (spendingByCategory[budget.category.toLowerCase()] || 0);
     
     const percentage = (spent / budget.amount) * 100;
     const remaining = budget.amount - spent;
